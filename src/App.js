@@ -1,23 +1,20 @@
+import React from 'react';
 import {
   BrowserRouter as Router,
   Routes,
   Route,
   Outlet,
 } from "react-router-dom";
-import React from 'react';
 import Home from "./pages/Home/Home";
-import Layout from './pages/Layout/Layout'
+import Layout from './pages/Layout/Layout';
 import ProtectedRoutes from "./routes/ProtectedRoutes";
 import Alert from "./components/Alert/Alert";
 import useStateProvider from "./hooks/useStateProvider";
-import useWindowDimensions from "./hooks/useWindowDimensions"
-import useAuth from "./hooks/useAuth";
 import Onboarding from "./pages/Onboarding/Onboarding";
+import Sidebar from "./components/Sidebar/SidebarNavigation";
 
 function App() {
-  const { width } = useWindowDimensions();
   const { alert } = useStateProvider();
-  const { user } = useAuth();
   return (
     <Router>
       <Routes>
@@ -25,13 +22,14 @@ function App() {
           element={
             <>
               <Layout>
+                <Sidebar />
                 <ProtectedRoutes />
               </Layout>
             </>
           }
         >
           {/* protected routes */}
-          <Route path="/" element={<Home/>} />
+          <Route path="/" element={<Home />} />
         </Route>
 
         <Route

@@ -1,11 +1,25 @@
 @import '../../styles/variables.scss';
 @import "../../styles/mixins.scss";
+@import "../../styles/index.scss";
 
 .layout {
-  display: flex;
+  transition: margin-left 0.3s ease;
+  
+  &.sidebarOpen {
+    margin-left: 200px;
+  }
+
+  &.sidebarClosed {
+    margin-left: 50px;
+  }
 }
-.container{
-  display: flex;
-  flex-direction: column;
-  color:black;
+
+.sidebar {
+  &.open {
+    margin-left: 200px;
+  }
+
+  &.closed {
+    margin-left: 50px;
+    }
 }
