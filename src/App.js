@@ -1,24 +1,52 @@
-import logo from './logo.svg';
-import './App.css';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Outlet,
+} from "react-router-dom";
+import React from 'react';
+import Home from "./pages/Home/Home";
+import Layout from './pages/Layout/Layout'
+import ProtectedRoutes from "./routes/ProtectedRoutes";
+import Alert from "./components/Alert/Alert";
+import useStateProvider from "./hooks/useStateProvider";
+import useWindowDimensions from "./hooks/useWindowDimensions"
+import useAuth from "./hooks/useAuth";
+import Onboarding from "./pages/Onboarding/Onboarding";
 
 function App() {
+  const { width } = useWindowDimensions();
+  const { alert } = useStateProvider();
+  const { user } = useAuth();
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <Router>
+      <Routes>
+        <Route
+          element={
+            <>
+              <Layout>
+                <ProtectedRoutes />
+              </Layout>
+            </>
+          }
         >
-          Learn React
-        </a>
-      </header>
-    </div>
+          {/* protected routes */}
+          <Route path="/" element={<Home/>} />
+        </Route>
+
+        <Route
+          element={
+            <>
+              <Outlet />
+            </>
+          }
+        >
+          {/* public routes */}
+          <Route path="/login" element={<Onboarding />} />
+        </Route>
+      </Routes>
+      {alert && <Alert message={alert.message} type={alert.type} />}
+    </Router>
   );
 }
 
