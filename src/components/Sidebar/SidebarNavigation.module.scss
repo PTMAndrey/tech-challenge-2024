@@ -1,0 +1,40 @@
+@import '../../styles/variables.scss';
+@import '../../styles/mixins.scss';
+@import "../../styles/index.scss";
+
+.sidebar {
+  width: 200px;
+  height: 100vh;
+  position: fixed;
+  background-color: rgb(238, 237, 237);
+  border-right: 1px solid;
+  left: 0;
+  top: 0;
+  transition: width 0.3s ease;
+}
+
+.sidebar button{
+  font-size: 30px;
+  display: flex;
+  margin-bottom: 20px;
+}
+.sidebar.closed {
+  width: 50px; 
+}
+
+.menuItems {
+  cursor: pointer;
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+}
+
+.menuItem .img {
+  width:50px;
+}
+
+.menuItem span {
+  display: block;
+}

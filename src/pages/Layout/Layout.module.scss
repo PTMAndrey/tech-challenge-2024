@@ -1,0 +1,25 @@
+@import '../../styles/variables.scss';
+@import "../../styles/mixins.scss";
+@import "../../styles/index.scss";
+
+.layout {
+  transition: margin-left 0.3s ease;
+  
+  &.sidebarOpen {
+    margin-left: 200px;
+  }
+
+  &.sidebarClosed {
+    margin-left: 50px;
+  }
+}
+
+.sidebar {
+  &.open {
+    margin-left: 200px;
+  }
+
+  &.closed {
+    margin-left: 50px;
+    }
+}
