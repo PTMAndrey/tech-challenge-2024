@@ -17,13 +17,16 @@ axios.defaults.headers = {
 export const login = async (email, password) => {
   try {
     const response = await axios.post(
-      '/api/auth/login',{
-        'eMailAdress':email,
-        'password': password,
-      }
+      '/api/auth/login', {
+      'eMailAdress': email,
+      'password': password,
+    }
     );
     console.log(response);
-    return response;
+    if (response.data.jwt === '')
+      return null;
+    else
+      return response;
   } catch (error) {
     console.log(error);
   }
@@ -32,19 +35,35 @@ export const login = async (email, password) => {
 
 export const registerAdmin = async (data) => {
   try {
-    const response = await axios.post('/utilizator/add',data);
+    const response = await axios.post('/api/auth/register', data);
+
     return response;
   } catch (error) {
     console.log(error);
   }
 };
 
-// get user by id
-export const getUserById = async (id) => {
+export const registerUser = async (data) => {
   try {
-    const response = await axios.get("/utilizator/getByID?id=" + id);
+    const response = await axios.post('/api/auth/register/employee',
+      {
+        firstName: data.firstName,
+        lastName: data.lastName,
+        eMailAdress: data.eMailAdress,
+        password: data.password,
+        idOrganisation: data.organisationName, // organisationName = idOrganisation only when registerUser is CALLED
+      });
+
+    console.log(response)
     return response;
   } catch (error) {
-    console.log(error);
+    if (error.response) {
+      const errorMessage = error.response.data.message;
+      console.log("Backend error message:", errorMessage);
+      throw new Error(error.response.data.message || "Something went wrong... Try again later");
+
+    } else{
+      throw new Error("Network error or other issue");
+    }
   }
 };
