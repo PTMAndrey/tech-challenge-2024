@@ -13,7 +13,8 @@
     font-size: $font-body-normal;
     font-weight: $font-medium;
     line-height: 24px;
-    padding-right: 1rem;
+    // margin-bottom: 15px;
+    // padding-right: 1rem;
     word-wrap: break-word;
     cursor:pointer;
 
@@ -39,12 +40,12 @@
   }
 
   label {
-    color: $color-white;
+    color: $color-gray-500;
     font-size: $font-body-small;
     font-weight: $font-medium;
     line-height: 22px;
     display: flex;
-    margin-bottom: 4px;
+    margin-bottom: 1px;
   }
 
   input:focus:required {

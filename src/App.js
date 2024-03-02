@@ -42,6 +42,7 @@ function App() {
           {/* public routes */}
           <Route path="/login" element={<Onboarding />} />
           <Route path="/register" element={<Onboarding />} />
+          <Route path="/register/employee/:id" element={<Onboarding />} />
         </Route>
       </Routes>
       {alert && <Alert message={alert.message} type={alert.type} />}

@@ -1,0 +1,190 @@
+@import "../../../styles/variables.scss";
+@import "../../../styles/mixins.scss";
+
+div a{
+    text-decoration: none;
+}
+.auth {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+ 
+    @include medium {
+        min-width: 135px;
+    }
+
+    @include small {
+        min-width: 226px;
+    }
+    margin:0px auto;
+}
+
+// main container
+.containerAuth {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 32px 32px 32px;
+}
+
+.contentContainerForm {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 415px;
+    min-width: 150px;
+    margin-bottom:30px;
+}
+
+.form {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 20px;
+
+    width: 100%;
+    height: 100%;
+    min-width: 150px;
+
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+}
+
+.formTitle {
+    padding: 0px;
+    gap: 4px;
+
+    width: 415px;
+    height: 58px;
+
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+
+}
+
+
+.title{
+    color: $color-black;
+    
+    font-size: $font-h4;
+    font-weight: $font-bold;
+
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+}
+
+.subTitle{
+    color: $color-gray-300;
+    font-size: $font-body-small;
+    font-weight: $font-semibold;
+
+}
+
+.formInput {
+    padding: 0px;
+    gap: 28px;
+    width: 100%;
+    flex: none;
+    order: 1;
+    align-self: stretch;
+    flex-grow: 0;
+}
+
+.authError{
+    color: $color-alert-400;
+    font-size: $font-body-small;
+    width:415px;
+}
+
+.textpwdInfo{
+    width: 415px;
+    height: 20px;
+    font-size:$font-body-tiny;
+    font-weight: $font-regular;
+    line-height: 20px;
+    color: $color-gray-300;
+
+    flex: none;
+    order: 0;
+    flex-grow: 1;
+}
+
+.contentContainerAuthOptions {
+    gap: 24px;
+    width: 415px;
+    // height: 142px;
+    min-width: 150px;
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+}
+
+.contentContainerButtons{
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 8px;
+    width: 415px;
+    height: 70px;
+}
+
+
+
+.contentContainerAuthEndForm{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+}
+
+
+.textAuthEndForm{
+    font-size: $font-body-small;
+    font-weight: $font-semibold;
+    line-height: 22px;
+    align-items: center;
+
+    span{
+      color: $color-primary-400;
+      cursor:pointer;
+    }
+}
+
+@media (max-width : 860px){
+    .authError {
+        font-size: $font-body-tiny;
+    }
+    .authError{
+        font-size: $font-body-tiny;
+    }
+
+    .contentContainerButtons Button, .formInput Button{
+        padding:9px;
+    }
+}
+
+@media (max-width : 550px){
+    .formInput button {
+        margin-bottom: 15px;
+    }
+
+}
+
+@media (max-width : 252px) {
+    .formInput {
+        margin-top: 20px
+    }
+    .contentContainerButtons Button,
+    .formInput Button,
+    .formInput input {
+        padding-left: 5px;
+    }
+}
