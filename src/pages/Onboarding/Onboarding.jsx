@@ -1,13 +1,16 @@
 import React from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import AssistLogo from "../../assets/logo/logo-assist-tagline.png";
 import LoginImage from "../../assets/logo/signup.png";
 import style from "./Onboarding.module.scss";
 import Login from "./Login/Login";
-import Register from "./Register/RegisterAdmin";
+import Register from "./Register/Register";
 
 const Onboarding = () => {
   const location = useLocation().pathname;
+  const { id } = useParams();
+  const matches = location.match(/^\/register\/employee\/(.*)$/);
+  console.log(id);
   return (
     <div className={style.mainContainer}>
       <div className={style.leftSide}>
@@ -21,7 +24,8 @@ const Onboarding = () => {
           <br />
 
           {location === "/login" && <Login />}
-          {location === "/register" && <Register />}
+          {location === "/register" && <Register/>}
+          {matches && <Register id={id}/>}
         </div>
       </div>
       {/* End leftSide */}

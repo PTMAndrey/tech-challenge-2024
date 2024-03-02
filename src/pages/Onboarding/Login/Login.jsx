@@ -30,8 +30,8 @@ const Login = () => {
   const [passwordShown, setPasswordShown] = useState(true);
 
   // form values
-  const [email, setEmail] = useState("vasile.popescu@example.com"); // ""
-  const [pwd, setPwd] = useState("parola123"); // ""
+  const [email, setEmail] = useState(""); // ""
+  const [pwd, setPwd] = useState(""); // ""
 
   // error states
   const [emailError, setEmailError] = useState(""); // null
@@ -72,6 +72,12 @@ const Login = () => {
             setAlert({
               type: "success",
               message: "Login successfully",
+            });
+          }
+          else{
+            setAlert({
+              type: "danger",
+              message: "Something went wrong! Check your credentials",
             });
           }
         }
@@ -126,7 +132,7 @@ const Login = () => {
               {/* password */}
               {pwdError && <div className={styles.authError}>{pwdError}</div>}
               <Input
-                label="Parola"
+                label="Password"
                 id="password"
                 name="password"
                 value={pwd}
@@ -135,7 +141,7 @@ const Login = () => {
                   handlePwdError(e.target.value);
                 }}
                 type={passwordShown ? "password" : "text"}
-                placeholder={"Parola"}
+                placeholder={"Password"}
                 icon={passwordShown ? <View /> : <ViewOff />}
                 onIconClick={passToggleHandler}
                 required
