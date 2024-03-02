@@ -20,14 +20,6 @@ div a {
     margin:0px auto;
 }
 
-.layer{
-    background-color: rgba(0, 0, 0, 0.788);
-    width: 100%;
-    height: 100%;
-    min-height: 39.4rem;
-    color:white;
-}
-
 // main container
 .containerAuth {
     display: flex;
@@ -35,18 +27,6 @@ div a {
     align-items: center;
     padding: 32px;
 }
-
-//reset pwd
-.containerAuthResetPwd {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    width: 415px;
-    height: 208px;
-    left: 281px;
-    top: 429px;
-}
-
 
 .contentContainerForm {
     flex-direction: column;
@@ -57,22 +37,7 @@ div a {
     width: 415px;
     height: 320px;
     min-width: 150px;
-
 }
-
-// reset pwd
-.contentContainerFormResetPwd {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 0px;
-    gap: 28px;
-
-    width: 415px;
-    height: 70px;
-    min-width: 150px;
-
-}
-
 
 .form {
     flex-direction: column;
@@ -104,18 +69,6 @@ div a {
 
 }
 
-.formTitleReset {
-    padding: 0px;
-    gap: 4px;
-
-    width: 415px;
-    height: 58px;
-
-    order: 0;
-    align-self: stretch;
-    flex-grow: 0;
-}
-
 .title {
 
     font-size: $font-h4;
@@ -127,6 +80,7 @@ div a {
 }
 
 .subTitle {
+    color: $color-gray-300;
     font-size: $font-body-small;
     font-weight: $font-semibold;
 
@@ -135,44 +89,17 @@ div a {
 .formInput {
     padding: 0px;
     gap: 28px;
-
-    // width: 415px;
-    // height: 168px;
-
     flex: none;
     order: 1;
     align-self: stretch;
     flex-grow: 0;
 }
 
-.registerSeparator {
-    width: 415px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
-
-    hr {
-        width: 100%;
-        height: 1px;
-    }
-
-    span {
-        margin: 0px 20px;
-        font-size: $font-body-tiny;
-        font-weight: $font-semibold;
-        color: #6c6c6c;
-    }
-}
-
-
-
 .authError {
     color: $color-alert-400;
     font-size: $font-body-small;
     width: 415px;
 }
-
 
 .rememberMe {
 
@@ -283,16 +210,7 @@ div a {
     }
 }
 
-.register {
-    margin-top: 190px;
-}
-
-.reset {
-    margin-top: 90px;
-}
-
-.contentContainerAuthEndForm,
-.forgotPasswordEndForm {
+.contentContainerAuthEndForm{
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -328,31 +246,13 @@ div a {
     }
 }
 
-.formInput button {
-    margin-bottom: 10px;
-}
-
 @media (max-width : 860px) {
-
-
-    .formTitleReset {
-        height: 80px;
-    }
-
-    .registerSeparator {
-        width: 260px;
-    }
-
     .authError {
         font-size: $font-body-tiny;
     }
 
     .contentContainerButtons {
         margin-top: 40px;
-    }
-
-    .reset {
-        margin-top: 120px;
     }
 
     .rememberMe {
@@ -365,9 +265,6 @@ div a {
         justify-content: center;
     }
 
-    // .contentContainerButtons{
-    //     height: 120px;
-    // }
 
     .contentContainerButtons Button,
     .formInput Button {
@@ -381,17 +278,9 @@ div a {
     .authRegister {
         margin-top: -10px;
     }
-
-    .register {
-        margin-top: 220px;
-    }
-
 }
 
 @media (max-width : 550px) {
-    .registerSeparator {
-        display: none;
-    }
 
     .formInput button {
         margin-bottom: 15px;
@@ -412,22 +301,12 @@ div a {
         justify-content: center;
     }
 
-    // .contentContainerButtons{
-    //     height: 120px;
-    // }
-
     .contentContainerButtons Button,
     .formInput Button,
     .formInput input {
         padding: 2px;
         padding-left: 5px;
     }
-
-    .register {
-        margin-top: 150px;
-    }
-
-    // .textAuthEndForm{margin-top:-100px;}
 }
 
 @media (max-width : 252px) {
@@ -445,18 +324,10 @@ div a {
         justify-content: center;
     }
 
-    // .contentContainerButtons{
-    //     height: 120px;
-    // }
-
     .contentContainerButtons Button,
     .formInput Button,
     .formInput input {
         padding: 2px;
         padding-left: 5px;
-    }
-
-    .register {
-        margin-top: 150px;
     }
 }
