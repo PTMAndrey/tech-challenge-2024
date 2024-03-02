@@ -5,6 +5,7 @@ axios.defaults.headers = {
   // 'Content-Type': 'multipart/form-data',
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE",
+  'Content-Type': 'application/json'
 };
 
 // access control axios
@@ -15,8 +16,11 @@ axios.defaults.headers = {
 // login  authenticate
 export const login = async (email, password) => {
   try {
-    const response = await axios.get(
-      "/utilizator/login?email=" + email + "&parola=" + password
+    const response = await axios.post(
+      '/api/auth/login',{
+        'eMailAdress':email,
+        'password': password,
+      }
     );
     console.log(response);
     return response;
@@ -26,7 +30,7 @@ export const login = async (email, password) => {
 };
 
 
-export const register = async (data) => {
+export const registerAdmin = async (data) => {
   try {
     const response = await axios.post('/utilizator/add',data);
     return response;
