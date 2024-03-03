@@ -29,7 +29,7 @@ const Register = ({id}) => {
         lastName: "",
         eMailAdress: "",
         password: "",
-            // organisationName is used for idOrganisation in case of employee register
+            //! organisationName is used for idOrganisation ONLY in case of [employee register]
         organisationName: id === undefined ? "" : decodedToken.idOrganisation,
         headquarterAddress: "",
     });
