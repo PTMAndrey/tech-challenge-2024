@@ -28,7 +28,12 @@ export const login = async (email, password) => {
     else
       return response;
   } catch (error) {
-    console.log(error);
+    if (error.response) {
+      throw new Error(error.response.data.message || "Something went wrong... Try again later");
+
+    } else {
+      throw new Error("Network error or other issue");
+    }
   }
 };
 
@@ -39,7 +44,12 @@ export const registerAdmin = async (data) => {
 
     return response;
   } catch (error) {
-    console.log(error);
+    if (error.response) {
+      throw new Error(error.response.data.message || "Something went wrong... Try again later");
+
+    } else {
+      throw new Error("Network error or other issue");
+    }
   }
 };
 
@@ -51,18 +61,16 @@ export const registerUser = async (data) => {
         lastName: data.lastName,
         eMailAdress: data.eMailAdress,
         password: data.password,
-        idOrganisation: data.organisationName, // organisationName = idOrganisation only when registerUser is CALLED
+        idOrganisation: data.organisationName, //! organisationName = idOrganisation only when registerUser is CALLED
       });
 
     console.log(response)
     return response;
   } catch (error) {
     if (error.response) {
-      const errorMessage = error.response.data.message;
-      console.log("Backend error message:", errorMessage);
       throw new Error(error.response.data.message || "Something went wrong... Try again later");
 
-    } else{
+    } else {
       throw new Error("Network error or other issue");
     }
   }
