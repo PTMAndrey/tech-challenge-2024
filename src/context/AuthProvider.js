@@ -1,3 +1,4 @@
+import { jwtDecode } from "jwt-decode";
 import { createContext, useEffect, useState } from "react";
 const AuthContext = createContext({});
 
@@ -7,23 +8,32 @@ export const AuthProvider = ({ children }) => {
   // user
   const [user, setUser] = useState(null);
 
-  const userID =
+  const userToken =
     rememberMe || !!localStorage.getItem("token")
       ? localStorage.getItem("token")
       : sessionStorage.getItem("token");
 
+console.log(user);
 
   const isLoggedIn = () => {
-    return !!userID;
+    return !!userToken;
   };
 
- // logout function
- function logout() {
-  sessionStorage.clear();
-  sessionStorage.removeItem("userID");
-  localStorage.removeItem("userID");
-  setUser(null);
-}
+  // logout function
+  const logout = () => {
+    sessionStorage.removeItem("token")
+    localStorage.removeItem("token")
+    setUser(null);
+    userToken = null;
+  }
+
+  useEffect(() => {
+    if (!user && userToken) {
+      const decodedToken = jwtDecode(JSON.stringify(userToken));
+      setUser(decodedToken);
+    }
+  }, [])
+
 
 
   return (
@@ -35,7 +45,8 @@ export const AuthProvider = ({ children }) => {
         setRememberMe,
         logout,
         isLoggedIn,
-        userID
+        userToken,
+        logout,
       }}
     >
       {children}

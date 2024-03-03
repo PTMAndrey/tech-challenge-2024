@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate, Navigate } from "react-router-dom";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "./Login.module.scss";
 
 import { ReactComponent as View } from "../../../assets/icons/view.svg";
@@ -15,16 +15,9 @@ import { jwtDecode } from "jwt-decode";
 
 
 const Login = () => {
-  const { isLoggedIn, setUser, setUserId, rememberMe, setRememberMe } = useAuth();
+  const { setUser, rememberMe, setRememberMe } = useAuth();
   const { setAlert } = useStateProvider();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (isLoggedIn()) {
-      navigate("/");
-    }
-  }, []);
-
 
   // const { setUser } = useAuth();
   const [passwordShown, setPasswordShown] = useState(true);
@@ -34,8 +27,8 @@ const Login = () => {
   const [pwd, setPwd] = useState(""); // ""
 
   // error states
-  const [emailError, setEmailError] = useState(""); // null
-  const [pwdError, setPwdError] = useState(""); // null
+  const [emailError, setEmailError] = useState(null);
+  const [pwdError, setPwdError] = useState(null); 
 
   const handleEmailError = (e) => {
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
@@ -59,7 +52,7 @@ const Login = () => {
         if (pwd.length > 6) {
           console.log(email, pwd);
           const response = await login(email, pwd);
-          if (response) {
+          if (response !== null) {
             const decodedToken = jwtDecode(response.data.jwt);
 
             if (rememberMe) localStorage.setItem('token', response.data.jwt);
@@ -74,7 +67,7 @@ const Login = () => {
               message: "Login successfully",
             });
           }
-          else{
+          else {
             setAlert({
               type: "danger",
               message: "Something went wrong! Check your credentials",
@@ -90,10 +83,10 @@ const Login = () => {
         });
       }
     } catch (error) {
-      console.log(error, "error");
+      console.log(error.message, "error");
       setAlert({
         type: "danger",
-        message: "Something went wrong! Check your credentials",
+        message: error.message || "Something went wrong...", // Use the error message from the catch
       });
     }
   };
