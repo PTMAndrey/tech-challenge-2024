@@ -4,7 +4,11 @@
 
 .layout {
   transition: margin-left 0.3s ease;
-  
+  background-color: rgb(238, 237, 237);
+  min-height: 100vh;
+  height:100%;
+  padding: 20px;
+
   &.sidebarOpen {
     margin-left: 200px;
   }

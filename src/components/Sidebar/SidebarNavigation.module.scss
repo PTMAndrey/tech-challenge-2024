@@ -6,7 +6,6 @@
   width: 200px;
   height: 100vh;
   position: fixed;
-  background-color: rgb(238, 237, 237);
   border-right: 1px solid;
   left: 0;
   top: 0;
@@ -20,21 +19,77 @@
 }
 .sidebar.closed {
   width: 50px; 
+  .img{
+    margin-left:8px;
+  }
 }
 
+.buttonToggleSideBar{
+  position:fixed;
+  bottom: -10px !important;
+  left:0 !important;
+}
+
+.headerSideBar, .bottomSideBar{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+
+}
+
+.profileContainer a{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin:20px 10px;
+}
+hr { 
+  display: block;
+  margin-bottom: 0.5em;
+  width: 100%;
+  border: 1px inset #424;
+} 
+
+.profileImg, .notificationBell{
+  font-size: 30px;
+  margin-bottom: 5px;
+}
+
+
 .menuItems {
-  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  // align-items: center;
+  
 }
 
 .menuItem {
+  cursor: pointer;
   display: flex;
   align-items: center;
+  flex-direction: row !important;
+  justify-content: space-between !important;
+  margin: 20px 0;
+  span{
+    margin: 0 auto;
+  }
 }
 
-.menuItem .img {
-  width:50px;
+.img {
+  font-size:30px;
+  margin-left:20px;
 }
 
 .menuItem span {
   display: block;
+}
+
+.bottomSideBar a{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  // margin:40px 10px 20px 10px;
 }
