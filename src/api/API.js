@@ -8,6 +8,23 @@ axios.defaults.headers = {
   'Content-Type': 'application/json'
 };
 
+axios.interceptors.request.use(
+  (config) => {
+    // Attempt to retrieve the token from localStorage or sessionStorage
+    const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+    
+    // If the token exists, append it to the Authorization header
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
 // access control axios
 // axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 
@@ -65,6 +82,23 @@ export const registerUser = async (data) => {
       });
 
     console.log(response)
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data.message || "Something went wrong... Try again later");
+
+    } else {
+      throw new Error("Network error or other issue");
+    }
+  }
+};
+
+
+
+export const sendEmailInvitations = async ( data) => {
+  try {
+    const response = await axios.post('/email/send', data);
+console.log(response);
     return response;
   } catch (error) {
     if (error.response) {

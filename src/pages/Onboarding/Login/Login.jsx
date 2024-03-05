@@ -5,7 +5,7 @@ import styles from "./Login.module.scss";
 import { ReactComponent as View } from "../../../assets/icons/view.svg";
 import { ReactComponent as ViewOff } from "../../../assets/icons/view-off.svg";
 
-import useAuth from "../../../hooks/useAuth";
+import useAuthProvider from "../../../hooks/useAuthProvider";
 import useStateProvider from "../../../hooks/useStateProvider";
 
 import { login } from "../../../api/API";
@@ -15,11 +15,11 @@ import { jwtDecode } from "jwt-decode";
 
 
 const Login = () => {
-  const { setUser, rememberMe, setRememberMe } = useAuth();
+  const { setUser, rememberMe, setRememberMe } = useAuthProvider();
   const { setAlert } = useStateProvider();
   const navigate = useNavigate();
 
-  // const { setUser } = useAuth();
+  // const { setUser } = useAuthProvider();
   const [passwordShown, setPasswordShown] = useState(true);
 
   // form values

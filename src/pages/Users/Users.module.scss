@@ -1,0 +1,50 @@
+@import "../../styles/variables.scss";
+@import "../../styles/mixins.scss";
+
+
+.dropzone {
+    cursor:pointer;
+    background-color: $color-gray-50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    height: 128px;
+    width: 200px;
+    margin-bottom: 1rem;
+  
+    &:hover {
+      background-color: $color-gray-100;
+    }
+  
+    p {
+      font-weight: $font-body-small;
+      font-size: $font-regular;
+      color: $color-gray-400;
+      margin: 0;
+      padding: 1rem;
+      text-align: center;
+    }
+  }
+  
+  .accept {
+    border: 2px dashed $color-success-400;
+  }
+  
+  .reject {
+    border: 2px dashed $color-alert-400;
+  }
+  
+  .error {
+    color: $color-alert-400;
+    font-size: $font-body-tiny;
+    margin-top: 4px;
+  }
+  
+  .uploadedFileInfo{
+    width: 300px;
+  }
+
+  input:disabled{
+    cursor: not-allowed !important;
+  }

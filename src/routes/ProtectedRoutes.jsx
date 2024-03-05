@@ -1,9 +1,9 @@
 import { Outlet, Navigate, useLocation } from "react-router-dom";
-import useAuth from "../hooks/useAuth";
+import useAuthProvider from "../hooks/useAuthProvider";
 
 const ProtectedRoutes = ({ role }) => {
   let location = useLocation();
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn } = useAuthProvider();
 
   return isLoggedIn() ? (
     <Outlet />

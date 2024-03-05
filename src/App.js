@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   BrowserRouter as Router,
   Routes,
   Route,
   Outlet,
+  useLocation,
 } from "react-router-dom";
 import Home from "./pages/Home/Home";
 import Layout from './pages/Layout/Layout';
@@ -12,42 +13,45 @@ import Alert from "./components/Alert/Alert";
 import useStateProvider from "./hooks/useStateProvider";
 import Onboarding from "./pages/Onboarding/Onboarding";
 import Sidebar from "./components/Sidebar/SidebarNavigation";
+import Users from './pages/Users/Users';
 
 function App() {
   const { alert } = useStateProvider();
-  return (
-    <Router>
-      <Routes>
-        <Route
-          element={
-            <>
-              <Layout>
-                <Sidebar />
-                <ProtectedRoutes />
-              </Layout>
-            </>
-          }
-        >
-          {/* protected routes */}
-          <Route path="/" element={<Home />} />
-        </Route>
 
-        <Route
-          element={
-            <>
-              <Outlet />
-            </>
-          }
-        >
-          {/* public routes */}
-          <Route path="/login" element={<Onboarding />} />
-          <Route path="/register" element={<Onboarding />} />
-          <Route path="/register/employee/:id" element={<Onboarding />} />
-        </Route>
-      </Routes>
-      {alert && <Alert message={alert.message} type={alert.type} />}
-    </Router>
-  );
+return (
+  <Router>
+    <Routes>
+      <Route
+        element={
+          <>
+            <Layout>
+              <Sidebar />
+              <ProtectedRoutes />
+            </Layout>
+          </>
+        }
+      >
+        {/* protected routes */}
+        <Route path="/" element={<Home />} />
+        <Route path="/users" element={<Users />} />
+      </Route>
+
+      <Route
+        element={
+          <>
+            <Outlet />
+          </>
+        }
+      >
+        {/* public routes */}
+        <Route path="/login" element={<Onboarding />} />
+        <Route path="/register" element={<Onboarding />} />
+        <Route path="/register/employee/:id" element={<Onboarding />} />
+      </Route>
+    </Routes>
+    {alert && <Alert message={alert.message} type={alert.type} />}
+  </Router>
+);
 }
 
 export default App;

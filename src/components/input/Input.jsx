@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { MdOutlineCancel } from 'react-icons/md'
 
 const Input = ({
+  accept,
   checked,
   clearable,
   disabled,
@@ -25,6 +26,7 @@ const Input = ({
   readOnly,
   ref,
   required,
+  size,
   title,
   type,
   value,
@@ -33,23 +35,25 @@ const Input = ({
     <div className={`${styles.containerInput} ${error && styles.error}`}>
       {label ? <label htmlFor={name}>{label}</label> : <p></p>}
       <input
-        title={title}
-        required={required}
+        accept={accept}
+        checked={checked}
+        className={error ? styles.inputErr : null}
         disabled={disabled}
-        value={value}
         id={id}
+        max={max}
+        min={min}
         name={name}
         onChange={onChange}
-        onBlur={onBlur}
         onClick={onClick}
-        placeholder={placeholder}
-        className={error ? styles.inputErr : null}
-        type={type}
+        onBlur={onBlur}
         pattern={pattern}
-        min={min}
-        max={max}
-        checked={checked}
+        placeholder={placeholder}
         readOnly={readOnly}
+        required={required}
+        size={size}
+        title={title}
+        type={type}
+        value={value}
       />
       {clearable &&
         <span
@@ -71,6 +75,7 @@ const Input = ({
 };
 
 Input.propTypes = {
+  accept: PropTypes.string,
   checked: PropTypes.bool,
   clearable: PropTypes.bool,
   disabled: PropTypes.bool,
@@ -91,12 +96,14 @@ Input.propTypes = {
   placeholder: PropTypes.string,
   readOnly: PropTypes.bool,
   required: PropTypes.bool,
+  size: PropTypes.bool,
   title: PropTypes.string,
   type: PropTypes.string,
   value: PropTypes.any,
 };
 
 Input.defaultProps = {
+  accept: "",
   checked: false,
   clearable: false,
   disabled: false,
@@ -116,6 +123,7 @@ Input.defaultProps = {
   placeholder: "Placeholder",
   readOnly: false,
   required: false,
+  size: null,
   type: "text",  
 };
 

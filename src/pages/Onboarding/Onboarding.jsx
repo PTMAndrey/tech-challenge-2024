@@ -2,10 +2,10 @@ import React, { useEffect } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import AssistLogo from "../../assets/logo/logo-assist-tagline.png";
 import LoginImage from "../../assets/logo/signup.png";
-import style from "./Onboarding.module.scss";
+import styles from "./Onboarding.module.scss";
 import Login from "./Login/Login";
 import Register from "./Register/Register";
-import useAuth from "../../hooks/useAuth";
+import useAuthProvider from "../../hooks/useAuthProvider";
 
 const Onboarding = () => {
   const location = useLocation().pathname;
@@ -13,7 +13,7 @@ const Onboarding = () => {
   const matches = location.match(/^\/register\/employee\/(.*)$/);
   // console.log(id);
   
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn } = useAuthProvider();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,12 +24,12 @@ const Onboarding = () => {
 
 
   return (
-    <div className={style.mainContainer}>
-      <div className={style.leftSide}>
-        <div className={style.contentContainer}>
+    <div className={styles.mainContainer}>
+      <div className={styles.leftSide}>
+        <div className={styles.contentContainer}>
           <img
             src={AssistLogo}
-            className={style.logoImageOnboarding}
+            className={styles.logoImageOnboarding}
             alt="Login Logo"
           />
           <br />
@@ -41,10 +41,10 @@ const Onboarding = () => {
         </div>
       </div>
       {/* End leftSide */}
-      {/* <div className={style.rightSide}> */}
+      {/* <div className={styles.rightSide}> */}
       <img
         src={LoginImage}
-        className={style.rightImageOnboarding}
+        className={styles.rightImageOnboarding}
         alt="Login"
       />
       {/* </div> */}
