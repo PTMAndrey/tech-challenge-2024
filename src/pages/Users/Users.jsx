@@ -15,6 +15,7 @@ const Users = () => {
     const [singleEmail, setSingleEmail] = useState('');
     const [emailList, setEmailList] = useState([]);
     const [uploadedFile, setUploadedFile] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleInputChange = (e) => {
         setSingleEmail(e.target.value);
@@ -55,20 +56,20 @@ const Users = () => {
             setAlert({ type: "danger", message: "Please provide an email or upload a file." });
             return;
         }
-
+        setIsLoading(true);
         try {
-            const response = await sendEmailInvitations({
+            await sendEmailInvitations({
                 idOrganisationAdmin: user?.idOrganisation || "",
                 emailList: emailsToSend,
             });
-            if (response.status === 200) {
-                setAlert({ type: "success", message: "Invitations sent successfully." });
-                setUploadedFile(null);
-                setSingleEmail('');
-                setEmailList([]);
-            }
+            setAlert({ type: "success", message: "Invitations sent successfully." });
+            setUploadedFile(null);
+            setSingleEmail('');
+            setEmailList([]);
         } catch (error) {
             setAlert({ type: "danger", message: error.message || "Something went wrong." });
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -89,10 +90,14 @@ const Users = () => {
             {uploadedFile && (
                 <div className={styles.uploadedFileInfo}>
                     <p>Uploaded file: {uploadedFile.name}</p>
-                    <Button variant="destructive" label="Cancel file" onClick={handleCancelFile} />
+                    {!isLoading && <Button variant="destructive" label="Cancel file" onClick={handleCancelFile} />}
                 </div>
             )}
-            <Button variant="primary" label="Send Invitations" onClick={sendInvitations} disabled={!singleEmail && emailList.length === 0} />
+            {isLoading ? (
+                <div className={styles.spinner}></div>
+            ) : (
+                <Button variant="primary" label="Send Invitations" onClick={sendInvitations} disabled={!singleEmail && emailList.length === 0 || isLoading} />
+            )}
         </Container>
     );
 };
