@@ -3,7 +3,7 @@
 @import "../../styles/index.scss";
 
 .sidebar {
-  width: 200px;
+  width: 160px;
   height: 100vh;
   position: fixed;
   border-right: 1px solid;
@@ -12,46 +12,52 @@
   transition: width 0.3s ease;
 }
 
-.sidebar button{
+.sidebar button {
   font-size: 30px;
   display: flex;
-  margin-bottom: 20px;
 }
+
 .sidebar.closed {
-  width: 50px; 
-  .img{
-    margin-left:8px;
+  width: 50px;
+
+  .profileImg {
+    margin-top: 30px;
+  }
+
+  .img {
+    margin: 0 auto;
   }
 }
 
-.buttonToggleSideBar{
-  position:fixed;
-  bottom: -10px !important;
-  left:0 !important;
+.buttonToggleSideBar {
+  position: fixed;
+  top: 5px !important;
+  left: 0 !important;
 }
 
-.headerSideBar, .bottomSideBar{
+.headerSideBar {
   display: flex;
   flex-direction: row;
   justify-content: center;
 
 }
 
-.profileContainer a{
+.profileContainer a {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin:20px 10px;
+  margin: 20px 10px;
 }
-hr { 
-  display: block;
-  margin-bottom: 0.5em;
-  width: 100%;
-  border: 1px inset #424;
-} 
 
-.profileImg, .notificationBell{
+hr {
+  display: block;
+  width: 100%;
+  border: 2px solid #424;
+}
+
+.profileImg,
+.notificationBell {
   font-size: 25px;
   margin-bottom: 5px;
 }
@@ -61,34 +67,61 @@ hr {
   display: flex;
   flex-direction: column;
   height: 75%;
-  
+
+  hr {
+    border: 1px solid rgba(160, 160, 160, 0.377) !important;
+  }
 }
 
-.menuItem {
+.menuItem,
+.activeMenuItem {
   cursor: pointer;
   display: flex;
   align-items: center;
   flex-direction: row !important;
   justify-content: space-between !important;
-  margin: 20px 0;
-  span{
+  padding: 12px 0;
+  margin-left:0.03em;
+  border-left: 3px solid transparent;
+
+  span {
     margin: 0 auto;
+    font-size: 14px;
+    display: block;
   }
 }
 
 .img {
-  font-size:25px;
-  margin-left:20px;
+  font-size: 25px;
+  margin-left: 20px;
 }
 
-.menuItem span {
-  display: block;
+.activeMenuItem {
+  animation: highlight 0.7s ease-in-out forwards;
 }
 
-.bottomSideBar a{
+@keyframes highlight {
+  to {
+    color: rgb(51, 54, 243);
+    border-left: 3px solid orange; // Schimbați această culoare după preferință
+  }
+}
+
+.bottomSideBar {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.bottomSideBar button {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   // margin:40px 10px 20px 10px;
+}
+
+.bottomSideBar span {
+  font-size: 14px;
 }

@@ -33,7 +33,7 @@ return (
       >
         {/* protected routes */}
         <Route path="/" element={<Home />} />
-        <Route path="/users" element={<Users />} />
+        <Route path="/employees" element={<Users />} />
       </Route>
 
       <Route

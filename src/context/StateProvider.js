@@ -5,6 +5,7 @@ const StateContext = createContext({});
 
 export const StateProvider = ({ children }) => {
 
+  const [activeNavbarItem, setActiveNavbarItem] = useState("/");
   // alert
   const [alert, setAlert] = useState(null);
   if (alert) {
@@ -17,6 +18,8 @@ export const StateProvider = ({ children }) => {
     value={{
       alert,
       setAlert,
+      activeNavbarItem,
+      setActiveNavbarItem,
     }}
   >{children}</StateContext.Provider>;
 };

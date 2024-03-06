@@ -20,7 +20,7 @@ console.log(user);
   };
 
   // logout function
-  const logout = () => {
+  function logout(){
     sessionStorage.removeItem("token")
     localStorage.removeItem("token")
     setUser(null);
