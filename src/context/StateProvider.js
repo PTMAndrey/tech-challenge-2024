@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useState } from "react";
 // import {  } from "../api/API";
 
 const StateContext = createContext({});
@@ -13,13 +13,15 @@ export const StateProvider = ({ children }) => {
       setAlert(null);
     }, 5000);
   }
-
+  function handeNavbarOption(option) {
+    setActiveNavbarItem(option);
+  }
   return <StateContext.Provider
     value={{
       alert,
       setAlert,
       activeNavbarItem,
-      setActiveNavbarItem,
+      handeNavbarOption,
     }}
   >{children}</StateContext.Provider>;
 };
