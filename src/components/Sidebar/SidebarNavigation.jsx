@@ -10,23 +10,22 @@ import { FaFolderOpen } from "react-icons/fa6";
 import { MdOutlineStars } from "react-icons/md";
 import { BiLogOutCircle } from "react-icons/bi";
 import useAuthProvider from "../../hooks/useAuthProvider";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import useStateProvider from "../../hooks/useStateProvider";
 
 
 const SidebarNavigation = ({ toggleSidebar, isSidebarOpen }) => {
   const { logout } = useAuthProvider();
-  const { activeNavbarItem, handleNavbarOption } = useStateProvider();
+  
   const navigate = useNavigate();
+  const location = useLocation().pathname;
+
   const handleLogout = () => {
     logout();
     navigate("/login");
   };
-  const handleItemClick = (path) => {
-    handleNavbarOption(path);
-    navigate(path);
-  };
-console.log(activeNavbarItem);
+
+
   return (
     <div className={`${styles.sidebar} ${isSidebarOpen ? styles.open : styles.closed}`}>
       <div className={styles.headerSideBar}>
@@ -34,7 +33,7 @@ console.log(activeNavbarItem);
           <button onClick={toggleSidebar} className={styles.buttonToggleSideBar}>
             {isSidebarOpen ? <TbLayoutSidebarRightExpandFilled /> : <TbLayoutSidebarLeftExpandFilled />}
           </button>
-          <Link to="/profile" className={activeNavbarItem === "/profile" ? styles.activeMenuItem : null} onClick={() => handleItemClick("/profile")}>
+          <Link to="/profile" className={location === "/profile" ? styles.activeMenuItem : null}>
             <FaUserCircle className={styles.profileImg} />
             {isSidebarOpen && <span>Profile</span>}
           </Link>
@@ -42,42 +41,42 @@ console.log(activeNavbarItem);
       </div>
       <hr />
       <div className={styles.menuItems}>
-        <Link to="/" className={activeNavbarItem === "/" ? styles.activeMenuItem : styles.menuItem} onClick={() => handleItemClick("/")}>
+        <Link to="/" className={location === "/" ? styles.activeMenuItem : styles.menuItem}>
           <FaHome className={styles.img} />
           {isSidebarOpen && <span>Home</span>}
         </Link>
         <hr />
-        <Link to="/team-roles" className={activeNavbarItem === "/team-roles" ? styles.activeMenuItem : styles.menuItem} onClick={() => handleItemClick("/team-roles")}>
+        <Link to="/team-roles" className={location === "/team-roles" ? styles.activeMenuItem : styles.menuItem}>
           <IoIosPeople className={styles.img} />
           {isSidebarOpen && <span>Team Roles</span>}
         </Link>
         <hr />
-        <Link to="/departments" className={activeNavbarItem === "/departments" ? styles.activeMenuItem : styles.menuItem} onClick={() => handleItemClick("/departments")}>
+        <Link to="/departments" className={location === "/departments" ? styles.activeMenuItem : styles.menuItem}>
           <MdOutlineStars className={styles.img} />
           {isSidebarOpen && <span>Departments</span>}
         </Link>
         <hr />
-        <Link to="/projects" className={activeNavbarItem === "/projects" ? styles.activeMenuItem : styles.menuItem} onClick={() => handleItemClick("/projects")}>
+        <Link to="/projects" className={location === "/projects" ? styles.activeMenuItem : styles.menuItem}>
           <FaFolderOpen className={styles.img} />
           {isSidebarOpen && <span>Projects</span>}
         </Link>
         <hr />
-        <Link to="/skills" className={activeNavbarItem === "/skills" ? styles.activeMenuItem : styles.menuItem} onClick={() => handleItemClick("/skills")}>
+        <Link to="/skills" className={location === "/skills" ? styles.activeMenuItem : styles.menuItem}>
           <GiSkills className={styles.img} />
           {isSidebarOpen && <span>Skills</span>}
         </Link>
         <hr />
-        <Link to="/teams" className={activeNavbarItem === "/teams" ? styles.activeMenuItem : styles.menuItem} onClick={() => handleItemClick("/teams")}>
+        <Link to="/teams" className={location === "/teams" ? styles.activeMenuItem : styles.menuItem}>
           <GiTeamIdea className={styles.img} />
           {isSidebarOpen && <span>Teams</span>}
         </Link>
         <hr />
-        <Link to="/employees" className={activeNavbarItem === "/employees" ? styles.activeMenuItem : styles.menuItem} onClick={() => handleItemClick("/employees")}>
+        <Link to="/employees" className={location === "/employees" ? styles.activeMenuItem : styles.menuItem} >
           <LiaUsersSolid className={styles.img} />
           {isSidebarOpen && <span>Employees</span>}
         </Link>
         <hr />
-        <Link to="/notifications" className={activeNavbarItem === "/notifications" ? styles.activeMenuItem : styles.menuItem} onClick={() => handleItemClick("/notifications")}>
+        <Link to="/notifications" className={location === "/notifications" ? styles.activeMenuItem : styles.menuItem}>
           <FaBell className={styles.img} />
           {isSidebarOpen && <span>Notifications</span>}
         </Link>

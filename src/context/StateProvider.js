@@ -13,15 +13,11 @@ export const StateProvider = ({ children }) => {
       setAlert(null);
     }, 5000);
   }
-  function handeNavbarOption(option) {
-    setActiveNavbarItem(option);
-  }
+  
   return <StateContext.Provider
     value={{
       alert,
       setAlert,
-      activeNavbarItem,
-      handeNavbarOption,
     }}
   >{children}</StateContext.Provider>;
 };
