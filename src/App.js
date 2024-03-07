@@ -14,6 +14,7 @@ import useStateProvider from "./hooks/useStateProvider";
 import Onboarding from "./pages/Onboarding/Onboarding";
 import Sidebar from "./components/Sidebar/SidebarNavigation";
 import Users from './pages/Users/Users';
+import NotFound from './pages/NotFound/NotFound';
 
 function App() {
   const { alert } = useStateProvider();
@@ -47,6 +48,8 @@ return (
         <Route path="/login" element={<Onboarding />} />
         <Route path="/register" element={<Onboarding />} />
         <Route path="/register/employee/:id" element={<Onboarding />} />
+        <Route path="/not-found" element={<NotFound />} />
+        <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
     {alert && <Alert message={alert.message} type={alert.type} />}

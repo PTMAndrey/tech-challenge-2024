@@ -8,20 +8,27 @@ import Register from "./Register/Register";
 import useAuthProvider from "../../hooks/useAuthProvider";
 
 const Onboarding = () => {
-  const location = useLocation().pathname;
-  const { id } = useParams();
-  const matches = location.match(/^\/register\/employee\/(.*)$/);
-  // console.log(id);
-  
-  const { isLoggedIn } = useAuthProvider();
+  // debugger
   const navigate = useNavigate();
+  const { id } = useParams();
+  const location = useLocation().pathname;
+  let regex = /^eyJhbGciOiJSUzI1NiJ9./;
+
+  const { isLoggedIn } = useAuthProvider();
 
   useEffect(() => {
     if (isLoggedIn()) {
       navigate("/");
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    if (regex.test(id) === false && (location !== "/login" && location !== "/register"))
+      navigate('/not-found', { replace: true });
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <div className={styles.mainContainer}>
@@ -36,8 +43,9 @@ const Onboarding = () => {
           <br />
 
           {location === "/login" && <Login />}
-          {location === "/register" && <Register/>}
-          {matches && <Register id={id}/>}
+          {location === "/register" && <Register />}
+          {location === ("/register/employee/" + id) && <Register id={id} />}
+          {/* {jwtid && <Register id={id} />} */}
         </div>
       </div>
       {/* End leftSide */}
