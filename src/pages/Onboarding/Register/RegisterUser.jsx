@@ -6,13 +6,13 @@ import { ReactComponent as View } from "../../../assets/icons/view.svg";
 import { ReactComponent as ViewOff } from "../../../assets/icons/view-off.svg";
 
 const RegisterUser = ({decodedToken, formValue, handleChange, showErrors, checkErrors, passwordShown, passToggleHandler }) => {
-
+console.log(decodedToken);
   return (
     <div className={styles.form}>
       <div className={styles.formTitle}>
         <h4 className={styles.title}>Create account</h4>
         <p className={styles.subTitle}>
-          Sign up to {decodedToken.organisationName} 
+          Sign up to {decodedToken?.organisationName} 
         </p>
       </div>
 
@@ -25,7 +25,7 @@ const RegisterUser = ({decodedToken, formValue, handleChange, showErrors, checkE
           label="First name *"
           id="firstName"
           name="firstName"
-          value={formValue.firstName}
+          value={formValue?.firstName}
           onChange={handleChange}
           error={showErrors && checkErrors("firstName") ? true : false}
           helper={showErrors ? checkErrors("firstName") : ""}
@@ -38,7 +38,7 @@ const RegisterUser = ({decodedToken, formValue, handleChange, showErrors, checkE
           label="Last name *"
           id="lastName"
           name="lastName"
-          value={formValue.lastName}
+          value={formValue?.lastName}
           onChange={handleChange}
           error={showErrors && checkErrors("lastName") ? true : false}
           helper={showErrors ? checkErrors("lastName") : ""}
@@ -51,7 +51,7 @@ const RegisterUser = ({decodedToken, formValue, handleChange, showErrors, checkE
           label="Email *"
           id="eMailAdress"
           name="eMailAdress"
-          value={formValue.eMailAdress}
+          value={formValue?.eMailAdress}
           onChange={handleChange}
           error={showErrors && checkErrors("eMailAdress") ? true : false}
           helper={showErrors ? checkErrors("eMailAdress") : ""}
@@ -65,7 +65,7 @@ const RegisterUser = ({decodedToken, formValue, handleChange, showErrors, checkE
           label="Password *"
           id="password"
           name="password"
-          value={formValue.password}
+          value={formValue?.password}
           onChange={handleChange}
           error={showErrors && checkErrors("password") ? true : false}
           helper={showErrors ? checkErrors("password") : ""}
@@ -77,7 +77,7 @@ const RegisterUser = ({decodedToken, formValue, handleChange, showErrors, checkE
         </span>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default RegisterUser
+export default RegisterUser;

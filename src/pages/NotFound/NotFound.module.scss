@@ -1,0 +1,117 @@
+@import "../../styles/variables.scss";
+@import "../../styles/mixins.scss";
+
+.containerNotFound {
+
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: $color-gray-300;
+    min-height: 100vh;
+    height: 100%;
+    transition: transform 0.5s ease-in-out;
+
+    @media screen and (max-width:400px) {
+        margin: 0 auto !important;
+    }
+}
+
+.rotateAndShake {
+    animation: rotateShake 5s infinite linear;
+}
+
+@keyframes rotateShake {
+
+    0%,
+    100% {
+        transform: rotate(0deg);
+    }
+
+    25% {
+        transform: rotate(5deg);
+    }
+
+    50% {
+        transform: rotate(-5deg);
+    }
+
+    75% {
+        transform: rotate(5deg);
+    }
+}
+
+img {
+    -moz-drag-over: none;
+    -webkit-user-drag: none;
+}
+
+.imagineNotFound {
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+    display: flex;
+    width: 320px;
+    height: 350px;
+
+    @media screen and (max-width:400px) {
+        width: 250px;
+        height: 250px;
+        margin: 0 auto;
+
+    }
+
+}
+
+
+.errorText h1,
+.errorText h2,
+.errorText p {
+    color: $color-black; // Asumați că aveți această variabilă definită sau înlocuiți-o cu o culoare
+    text-shadow: 0 0 10px rgba(1, 1, 1, 0.7);
+    margin: 20px 10px;
+    transition: color 0.5s ease-in-out;
+    display: flex;
+
+    @media screen and (max-width:400px) {
+        justify-content: center;
+    }
+}
+
+.ntf {
+    font-size: 130px;
+    text-shadow: 0 0 10px rgba(1, 1, 1, 0.7);
+
+    @media screen and (max-width:400px) {
+        font-size: 80px;
+    }
+}
+
+.homeButton {
+    margin-top: 20px;
+    display: inline-block;
+    font-size: 1.2rem;
+    border-radius: 10px;
+    padding: 5px 2px;
+    transition: color 0.3s ease-in-out;
+    display: flex;
+
+    @media screen and (max-width:400px) {
+        justify-content: center;
+    }
+
+    &:hover {
+        background-color: $color-primary-300;
+        border-color: $color-primary-300;
+        color: #fff;
+
+        transition: color 0.3s ease-in-out;
+    }
+}

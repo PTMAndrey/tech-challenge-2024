@@ -13,7 +13,6 @@ export const AuthProvider = ({ children }) => {
       ? localStorage.getItem("token")
       : sessionStorage.getItem("token");
 
-console.log(user);
 
   const isLoggedIn = () => {
     return !!userToken;
@@ -24,7 +23,6 @@ console.log(user);
     sessionStorage.removeItem("token")
     localStorage.removeItem("token")
     setUser(null);
-    userToken = null;
   }
 
   useEffect(() => {
@@ -43,7 +41,6 @@ console.log(user);
         setUser,
         rememberMe,
         setRememberMe,
-        logout,
         isLoggedIn,
         userToken,
         logout,

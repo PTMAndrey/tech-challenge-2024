@@ -1,24 +1,27 @@
+/* eslint-disable no-useless-escape */
 import React, { useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 import useStateProvider from "../../../hooks/useStateProvider";
 import styles from "./Register.module.scss";
-import Input from "../../../components/input/Input";
 import Button from "../../../components/Button/Button";
-
-import { ReactComponent as View } from "../../../assets/icons/view.svg";
-import { ReactComponent as ViewOff } from "../../../assets/icons/view-off.svg";
-
 import { registerAdmin, registerUser } from "../../../api/API";
 import RegisterAdmin from "./RegisterAdmin";
 import RegisterUser from "./RegisterUser";
 import { jwtDecode } from "jwt-decode";
 
 const Register = ({id}) => {
+    
     const navigate = useNavigate();
-    // console.log(id);
-
-    const decodedToken = id !== undefined && jwtDecode(JSON.stringify(id));
+    let decodedToken;
+    if (id) {
+        try {
+            decodedToken = jwtDecode(id);
+        } catch (error) {
+            console.error("Eroare la decodarea JWT", error);
+            // Manevrează eroarea corespunzător (de exemplu, redirectează utilizatorul)
+        }
+    }
 
     const { setAlert } = useStateProvider();
 
@@ -29,8 +32,8 @@ const Register = ({id}) => {
         lastName: "",
         eMailAdress: "",
         password: "",
-            //! organisationName is used for idOrganisation ONLY in case of [employee register]
-        organisationName: id === undefined ? "" : decodedToken.idOrganisation,
+        //! organisationName is used for idOrganisation ONLY in case of [employee register]
+        organisationName: id === undefined ? "" : decodedToken?.idOrganisation,
         headquarterAddress: "",
     });
 
@@ -125,7 +128,7 @@ const Register = ({id}) => {
         if (isFormValid()) {
             setShowErrors(false);
             try {
-                const response =  id === undefined ? await registerAdmin(formValue) : await registerUser(formValue);
+                const response = id === undefined ? await registerAdmin(formValue) : await registerUser(formValue);
                 if (response.status === 200) {
                     navigate("/login");
                     setAlert({
