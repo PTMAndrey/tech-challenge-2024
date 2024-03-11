@@ -19,20 +19,16 @@ jobs:
           npm install
         workingDirectory: $(projectRoot)
         displayName: "Install dependencies"
-      
+
       - script: |
-          npm run build
-        workingDirectory: $(projectRoot)
-        displayName: "Build project"
-      
-      - script: |
-          echo "BACKEND_BASE_URL=$(BACKEND_BASE_URL)" > build/.env
+          echo "BACKEND_BASE_URL=$(BACKEND_BASE_URL)" > .env
         workingDirectory: $(projectRoot)
         displayName: "Create env file"
 
       - script: |
-          cat build/.env
+          npm run build
         workingDirectory: $(projectRoot)
+        displayName: "Build project"
       
       - task: ArchiveFiles@2
         displayName: 'Archive files'
