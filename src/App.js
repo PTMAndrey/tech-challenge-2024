@@ -13,7 +13,14 @@ import Alert from "./components/Alert/Alert";
 import useStateProvider from "./hooks/useStateProvider";
 import Onboarding from "./pages/Onboarding/Onboarding";
 import Sidebar from "./components/Sidebar/SidebarNavigation";
+import Profile from './pages/Profile/Profile';
+import TeamRoles from './pages/TeamRoles/TeamRoles';
+import Departments from './pages/Departments/Departments';
+import Projects from './pages/Projects/Projects';
+import Skills from './pages/Skills/Skills';
+import Teams from './pages/Teams/Teams';
 import Users from './pages/Users/Users';
+import Notifications from './pages/Notifications/Notifications';
 import NotFound from './pages/NotFound/NotFound';
 
 function App() {
@@ -33,8 +40,15 @@ return (
         }
       >
         {/* protected routes */}
+        <Route path="/profile" element={<Profile />} />
         <Route path="/" element={<Home />} />
+        <Route path="/team-roles" element={<TeamRoles/>} />
+        <Route path="/departments" element={<Departments />} />
+        <Route path="/projects" element={<Projects />} />
+        <Route path="/skills" element={<Skills />} />
+        <Route path="/teams" element={<Teams />} />
         <Route path="/employees" element={<Users />} />
+        <Route path="/notifications" element={<Notifications />} />
       </Route>
 
       <Route

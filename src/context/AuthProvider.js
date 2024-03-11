@@ -1,5 +1,6 @@
 import { jwtDecode } from "jwt-decode";
 import { createContext, useEffect, useState } from "react";
+import { getUserById } from "../api/API";
 const AuthContext = createContext({});
 
 export const AuthProvider = ({ children }) => {
@@ -13,7 +14,7 @@ export const AuthProvider = ({ children }) => {
       ? localStorage.getItem("token")
       : sessionStorage.getItem("token");
 
-
+console.log(user);
   const isLoggedIn = () => {
     return !!userToken;
   };
@@ -28,9 +29,23 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     if (!user && userToken) {
       const decodedToken = jwtDecode(JSON.stringify(userToken));
-      setUser(decodedToken);
+      // setUser(decodedToken);
+      fetchUser(decodedToken.userId);
     }
   }, [])
+
+  const fetchUser = async (userID) => {
+    console.log(user);
+    try {
+        const response = await getUserById(userID);
+        if (response?.status === 200) {
+          console.log(response.data);
+          setUser(response?.data);
+        }
+    } catch (error) {
+      console.log("Error: ", error);
+    }
+  };
 
 
 
@@ -43,6 +58,7 @@ export const AuthProvider = ({ children }) => {
         setRememberMe,
         isLoggedIn,
         userToken,
+        fetchUser,
         logout,
       }}
     >

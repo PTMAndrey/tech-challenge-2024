@@ -104,14 +104,26 @@ hr {
   to {
     color: rgb(51, 54, 243);
     border-left: 3px solid orange; // Schimbați această culoare după preferință
+    font-weight: bold;
   }
 }
 
+.activeMenuProfile{
+  animation: highlightProfile 0.7s ease-in-out forwards;
+}
+@keyframes highlightProfile {
+  to {
+    color: rgb(51, 54, 243);
+    font-weight: bold;
+  }
+}
 .bottomSideBar {
   display: flex;
   flex-direction: row;
   justify-content: center;
   margin: 0 auto;
+  height: 100px;
+  align-items: center;
 }
 
 .bottomSideBar button {
