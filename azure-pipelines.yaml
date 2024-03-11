@@ -36,4 +36,4 @@ steps:
       appType: 'webAppLinux'
       appName: "atc-2024-thepenguins-fe-linux-web-app"
       package: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
-      startUpCommand: 'pm2 serve /home/site/wwwroot --no-daemon'
+      startUpCommand: 'pm2 serve /home/site/wwwroot --no-daemon --spa'
