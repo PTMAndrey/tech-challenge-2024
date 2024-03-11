@@ -12,7 +12,7 @@ axios.interceptors.request.use(
   (config) => {
     // Attempt to retrieve the token from localStorage or sessionStorage
     const token = localStorage.getItem("token") || sessionStorage.getItem("token");
-    
+
     // If the token exists, append it to the Authorization header
     if (token) {
       config.headers['Authorization'] = `Bearer ${token}`;
@@ -58,7 +58,6 @@ export const login = async (email, password) => {
 export const registerAdmin = async (data) => {
   try {
     const response = await axios.post('/api/auth/register', data);
-
     return response;
   } catch (error) {
     if (error.response) {
@@ -80,8 +79,6 @@ export const registerUser = async (data) => {
         password: data.password,
         idOrganisation: data.organisationName, //! organisationName = idOrganisation only when registerUser is CALLED
       });
-
-    console.log(response)
     return response;
   } catch (error) {
     if (error.response) {
@@ -95,10 +92,25 @@ export const registerUser = async (data) => {
 
 
 
-export const sendEmailInvitations = async ( data) => {
+export const sendEmailInvitations = async (data) => {
   try {
     const response = await axios.post('/email/send', data);
-console.log(response);
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data.message || "Something went wrong... Try again later");
+
+    } else {
+      throw new Error("Network error or other issue");
+    }
+  }
+};
+
+// get user by id
+export const getUserById = async (id) => {
+  try {
+    const response = await axios.get("/user/getById?idUser=" + id);
+    console.log(response);
     return response;
   } catch (error) {
     if (error.response) {

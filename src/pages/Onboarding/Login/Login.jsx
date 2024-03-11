@@ -15,7 +15,7 @@ import { jwtDecode } from "jwt-decode";
 
 
 const Login = () => {
-  const { setUser, rememberMe, setRememberMe } = useAuthProvider();
+  const { setUser, rememberMe, fetchUser, setRememberMe } = useAuthProvider();
   const { setAlert } = useStateProvider();
   const navigate = useNavigate();
 
@@ -50,16 +50,15 @@ const Login = () => {
     try {
       if (emailError === "" && pwdError === "") {
         if (pwd.length > 6) {
-          console.log(email, pwd);
           const response = await login(email, pwd);
           if (response !== null) {
             const decodedToken = jwtDecode(response.data.jwt);
+            console.log(decodedToken);
 
             if (rememberMe) localStorage.setItem('token', response.data.jwt);
             else sessionStorage.setItem('token', response.data.jwt);
-
-            setUser(decodedToken);
-            console.log(decodedToken);
+            setUser(decodedToken.userId);
+            fetchUser(decodedToken.userId);
             navigate("/");
 
             setAlert({

@@ -26,6 +26,23 @@ const Users = () => {
         }
     };
 
+    // const handleFileUpload = useCallback((files) => {
+    //     const file = files[0];
+    //     setUploadedFile(file);
+    //     setSingleEmail(''); // Clear single email input when file is uploaded
+
+    //     const reader = new FileReader();
+    //     reader.onload = (e) => {
+    //         const data = new Uint8Array(e.target.result);
+    //         const workbook = XLSX.read(data, { type: 'array' });
+    //         const sheetName = workbook.SheetNames[0];
+    //         const worksheet = workbook.Sheets[sheetName];
+    //         const json = XLSX.utils.sheet_to_json(worksheet);
+    //         const emails = json.map(row => row.email || row.Email || row.EMAIL).filter(email => email);
+    //         setEmailList(emails);
+    //     };
+    //     reader.readAsArrayBuffer(file);
+    // }, []);
     const handleFileUpload = useCallback((files) => {
         const file = files[0];
         setUploadedFile(file);
@@ -38,11 +55,22 @@ const Users = () => {
             const sheetName = workbook.SheetNames[0];
             const worksheet = workbook.Sheets[sheetName];
             const json = XLSX.utils.sheet_to_json(worksheet);
-            const emails = json.map(row => row.email || row.Email || row.EMAIL).filter(email => email);
+            const emails = json.map(row => {
+                let email = null;
+                Object.keys(row).forEach(key => {
+                    if (key.toLowerCase().includes('email')) {
+                        email = row[key] ? row[key].trim() : null;
+                    }
+                });
+                return email;
+            })
+                .filter(email => email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email));
             setEmailList(emails);
+            console.log(emails);
         };
         reader.readAsArrayBuffer(file);
     }, []);
+
 
     const handleCancelFile = () => {
         setUploadedFile(null);
@@ -59,7 +87,7 @@ const Users = () => {
         setIsLoading(true);
         try {
             await sendEmailInvitations({
-                idOrganisationAdmin: user?.idOrganisation || "",
+                idOrganisationAdmin: user?.idUser || "",
                 emailList: emailsToSend,
             });
             setAlert({ type: "success", message: "Invitations sent successfully." });
