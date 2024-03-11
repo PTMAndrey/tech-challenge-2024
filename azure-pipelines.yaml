@@ -21,7 +21,7 @@ jobs:
         displayName: "Install dependencies"
 
       - script: |
-          echo "BACKEND_BASE_URL=$(BACKEND_BASE_URL)" > .env
+          echo "REACT_APP_BACKEND_BASE_URL=$(BACKEND_BASE_URL)" > .env
         workingDirectory: $(projectRoot)
         displayName: "Create env file"
 
