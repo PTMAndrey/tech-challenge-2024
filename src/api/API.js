@@ -1,6 +1,7 @@
 import axios from "axios";
 
 axios.defaults.baseURL = process.env.BACKEND_BASE_URL;
+console.log(process.env.BACKEND_BASE_URL)
 axios.defaults.headers = {
   // 'Content-Type': 'multipart/form-data',
   "Access-Control-Allow-Origin": "*",
