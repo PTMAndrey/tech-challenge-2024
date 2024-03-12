@@ -62,7 +62,6 @@
             background-color: #5e70f5;
             color: $color-black;
             padding: 10px;
-            font-weight: bold;
             text-align: left;
             border-bottom: 2px solid #dcdcdc;
         }
@@ -70,6 +69,7 @@
         th {
             display: flex;
             justify-content: center;
+            font-weight: bold;
             color: $color-white;
             padding: 5px 10px;
         }
@@ -87,15 +87,11 @@
     }
 
     @include responsive_W750px {
-
         td {
-
-            // position: relative;
-            // padding-left: 50%;
+            font-weight: $font-body-tiny !important;
             &:before {
                 content: attr(data-label);
                 position: absolute;
-                font-weight: bold;
             }
         }
     }
