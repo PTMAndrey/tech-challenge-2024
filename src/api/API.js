@@ -122,3 +122,20 @@ export const getUserById = async (id) => {
     }
   }
 };
+
+// update organisation headquarter address
+export const updateOrganisationAddress = async (idOrganisation, address) => {
+  try {
+    const response = await axios.put("/organisation/updateHeadquarterAddress?idOrganisation=" + idOrganisation + "&newHeadquarterAddress="+address);
+    console.log(response);
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data.message || "Something went wrong... Try again later");
+
+    } else {
+      throw new Error("Network error or other issue");
+    }
+  }
+};
+

@@ -1,14 +1,28 @@
 @import "../../styles/variables.scss";
 
 .container {
-  border-bottom: 1px solid $color-gray-200;
   display: flex;
   width: 100%;
   align-items: center;
+  display: flex;
   justify-content: space-between;
+  flex-direction: row;
 
-  > span {
+  border-bottom: 1px solid $color-gray-200;
+
+  @media screen and (max-width:350px) {
+    flex-direction: column;
+    // border-bottom: 1px solid transparent;
+  }
+
+  >span {
     margin: 20px 0;
+  }
+
+  p {
+    -webkit-user-select: all;
+    -ms-user-select: all;
+    user-select: all;
   }
 }
 
@@ -17,6 +31,8 @@
   font-weight: $font-regular;
   color: $color-gray-700;
   line-height: 24px;
+  display: flex;
+  align-items: center;
 }
 
 .info {
@@ -26,14 +42,28 @@
   color: $color-gray-400;
 }
 
+
+.info2 {
+  font-size: $font-body-small;
+  font-weight: $font-regular;
+  line-height: 22px;
+  color: $color-gray-400;
+  min-width: 200px;
+  width: 100%;
+  margin: 5px 0;
+  padding: 10px;
+  background-color: #D9D9D9;
+  border-radius: 10px;
+}
+
 .action {
   color: $color-primary-500;
   font-size: $font-button;
   font-weight: $font-semibold;
 }
 
-.disabled{
-  
+.disabled {
+
   color: $color-gray-300;
   font-size: $font-button;
   font-weight: $font-semibold;
