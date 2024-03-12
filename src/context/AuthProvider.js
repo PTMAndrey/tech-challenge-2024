@@ -31,6 +31,7 @@ console.log(user);
       const decodedToken = jwtDecode(JSON.stringify(userToken));
       // setUser(decodedToken);
       fetchUser(decodedToken.userId);
+      console.log(decodedToken);
     }
   }, [])
 

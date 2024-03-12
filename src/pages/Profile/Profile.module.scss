@@ -14,10 +14,13 @@
 
         .leftSide {
             width: 100%;
+            align-items: center;
+            padding-left: 0px;
         }
 
         .rightSide {
             width: 100%;
+            align-items: center;
         }
     }
 }
@@ -27,6 +30,7 @@
     flex-direction: column;
     width: 50%;
     justify-content: flex-start;
+    padding-left: 30px;
 
 }
 
@@ -47,46 +51,48 @@
 
 .responsiveTable {
     margin: 20px 0;
-    min-width:50%;
+    min-width: 50%;
     width: auto;
+
     table {
-      width: 100%;
-      border-collapse: collapse;
-      tr {
-        background-color: #5e70f5;
-        color: $color-black;
-        padding: 10px;
-        font-weight: bold;
-        text-align: left;
-        border-bottom: 2px solid #dcdcdc;
-      }
-      th{
-        padding:5px 10px;
-      }
-      td {
-        background-color: #f2f2f2;
-        padding: 10px;
-        text-align: left;
-        border-bottom: 1px solid #dcdcdc;
-        &:hover {
-          background-color: #e8e8e8;
+        width: 100%;
+        border-collapse: collapse;
+
+        tr {
+            background-color: #5e70f5;
+            color: $color-black;
+            padding: 10px;
+            text-align: left;
+            border-bottom: 2px solid #dcdcdc;
         }
-      }
+
+        th {
+            display: flex;
+            justify-content: center;
+            font-weight: bold;
+            color: $color-white;
+            padding: 5px 10px;
+        }
+
+        td {
+            background-color: #f2f2f2;
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #dcdcdc;
+
+            &:hover {
+                background-color: #e8e8e8;
+            }
+        }
     }
+
     @include responsive_W750px {
-      table, th, td {
-        display: block;
-      }
-      td {
-        position: relative;
-        padding-left: 50%;
-        &:before {
-          content: attr(data-label);
-          position: absolute;
-          left: 10px;
-          top: 10px;
-          font-weight: bold;
+        td {
+            font-weight: $font-body-tiny !important;
+            &:before {
+                content: attr(data-label);
+                position: absolute;
+            }
         }
-      }
     }
-  }
+}

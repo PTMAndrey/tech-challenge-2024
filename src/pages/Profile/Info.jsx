@@ -11,6 +11,8 @@ import { HiOutlineOfficeBuilding } from "react-icons/hi";
 import { FaRegAddressCard } from "react-icons/fa";
 import { MdOutlineLocalPolice } from "react-icons/md";
 import { RiAdminLine } from "react-icons/ri";
+import { TbSteam } from "react-icons/tb";
+
 import { Col, Container, Row } from 'react-bootstrap';
 
 import { updateOrganisationAddress } from '../../api/API';
@@ -30,7 +32,7 @@ const Info = () => {
 
   // form data
   const [formValue, setFormValue] = useState({
-    headquarterAddress: ''
+    organisationHeadquarterAddress: user?.organisationHeadquarterAddress || ""
   });
 
   // handleChange
@@ -46,20 +48,20 @@ const Info = () => {
   const handleCancel = () => {
     setActiveForm("");
     setFormValue({
-      headquarterAddress: '',
+      organisationHeadquarterAddress: '',
     });
 
   };
   const clearText = () => {
     setFormValue({
-      headquarterAddress: '',
+      organisationHeadquarterAddress: '',
     });
 
   };
 
   // isFormValid
   const isFormValid = (field) => {
-    if (field === "headquarterAddress") {
+    if (field === "organisationHeadquarterAddress") {
       if (formValue[field].length > 9) {
         return true;
       }
@@ -78,7 +80,7 @@ const Info = () => {
     if (isFormValid(field)) {
       setShowErrors(false);
       try {
-        const response = await updateOrganisationAddress(user?.idOrganisation, formValue.headquarterAddress);
+        const response = await updateOrganisationAddress(user?.idOrganisation, formValue.organisationHeadquarterAddress);
         if (response.status === 200) {
           setAlert({
             type: "success",
@@ -89,10 +91,10 @@ const Info = () => {
           setActiveForm("");
         }
       } catch (error) {
-        console.log(error, "error");
+        console.log(error.message, "error");
         setAlert({
           type: "danger",
-          message: "Something went wrong on the server",
+          message: error.message || "Something went wrong...",
         });
       }
     } else {
@@ -119,48 +121,56 @@ const Info = () => {
             title="Organisation Name"
             info={user?.organisationName}
           />
-          {user?.authorities.some(authority => authority.authority === "ORGANIZATION_ADMIN")
+          {user?.authorities.some(authority => authority.authority === "ORGANISATION_ADMIN")
             ?
             <div className={styles.inputRowItem}>
               <RowItem
-                active={activeForm === "headquarterAddress" ? true : false}
-                onAction={() => setActiveForm("headquarterAddress")}
+                active={activeForm === "organisationHeadquarterAddress" ? true : false}
+                onAction={() => setActiveForm("organisationHeadquarterAddress")}
                 onCancel={handleCancel}
                 icon={<FaRegAddressCard />}
                 title="Organisation Address"
-                info={user?.headquarterAddress}
+                info={user?.organisationHeadquarterAddress}
                 action="Edit"
               />
-              {activeForm === "headquarterAddress" && (
+              {activeForm === "organisationHeadquarterAddress" && (
                 <div className={styles.form}>
                   <Input
                     onChange={handleChange}
-                    value={formValue.headquarterAddress}
-                    name="headquarterAddress"
-                    id="headquarterAddress"
+                    value={formValue.organisationHeadquarterAddress}
+                    name="organisationHeadquarterAddress"
+                    id="organisationHeadquarterAddress"
                     type="text"
                     clearable
                     onIconClear={clearText}
                     label="Address"
                     placeholder="Change the address"
-                    error={showErrors && !isFormValid("headquarterAddress")}
+                    error={showErrors && !isFormValid("organisationHeadquarterAddress")}
                     helper={
-                      showErrors && !isFormValid("headquarterAddress")
+                      showErrors && !isFormValid("organisationHeadquarterAddress")
                         ? "Address must be at least 10 characters"
                         : ""
                     }
                   />
-                  <Button onClick={(e) => handleSubmit(e, "headquarterAddress")} label="Save" />
+                  <Button onClick={(e) => handleSubmit(e, "organisationHeadquarterAddress")} label="Save" />
                 </div>
               )}
             </div>
             :
             <RowItem
-              icon={<HiOutlineOfficeBuilding />}
+              icon={<TbSteam />}
               title="Organisation Address"
-              info={user?.headquarterAddress}
+              info={user?.organisationHeadquarterAddress}
             />
           }
+          {user?.departmentName &&
+            <RowItem
+              icon={<HiOutlineOfficeBuilding />}
+              title="Department"
+              info={user?.departmentName}
+            />
+          }
+
           <RowItem
             icon={<MdOutlineLocalPolice />}
             title="My roles"
