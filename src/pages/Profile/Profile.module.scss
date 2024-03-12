@@ -2,3 +2,91 @@
 @import '../../styles/mixins.scss';
 @import "../../styles/index.scss";
 
+.container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    min-width: 220px;
+    justify-content: flex-start;
+
+    @media screen and (max-width:750px) {
+        flex-direction: column;
+
+        .leftSide {
+            width: 100%;
+        }
+
+        .rightSide {
+            width: 100%;
+        }
+    }
+}
+
+.leftSide {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    justify-content: flex-start;
+
+}
+
+.rightSide {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 50%;
+    margin: 20px 0;
+}
+
+.form {
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+
+
+.responsiveTable {
+    margin: 20px 0;
+    min-width:50%;
+    width: auto;
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      tr {
+        background-color: #5e70f5;
+        color: $color-black;
+        padding: 10px;
+        font-weight: bold;
+        text-align: left;
+        border-bottom: 2px solid #dcdcdc;
+      }
+      th{
+        padding:5px 10px;
+      }
+      td {
+        background-color: #f2f2f2;
+        padding: 10px;
+        text-align: left;
+        border-bottom: 1px solid #dcdcdc;
+        &:hover {
+          background-color: #e8e8e8;
+        }
+      }
+    }
+    @include responsive_W750px {
+      table, th, td {
+        display: block;
+      }
+      td {
+        position: relative;
+        padding-left: 50%;
+        &:before {
+          content: attr(data-label);
+          position: absolute;
+          left: 10px;
+          top: 10px;
+          font-weight: bold;
+        }
+      }
+    }
+  }

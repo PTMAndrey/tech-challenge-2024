@@ -1,46 +1,27 @@
 import React from 'react'
 import styles from "./Profile.module.scss";
-import RowItem from '../../components/RowItem/RowItem';
-import useAuthProvider from "../../hooks/useAuthProvider";
+import { useLocation,  } from 'react-router-dom';
+import Info from './Info';
+import MySkills from './MySkills';
 
 const Profile = () => {
-  const { user } = useAuthProvider();
-
+  const location = useLocation();
+  const currentTab = location.pathname.split("/")[2];
+  const tabSelector = () => {
+    switch (currentTab) {
+      case "info":
+        return <Info />;
+      case "skills":
+        return < MySkills />;
+      default:
+        break;
+    }
+  };
   return (
-    <div>
-      <h4 className={styles.title}>Salut</h4>
+    <section>
+      <div className={styles.content}>{tabSelector()}</div>
+    </section>
 
-      <RowItem
-        title="Nume"
-        info={user?.firstName}
-      />
-      
-      <RowItem
-        title="Prenume"
-        info={user?.lastName}
-      />
-      <RowItem
-        title="Email"
-        info={user?.emailAdress}
-      />
-
-      <RowItem
-        title="Organisation Name"
-        info={user?.organisationName}
-      />
-
-      <RowItem
-        title="Role"
-        data={user?.authorities}
-        info={null}
-      />
-
-      <RowItem
-        title="Organisation Administrator"
-        info={user?.organisationAdminNames}
-      />
-
-    </div>
   );
 };
 
