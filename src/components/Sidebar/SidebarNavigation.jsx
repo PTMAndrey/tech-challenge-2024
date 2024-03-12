@@ -33,7 +33,7 @@ const SidebarNavigation = ({ toggleSidebar, isSidebarOpen }) => {
           <button onClick={toggleSidebar} className={styles.buttonToggleSideBar}>
             {isSidebarOpen ? <TbLayoutSidebarRightExpandFilled /> : <TbLayoutSidebarLeftExpandFilled />}
           </button>
-          <Link to="/profile" className={location === "/profile" ? styles.activeMenuProfile : null}>
+          <Link to="/profile/info" className={location === "/profile/info" ? styles.activeMenuProfile : null}>
             <FaUserCircle className={styles.profileImg} />
             {isSidebarOpen && <span>Profile</span>}
           </Link>

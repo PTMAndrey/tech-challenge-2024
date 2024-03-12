@@ -4,9 +4,9 @@
   position: relative;
 
   input {
-    border:none;
+    border: none;
     border-bottom: 2px solid $color-gray-200;
-    padding: 10px 10px 10px 12px !important;
+    padding: 10px 45px 10px 12px !important;
     width: 100%;
     border-radius: 8px;
     color: $color-black;
@@ -16,7 +16,7 @@
     // margin-bottom: 15px;
     // padding-right: 1rem;
     word-wrap: break-word;
-    cursor:pointer;
+    cursor: pointer;
 
     &:hover,
     &:active,
@@ -28,6 +28,11 @@
       background: $color-gray-50;
       border: unset;
     }
+
+    @media screen and (max-width:350px) {
+      padding: 7px 45px 7px 12px !important;
+      line-height: 12px;
+    }
   }
 
   input::placeholder {
@@ -35,8 +40,12 @@
     font-size: $font-body-normal;
     font-weight: $font-medium;
     line-height: 24px;
-    white-space:pre;
+    white-space: pre;
 
+    @media screen and (max-width:350px) {
+      font-size: $font-body-small;
+      line-height: 12px;
+    }
   }
 
   label {
@@ -79,10 +88,10 @@
 
   .iconX {
     position: absolute;
-    bottom: 30%;
+    // bottom: 30%;
     transform: translate(-100%, 50%);
     border-left: 1px solid $color-gray-200;
-    margin-left: -50px;
+    margin-left: 0px;
     padding-left: 10px;
     padding-right: 10px;
     width: fit-content;
