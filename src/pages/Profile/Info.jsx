@@ -184,7 +184,7 @@ const Info = () => {
         title={user?.organisationName + ' administrator' + (user?.organisationAdminNames.length > 1 ? 's' : '')}
         info={adminNames}
       /> */}
-      {(user?.organisationAdminNames || user?.departmentManagerName) &&
+      {(user?.organisationAdminNames.length > 0 || user?.departmentManagerName !== null) &&
         <Col className={styles.rightSide}>
           <h1><u>{user?.organisationName}</u> {' leader' + (user?.organisationAdminNames.length > 1 ? 's' : '')}</h1>
 
