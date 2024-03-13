@@ -3,28 +3,40 @@
 @import "../../styles/index.scss";
 
 
-.pageTeamRoles{
+.pageTeamRoles {
     display: flex;
     flex-direction: column;
-    margin:2em;
+    margin: 2em;
 }
 
-.refreshTable{
+.refreshTable {
     display: flex;
     align-items: center;
     flex-direction: row;
-    @include responsive_W550px{
 
-    }
+    @include responsive_W550px {}
 }
-.addRole{
+
+.addRole {
     display: flex;
     width: 10em;
-    margin-bottom:1em;
+    margin-bottom: 1em;
+}
+
+.tableButtons {
+    cursor: pointer;
+
+    @include responsive_W550px {
+        font-size: 17px !important;
+    }
 }
 
 .authError {
     color: $color-alert-400;
     font-size: $font-body-small;
     width: 415px;
+}
+
+.iconWhite {
+    color: $color-white !important;
 }

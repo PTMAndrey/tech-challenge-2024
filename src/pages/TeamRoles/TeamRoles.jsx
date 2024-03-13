@@ -22,19 +22,18 @@ import FirstPageIcon from '@mui/icons-material/FirstPage';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import LastPageIcon from '@mui/icons-material/LastPage';
-import CachedIcon from '@mui/icons-material/Cached';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import BorderColorIcon from '@mui/icons-material/BorderColor';
+import TextRotationAngleupIcon from '@mui/icons-material/TextRotationAngleup';
+import TextRotationAngledownIcon from '@mui/icons-material/TextRotationAngledown';
 import { useTheme } from '@emotion/react';
 import PropTypes from 'prop-types';
-import { Row } from 'react-bootstrap';
 
 import { StyledEngineProvider } from '@mui/material/styles';
 
 import Modal from '../../components/ModalDialog/Modal';
 import Input from '../../components/input/Input'
-import { useNavigate } from 'react-router-dom';
 import { addTeamRoles, deleteTeamRoles, updateTeamRoles } from '../../api/API';
 
 
@@ -85,7 +84,7 @@ const TeamRoles = () => {
   const [openDelete, setOpenDelete] = useState(false);
   const handleOpenDelete = () => {
     setOpenDelete(true);
-    
+
   };
   const handleCloseDelete = () => {
     setOpenDelete(false);
@@ -123,7 +122,7 @@ const TeamRoles = () => {
         console.log(error.message, "error");
         setAlert({
           type: "danger",
-          message: error.message || "Something went wrong...", // Use the error message from the catch
+          message: error.message || "Something went wrong...",
         });
       }
     }
@@ -149,7 +148,7 @@ const TeamRoles = () => {
         console.log(error.message, "error");
         setAlert({
           type: "danger",
-          message: error.message || "Something went wrong...", // Use the error message from the catch
+          message: error.message || "Something went wrong...",
         });
       }
     }
@@ -170,7 +169,7 @@ const TeamRoles = () => {
       console.log(error.message, "error");
       setAlert({
         type: "danger",
-        message: error.message || "Something went wrong...", // Use the error message from the catch
+        message: error.message || "Something went wrong...",
       });
     }
   }
@@ -178,22 +177,33 @@ const TeamRoles = () => {
   function createData(idTeamRole, teamRoleName) {
     return { idTeamRole, teamRoleName };
   }
-  // const rows = [
-  //   teamRoles?.map((role) => {
-  //     return (
-  //       createData(role.idTeamRole, role.teamRoleName, role.idOrganisation))
-  //   }
-  //   )
-  // ].sort((a, b) => (a.teamRoleName > b.teamRoleName ? -1 : 1));
 
-  const sortedTeamRoles = teamRoles?.map(role =>
-    createData(role.idTeamRole, role.teamRoleName)
-  ).sort((a, b) => a.teamRoleName.localeCompare(b.teamRoleName));
+  // const sortedTeamRoles = teamRoles?.map(role =>
+  //   createData(role.idTeamRole, role.teamRoleName)
+  // ).sort((a, b) => a.teamRoleName.localeCompare(b.teamRoleName));
 
-  const rows = [sortedTeamRoles];
+  // const rows = [sortedTeamRoles];
+  const [rows, setRows] = useState([]);
 
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(3);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(3);
+  const [sortDirection, setSortDirection] = useState('asc'); // 'asc' pentru crescător, 'desc' pentru descrescător
+  const toggleSortDirection = () => {
+    setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+  };
+
+  useEffect(() => {
+    const sortedTeamRoles = teamRoles?.map(role =>
+      createData(role.idTeamRole, role.teamRoleName)
+    ).sort((a, b) => {
+      if (sortDirection === 'asc') {
+        return a.teamRoleName.localeCompare(b.teamRoleName);
+      } else {
+        return b.teamRoleName.localeCompare(a.teamRoleName);
+      }
+    });
+    setRows(sortedTeamRoles || []);
+  }, [teamRoles, sortDirection]);
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -204,7 +214,7 @@ const TeamRoles = () => {
   };
 
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 3));
+    setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
 
@@ -226,23 +236,24 @@ const TeamRoles = () => {
           />
 
           <TableContainer component={Paper} className={styles.table}>
-            {/* <div className={styles.refreshTable}>
-              <CachedIcon/>
-              <span>Refresh table</span>
-            </div> */}
             <Table sx={{ minWidth: 500 }} aria-label="custom pagination customized table">
               <TableHead>
                 <TableRow>
                   <StyledTableCell align="center">Nr. crt.</StyledTableCell>
-                  <StyledTableCell align="center">Role</StyledTableCell>
+                  <StyledTableCell align="center">
+                    Role
+                    <IconButton onClick={toggleSortDirection} className={styles.iconWhite}>
+                      {sortDirection === 'asc' ? <TextRotationAngledownIcon  /> : <TextRotationAngleupIcon />}
+                    </IconButton>
+                  </StyledTableCell>
                   <StyledTableCell align="center">Update</StyledTableCell>
                   <StyledTableCell align="center">Delete</StyledTableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {(rowsPerPage > 0
-                  ? rows[0]?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  : rows[0]
+                  ? rows?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  : rows
                 )?.map((row, index) => (
                   <TableRow key={index}>
                     <TableCell component="th" scope="row" style={{ width: 160 }} align="center">
@@ -252,12 +263,12 @@ const TeamRoles = () => {
                       {row?.teamRoleName}
                     </TableCell>
                     <TableCell style={{ width: 160 }} align="center">
-                      <BorderColorIcon style={{ cursor: 'pointer' }} onClick={() => {
+                      <BorderColorIcon className={styles.tableButtons} onClick={() => {
                         setTeamRole({ idTeamRole: row?.idTeamRole, teamRoleName: row?.teamRoleName }); handleOpenAddUpdate('update');
                       }} />
                     </TableCell>
                     <TableCell style={{ width: 160 }} align="center">
-                      <DeleteForeverIcon style={{ cursor: 'pointer' }} onClick={() => {
+                      <DeleteForeverIcon className={styles.tableButtons} onClick={() => {
                         setTeamRole({ idTeamRole: row?.idTeamRole, teamRoleName: row?.teamRoleName }); handleOpenDelete();
                       }} />
                     </TableCell>
@@ -275,7 +286,7 @@ const TeamRoles = () => {
                   <TablePagination
                     rowsPerPageOptions={[3, 5, 10, { label: 'All', value: -1 }]}
                     colSpan={5}
-                    count={rows[0]?.length}
+                    count={rows?.length}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     SelectProps={{
@@ -302,36 +313,19 @@ const TeamRoles = () => {
             handleClose={handleCloseAddUpdate}
             title={openAddUpdate.action === 'add' ? "Add new role" : (<>{"Update "} <br /> {"[" + teamRole.teamRoleName + "]"}</>)}
             content={
-              <>
-                {/* <Input
-                  label="Team role"
-                  id="teamRoleName"
-                  name="teamRoleName"
-                  value={teamRole.teamRoleName}
-                  onChange={(e) => {
-                    setTeamRole((prev) => { return { ...prev, teamRoleName: e.target.value }; })
-                    handleRoleError(e.target.value);
-                  }}
-                  type="text"
-                  placeholder={""}
-                  required
-                />
-                {roleError && <div className={styles.authError}>{roleError}</div>} */}
+              <Input
+                type="text"
+                placeholder="Role"
+                label="Team role"
+                id="teamRoleName"
+                name="teamRoleName"
+                value={teamRole.teamRoleName}
+                onChange={handleChange}
 
-                <Input
-                  type="text"
-                  placeholder="Role"
-                  label="Team role"
-                  id="teamRoleName"
-                  name="teamRoleName"
-                  value={teamRole.teamRoleName}
-                  onChange={handleChange}
-
-                  required
-                  error={showErrors && checkErrors("teamRoleName") ? true : false}
-                  helper={showErrors ? checkErrors("teamRoleName") : ""}
-                />
-              </>
+                required
+                error={showErrors && checkErrors("teamRoleName") ? true : false}
+                helper={showErrors ? checkErrors("teamRoleName") : ""}
+              />
             }
             handleActionYes={() => openAddUpdate.action === 'add' ? handleAddTeamRole() : handleUpdateTeamRole(teamRole.idTeamRole)}
             textActionYes={"Confirm"}

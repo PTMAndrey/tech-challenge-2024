@@ -142,7 +142,6 @@ export const updateOrganisationAddress = async (idOrganisation, address) => {
 export const getAllTeamRoles = async (id) => {
   try {
     const response = await axios.get("/teamRole/getAll?idOrganisation=" + id);
-    console.log(response);
     return response;
   } catch (error) {
     if (error.response) {

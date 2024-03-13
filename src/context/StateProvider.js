@@ -22,7 +22,6 @@ export const StateProvider = ({ children }) => {
       const response = await getAllTeamRoles(idOrganisation);
       if (response?.status === 200) {
         setTeamRoles(response.data)
-        console.log(response.data)
       }
       else
         setTeamRoles(null);
