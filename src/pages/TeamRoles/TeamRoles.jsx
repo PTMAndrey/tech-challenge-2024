@@ -1,9 +1,436 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import styles from './TeamRoles.module.scss';
+
+import TableNotFound from '../../components/Tables/TableNotFound'
+import Button from '../../components/Button/Button'
+import useStateProvider from '../../hooks/useStateProvider'
+import useAuthProvider from '../../hooks/useAuthProvider';
+
+import { styled } from '@mui/material/styles';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import IconButton from '@mui/material/IconButton';
+import Box from '@mui/material/Box';
+import TableFooter from '@mui/material/TableFooter';
+import TablePagination from '@mui/material/TablePagination';
+import FirstPageIcon from '@mui/icons-material/FirstPage';
+import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+import LastPageIcon from '@mui/icons-material/LastPage';
+import CachedIcon from '@mui/icons-material/Cached';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import BorderColorIcon from '@mui/icons-material/BorderColor';
+import { useTheme } from '@emotion/react';
+import PropTypes from 'prop-types';
+import { Row } from 'react-bootstrap';
+
+import { StyledEngineProvider } from '@mui/material/styles';
+
+import Modal from '../../components/ModalDialog/Modal';
+import Input from '../../components/input/Input'
+import { useNavigate } from 'react-router-dom';
+import { addTeamRoles, deleteTeamRoles, updateTeamRoles } from '../../api/API';
+
+
 
 const TeamRoles = () => {
+  const { teamRoles, fetchTeamRoles } = useStateProvider();
+  const { user } = useAuthProvider();
+
+  useEffect(() => {
+    fetchTeamRoles(user?.idOrganisation);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
+
+  const [showErrors, setShowErrors] = useState(false);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setTeamRole((prev) => {
+      return { ...prev, [name]: value };
+    });
+  };
+
+  const isFormValid = () => {
+    let isValid = true;
+    Object.keys(teamRole).forEach((field) => {
+      if (checkErrors(field)) {
+        isValid = false;
+      }
+    });
+    return isValid;
+  };
+
+  const checkErrors = (field) => {
+    if (field === "teamRoleName") {
+      if (teamRole.teamRoleName.length < 4 && teamRole.teamRoleName.length > 0) {
+        return "Min 4 characters required.";
+      } else if (teamRole.teamRoleName.length === 0) {
+        return "Min 4 characters required.";
+      }
+    }
+    return "";
+  }
+
+  const { setAlert } = useStateProvider();
+
+  const [teamRole, setTeamRole] = useState({ idTeamRole: null, teamRoleName: '' });
+  const [openAddUpdate, setOpenAddUpdate] = useState({ open: false, action: '' });
+
+  const [openDelete, setOpenDelete] = useState(false);
+  const handleOpenDelete = () => {
+    setOpenDelete(true);
+    
+  };
+  const handleCloseDelete = () => {
+    setOpenDelete(false);
+    setTeamRole({ idTeamRole: null, teamRoleName: '' })
+    setShowErrors(false);
+  };
+
+  const handleOpenAddUpdate = (action) => {
+    setOpenAddUpdate({ open: true, action: action });
+  }
+  const handleCloseAddUpdate = () => {
+    setOpenAddUpdate({ open: false, action: '' });
+    setTeamRole({ idTeamRole: null, teamRoleName: '' })
+    setShowErrors(false);
+
+  }
+
+  const handleAddTeamRole = async () => {
+    if (!isFormValid()) {
+      setShowErrors(true);
+    }
+    if (isFormValid()) {
+      setShowErrors(false);
+      try {
+        const response = await addTeamRoles(user?.idUser, { teamRoleName: teamRole.teamRoleName, idOrganisation: user?.idOrganisation });
+        if (response.status === 200 || response.status === 201) {
+          fetchTeamRoles(user?.idOrganisation);
+          setAlert({
+            type: "success",
+            message: "You added a new role!",
+          });
+          handleCloseAddUpdate();
+        }
+      } catch (error) {
+        console.log(error.message, "error");
+        setAlert({
+          type: "danger",
+          message: error.message || "Something went wrong...", // Use the error message from the catch
+        });
+      }
+    }
+  }
+
+  const handleUpdateTeamRole = async (idTeamRole) => {
+    if (!isFormValid()) {
+      setShowErrors(true);
+    }
+    if (isFormValid()) {
+      setShowErrors(false);
+      try {
+        const response = await updateTeamRoles(idTeamRole, { teamRoleName: teamRole.teamRoleName, idOrganisation: user?.idOrganisation });
+        if (response.status === 200 || response.status === 201) {
+          fetchTeamRoles(user?.idOrganisation);
+          setAlert({
+            type: "success",
+            message: "Update complete!",
+          });
+          handleCloseAddUpdate();
+        }
+      } catch (error) {
+        console.log(error.message, "error");
+        setAlert({
+          type: "danger",
+          message: error.message || "Something went wrong...", // Use the error message from the catch
+        });
+      }
+    }
+  }
+
+  const handleDeleteTeamRole = async (idTeamRole) => {
+    try {
+      const response = await deleteTeamRoles(idTeamRole);
+      if (response.status === 200 || response.status === 201) {
+        fetchTeamRoles(user?.idOrganisation);
+        setAlert({
+          type: "success",
+          message: "Team-role deleted!",
+        });
+        handleCloseDelete();
+      }
+    } catch (error) {
+      console.log(error.message, "error");
+      setAlert({
+        type: "danger",
+        message: error.message || "Something went wrong...", // Use the error message from the catch
+      });
+    }
+  }
+
+  function createData(idTeamRole, teamRoleName) {
+    return { idTeamRole, teamRoleName };
+  }
+  // const rows = [
+  //   teamRoles?.map((role) => {
+  //     return (
+  //       createData(role.idTeamRole, role.teamRoleName, role.idOrganisation))
+  //   }
+  //   )
+  // ].sort((a, b) => (a.teamRoleName > b.teamRoleName ? -1 : 1));
+
+  const sortedTeamRoles = teamRoles?.map(role =>
+    createData(role.idTeamRole, role.teamRoleName)
+  ).sort((a, b) => a.teamRoleName.localeCompare(b.teamRoleName));
+
+  const rows = [sortedTeamRoles];
+
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(3);
+
+  // Avoid a layout jump when reaching the last page with empty rows.
+  const emptyRows =
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows[0].length) : 0;
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 3));
+    setPage(0);
+  };
+
+
   return (
-    <div></div>
+    <section>
+      {!teamRoles ?
+        <TableNotFound />
+        :
+        <div className={styles.pageTeamRoles}>
+          <Button
+            className={styles.addRole}
+            label="Add role"
+            icon={<AddCircleOutlineIcon />}
+            position="left"
+            variant="primary"
+            border={false}
+            onClick={() => { handleOpenAddUpdate('add') }}
+          />
+
+          <TableContainer component={Paper} className={styles.table}>
+            {/* <div className={styles.refreshTable}>
+              <CachedIcon/>
+              <span>Refresh table</span>
+            </div> */}
+            <Table sx={{ minWidth: 500 }} aria-label="custom pagination customized table">
+              <TableHead>
+                <TableRow>
+                  <StyledTableCell align="center">Nr. crt.</StyledTableCell>
+                  <StyledTableCell align="center">Role</StyledTableCell>
+                  <StyledTableCell align="center">Update</StyledTableCell>
+                  <StyledTableCell align="center">Delete</StyledTableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {(rowsPerPage > 0
+                  ? rows[0]?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  : rows[0]
+                )?.map((row, index) => (
+                  <TableRow key={index}>
+                    <TableCell component="th" scope="row" style={{ width: 160 }} align="center">
+                      {index + 1}
+                    </TableCell>
+                    <TableCell style={{ width: 160 }} align="center">
+                      {row?.teamRoleName}
+                    </TableCell>
+                    <TableCell style={{ width: 160 }} align="center">
+                      <BorderColorIcon style={{ cursor: 'pointer' }} onClick={() => {
+                        setTeamRole({ idTeamRole: row?.idTeamRole, teamRoleName: row?.teamRoleName }); handleOpenAddUpdate('update');
+                      }} />
+                    </TableCell>
+                    <TableCell style={{ width: 160 }} align="center">
+                      <DeleteForeverIcon style={{ cursor: 'pointer' }} onClick={() => {
+                        setTeamRole({ idTeamRole: row?.idTeamRole, teamRoleName: row?.teamRoleName }); handleOpenDelete();
+                      }} />
+                    </TableCell>
+                  </TableRow>
+                ))}
+
+                {emptyRows > 0 && (
+                  <TableRow style={{ height: 53 * emptyRows }}>
+                    <TableCell colSpan={6} />
+                  </TableRow>
+                )}
+              </TableBody>
+              <TableFooter>
+                <TableRow>
+                  <TablePagination
+                    rowsPerPageOptions={[3, 5, 10, { label: 'All', value: -1 }]}
+                    colSpan={5}
+                    count={rows[0]?.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    SelectProps={{
+                      inputProps: {
+                        'aria-label': 'rows per page',
+                      },
+                      native: true,
+                    }}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                    ActionsComponent={TablePaginationActions}
+                  />
+                </TableRow>
+              </TableFooter>
+            </Table>
+          </TableContainer>
+
+        </div>
+      }
+      {openAddUpdate.open &&
+        <StyledEngineProvider injectFirst>
+          <Modal
+            open={openAddUpdate.open}
+            handleClose={handleCloseAddUpdate}
+            title={openAddUpdate.action === 'add' ? "Add new role" : (<>{"Update "} <br /> {"[" + teamRole.teamRoleName + "]"}</>)}
+            content={
+              <>
+                {/* <Input
+                  label="Team role"
+                  id="teamRoleName"
+                  name="teamRoleName"
+                  value={teamRole.teamRoleName}
+                  onChange={(e) => {
+                    setTeamRole((prev) => { return { ...prev, teamRoleName: e.target.value }; })
+                    handleRoleError(e.target.value);
+                  }}
+                  type="text"
+                  placeholder={""}
+                  required
+                />
+                {roleError && <div className={styles.authError}>{roleError}</div>} */}
+
+                <Input
+                  type="text"
+                  placeholder="Role"
+                  label="Team role"
+                  id="teamRoleName"
+                  name="teamRoleName"
+                  value={teamRole.teamRoleName}
+                  onChange={handleChange}
+
+                  required
+                  error={showErrors && checkErrors("teamRoleName") ? true : false}
+                  helper={showErrors ? checkErrors("teamRoleName") : ""}
+                />
+              </>
+            }
+            handleActionYes={() => openAddUpdate.action === 'add' ? handleAddTeamRole() : handleUpdateTeamRole(teamRole.idTeamRole)}
+            textActionYes={"Confirm"}
+            handleActionNo={handleCloseAddUpdate}
+            textActionNo={"Cancel"}
+          />
+        </StyledEngineProvider>
+      }
+      {openDelete &&
+        <StyledEngineProvider injectFirst>
+          <Modal
+            open={openDelete}
+            handleClose={handleCloseDelete}
+            title={(<>{"Delete "} <br /> {"[" + teamRole.teamRoleName + "]"}</>)}
+            content={"This action is permanent!"}
+            handleActionYes={() => handleDeleteTeamRole(teamRole.idTeamRole)}
+            textActionYes={"Delete"}
+            handleActionNo={handleCloseDelete}
+            textActionNo={"Cancel"}
+          />
+        </StyledEngineProvider>
+      }
+    </section>
   )
 }
 
-export default TeamRoles
+export default TeamRoles;
+
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
+
+
+
+function TablePaginationActions(props) {
+  const theme = useTheme();
+  const { count, page, rowsPerPage, onPageChange } = props;
+
+  const handleFirstPageButtonClick = (event) => {
+    onPageChange(event, 0);
+  };
+
+  const handleBackButtonClick = (event) => {
+    onPageChange(event, page - 1);
+  };
+
+  const handleNextButtonClick = (event) => {
+    onPageChange(event, page + 1);
+  };
+
+  const handleLastPageButtonClick = (event) => {
+    onPageChange(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
+  };
+
+  return (
+    <Box sx={{ flexShrink: 0, ml: 2.5 }}>
+      <IconButton
+        onClick={handleFirstPageButtonClick}
+        disabled={page === 0}
+        aria-label="first page"
+      >
+        {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
+      </IconButton>
+      <IconButton
+        onClick={handleBackButtonClick}
+        disabled={page === 0}
+        aria-label="previous page"
+      >
+        {theme.direction === 'rtl' ? <KeyboardArrowLeftIcon /> : <KeyboardArrowLeftIcon />}
+      </IconButton>
+      <IconButton
+        onClick={handleNextButtonClick}
+        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+        aria-label="next page"
+      >
+        {theme.direction === 'rtl' ? <KeyboardArrowRightIcon /> : <KeyboardArrowRightIcon />}
+      </IconButton>
+      <IconButton
+        onClick={handleLastPageButtonClick}
+        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+        aria-label="last page"
+      >
+        {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
+      </IconButton>
+    </Box>
+  );
+}
+
+
+TablePaginationActions.propTypes = {
+  count: PropTypes.number.isRequired,
+  onPageChange: PropTypes.func.isRequired,
+  page: PropTypes.number.isRequired,
+  rowsPerPage: PropTypes.number.isRequired,
+};

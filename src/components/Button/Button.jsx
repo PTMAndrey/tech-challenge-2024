@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styles from "./Button.module.scss";
-import {RiUserSearchLine} from 'react-icons/ri'
+import { RiUserSearchLine } from 'react-icons/ri'
 
 const Button = ({
   className,
@@ -21,7 +21,7 @@ const Button = ({
       className={`${styles.button} ${styles[variant]} ${styles[position]} ${className} ${border ? styles.border : styles.noBorder}`}
     >
       {
-        iconRol === 'search' ?  <RiUserSearchLine/> : null
+        iconRol === 'search' ? <RiUserSearchLine /> : null
       }
       <span className={styles.label}> {icon} </span>
       <span className={styles.label}>{label}</span>
@@ -30,8 +30,8 @@ const Button = ({
 };
 
 Button.propTypes = {
-  variant: PropTypes.oneOf(["primary", "secondary", "tertiary", "destructive","transparent"]).isRequired,
-  
+  variant: PropTypes.oneOf(["primary", "secondary", "tertiary", "destructive", "transparent"]).isRequired,
+
   label: PropTypes.string.isRequired,
   icon: PropTypes.node,
   position: PropTypes.oneOf(["left", "right", "none"]),

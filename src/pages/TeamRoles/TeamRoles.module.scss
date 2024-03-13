@@ -1,0 +1,30 @@
+@import '../../styles/variables.scss';
+@import '../../styles/mixins.scss';
+@import "../../styles/index.scss";
+
+
+.pageTeamRoles{
+    display: flex;
+    flex-direction: column;
+    margin:2em;
+}
+
+.refreshTable{
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    @include responsive_W550px{
+
+    }
+}
+.addRole{
+    display: flex;
+    width: 10em;
+    margin-bottom:1em;
+}
+
+.authError {
+    color: $color-alert-400;
+    font-size: $font-body-small;
+    width: 415px;
+}
