@@ -48,9 +48,9 @@ function App() {
             <Route path="skills" element={<Profile />} />
           </Route>
 
-          <Route path="/">
-            <Route path="dashboard" element={<Home />} />
-          </Route>
+
+          <Route path="/" element={<Home />} />
+
 
           {user?.authorities.some(authority => authority.authority === "ORGANISATION_ADMIN") &&
             <Route path="/team-roles" element={<TeamRoles />} />

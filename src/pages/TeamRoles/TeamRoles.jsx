@@ -238,7 +238,6 @@ const TeamRoles = () => {
       return null;
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPageTeamRoles, pageSize, rows, sortDirection]);
-console.log(rows);
 
   return (
     <section>
