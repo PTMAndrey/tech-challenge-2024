@@ -7,6 +7,11 @@
     display: flex;
     flex-direction: column;
     margin: 2em;
+
+    @include responsive_W550px {
+        align-items: center;
+    }
+
 }
 
 .refreshTable {
@@ -14,7 +19,6 @@
     align-items: center;
     flex-direction: row;
 
-    @include responsive_W550px {}
 }
 
 .addRole {
@@ -39,4 +43,28 @@
 
 .iconWhite {
     color: $color-white !important;
+}
+
+.paginationBar {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.cardButtons {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.sortButtonCard {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: $color-primary-300;
+    color: $color-white !important;
+    p {
+        padding: 5px;
+        font-size: $font-body-small;
+    }
 }

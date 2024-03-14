@@ -1,13 +1,14 @@
 import { createContext, useEffect, useState } from "react";
 import { getAllTeamRoles } from "../api/API";
-// import {  } from "../api/API";
-import useAuthProvider from '../hooks/useAuthProvider';
 
 const StateContext = createContext({});
 
 export const StateProvider = ({ children }) => {
 
-  const [teamRoles, setTeamRoles] = useState(); // folosit in pagina principala
+  const [teamRoles, setTeamRoles] = useState();
+  
+  let pageSize = 3;
+  const [currentPageTeamRoles, setCurrentPageTeamRoles] = useState(1);
 
   // alert
   const [alert, setAlert] = useState(null);
@@ -22,9 +23,11 @@ export const StateProvider = ({ children }) => {
       const response = await getAllTeamRoles(idOrganisation);
       if (response?.status === 200) {
         setTeamRoles(response.data)
+        setCurrentPageTeamRoles(1);
       }
-      else
+      else{
         setTeamRoles(null);
+      }
 
     } catch (error) { }
   };
@@ -38,6 +41,9 @@ export const StateProvider = ({ children }) => {
       teamRoles,
       setTeamRoles,
       fetchTeamRoles,
+      pageSize,
+      currentPageTeamRoles,
+      setCurrentPageTeamRoles,
     }}
   >{children}</StateContext.Provider>;
 };

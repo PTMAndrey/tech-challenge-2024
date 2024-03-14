@@ -1,46 +1,52 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import styles from './TeamRoles.module.scss';
-
+import { addTeamRoles, deleteTeamRoles, updateTeamRoles } from '../../api/API';
 import TableNotFound from '../../components/Tables/TableNotFound'
 import Button from '../../components/Button/Button'
-import useStateProvider from '../../hooks/useStateProvider'
-import useAuthProvider from '../../hooks/useAuthProvider';
-
-import { styled } from '@mui/material/styles';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import IconButton from '@mui/material/IconButton';
-import Box from '@mui/material/Box';
-import TableFooter from '@mui/material/TableFooter';
-import TablePagination from '@mui/material/TablePagination';
-import FirstPageIcon from '@mui/icons-material/FirstPage';
-import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
-import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
-import LastPageIcon from '@mui/icons-material/LastPage';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import BorderColorIcon from '@mui/icons-material/BorderColor';
-import TextRotationAngleupIcon from '@mui/icons-material/TextRotationAngleup';
-import TextRotationAngledownIcon from '@mui/icons-material/TextRotationAngledown';
-import { useTheme } from '@emotion/react';
-import PropTypes from 'prop-types';
-
-import { StyledEngineProvider } from '@mui/material/styles';
-
 import Modal from '../../components/ModalDialog/Modal';
 import Input from '../../components/input/Input'
-import { addTeamRoles, deleteTeamRoles, updateTeamRoles } from '../../api/API';
+import useStateProvider from '../../hooks/useStateProvider'
+import useAuthProvider from '../../hooks/useAuthProvider';
+import useWindowDimensions from '../../hooks/useWindowDimensions';
 
+import {
+  styled,
+  StyledEngineProvider,
+  Table,
+  TableBody,
+  TableCell,
+  tableCellClasses,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  IconButton,
+  Box,
+  TableFooter,
+  TablePagination
+} from './imports/muiMaterial';
+
+import {
+  FirstPageIcon,
+  KeyboardArrowLeftIcon,
+  KeyboardArrowRightIcon,
+  LastPageIcon,
+  AddCircleOutlineIcon,
+  DeleteForeverIcon,
+  BorderColorIcon,
+  TextRotationAngleupIcon,
+  TextRotationAngledownIcon
+} from './imports/muiiconsMaterial';
+
+import { useTheme } from '@emotion/react';
+import PropTypes from 'prop-types';
+import ListRolesForMobile from './ListRolesForMobile';
 
 
 const TeamRoles = () => {
-  const { teamRoles, fetchTeamRoles } = useStateProvider();
+  const { teamRoles, fetchTeamRoles, currentPageTeamRoles, pageSize  } = useStateProvider();
   const { user } = useAuthProvider();
+  const { width } = useWindowDimensions();
 
   useEffect(() => {
     fetchTeamRoles(user?.idOrganisation);
@@ -174,8 +180,8 @@ const TeamRoles = () => {
     }
   }
 
-  function createData(idTeamRole, teamRoleName) {
-    return { idTeamRole, teamRoleName };
+  function createData(id, teamRoleName) {
+    return { id, teamRoleName };
   }
 
   // const sortedTeamRoles = teamRoles?.map(role =>
@@ -218,6 +224,21 @@ const TeamRoles = () => {
     setPage(0);
   };
 
+  const currentTableData = useMemo(() => {
+    if (rows) {
+      const firstPageIndex = (currentPageTeamRoles - 1) * pageSize;
+      const lastPageIndex = firstPageIndex + pageSize;
+
+      if (rows?.length < lastPageIndex && (lastPageIndex - rows?.length) > 0)
+        return rows?.slice(firstPageIndex, lastPageIndex - (lastPageIndex - rows?.length));
+      else
+        return rows?.slice(firstPageIndex, lastPageIndex);
+    }
+    else
+      return null;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPageTeamRoles, pageSize, rows, sortDirection]);
+console.log(rows);
 
   return (
     <section>
@@ -234,75 +255,89 @@ const TeamRoles = () => {
             border={false}
             onClick={() => { handleOpenAddUpdate('add') }}
           />
-
-          <TableContainer component={Paper} className={styles.table}>
-            <Table sx={{ minWidth: 500 }} aria-label="custom pagination customized table">
-              <TableHead>
-                <TableRow>
-                  <StyledTableCell align="center">Nr. crt.</StyledTableCell>
-                  <StyledTableCell align="center">
-                    Role
-                    <IconButton onClick={toggleSortDirection} className={styles.iconWhite}>
-                      {sortDirection === 'asc' ? <TextRotationAngledownIcon  /> : <TextRotationAngleupIcon />}
-                    </IconButton>
-                  </StyledTableCell>
-                  <StyledTableCell align="center">Update</StyledTableCell>
-                  <StyledTableCell align="center">Delete</StyledTableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {(rowsPerPage > 0
-                  ? rows?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  : rows
-                )?.map((row, index) => (
-                  <TableRow key={index}>
-                    <TableCell component="th" scope="row" style={{ width: 160 }} align="center">
-                      {index + 1}
-                    </TableCell>
-                    <TableCell style={{ width: 160 }} align="center">
-                      {row?.teamRoleName}
-                    </TableCell>
-                    <TableCell style={{ width: 160 }} align="center">
-                      <BorderColorIcon className={styles.tableButtons} onClick={() => {
-                        setTeamRole({ idTeamRole: row?.idTeamRole, teamRoleName: row?.teamRoleName }); handleOpenAddUpdate('update');
-                      }} />
-                    </TableCell>
-                    <TableCell style={{ width: 160 }} align="center">
-                      <DeleteForeverIcon className={styles.tableButtons} onClick={() => {
-                        setTeamRole({ idTeamRole: row?.idTeamRole, teamRoleName: row?.teamRoleName }); handleOpenDelete();
-                      }} />
-                    </TableCell>
+          {width > 460 ?
+            <TableContainer component={Paper} className={styles.table}>
+              <Table sx={{ minWidth: 500 }} aria-label="custom pagination customized table">
+                <TableHead>
+                  <TableRow>
+                    <StyledTableCell align="center">Nr. crt.</StyledTableCell>
+                    <StyledTableCell align="center">
+                      Role
+                      <IconButton onClick={toggleSortDirection} className={styles.iconWhite}>
+                        {sortDirection === 'asc' ? <TextRotationAngledownIcon /> : <TextRotationAngleupIcon />}
+                      </IconButton>
+                    </StyledTableCell>
+                    <StyledTableCell align="center">Update</StyledTableCell>
+                    <StyledTableCell align="center">Delete</StyledTableCell>
                   </TableRow>
-                ))}
+                </TableHead>
+                <TableBody>
+                  {(rowsPerPage > 0
+                    ? rows?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    : rows
+                  )?.map((row, index) => (
+                    <TableRow key={index}>
+                      <TableCell component="th" scope="row" style={{ width: 160 }} align="center">
+                        {index + 1}
+                      </TableCell>
+                      <TableCell style={{ width: 160 }} align="center">
+                        {row?.teamRoleName}
+                      </TableCell>
+                      <TableCell style={{ width: 160 }} align="center">
+                        <BorderColorIcon className={styles.tableButtons} onClick={() => {
+                          setTeamRole({ idTeamRole: row?.id, teamRoleName: row?.teamRoleName }); handleOpenAddUpdate('update');
+                        }} />
+                      </TableCell>
+                      <TableCell style={{ width: 160 }} align="center">
+                        <DeleteForeverIcon className={styles.tableButtons} onClick={() => {
+                          setTeamRole({ idTeamRole: row?.id, teamRoleName: row?.teamRoleName }); handleOpenDelete();
+                        }} />
+                      </TableCell>
+                    </TableRow>
+                  ))}
 
-                {emptyRows > 0 && (
-                  <TableRow style={{ height: 53 * emptyRows }}>
-                    <TableCell colSpan={6} />
+                  {emptyRows > 0 && (
+                    <TableRow style={{ height: 53 * emptyRows }}>
+                      <TableCell colSpan={6} />
+                    </TableRow>
+                  )}
+                </TableBody>
+                <TableFooter>
+                  <TableRow>
+                    <TablePagination
+                      rowsPerPageOptions={[3, 5, 10, { label: 'All', value: -1 }]}
+                      colSpan={5}
+                      count={rows?.length}
+                      rowsPerPage={rowsPerPage}
+                      page={page}
+                      SelectProps={{
+                        inputProps: {
+                          'aria-label': 'rows per page',
+                        },
+                        native: true,
+                      }}
+                      onPageChange={handleChangePage}
+                      onRowsPerPageChange={handleChangeRowsPerPage}
+                      ActionsComponent={TablePaginationActions}
+                    />
                   </TableRow>
-                )}
-              </TableBody>
-              <TableFooter>
-                <TableRow>
-                  <TablePagination
-                    rowsPerPageOptions={[3, 5, 10, { label: 'All', value: -1 }]}
-                    colSpan={5}
-                    count={rows?.length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    SelectProps={{
-                      inputProps: {
-                        'aria-label': 'rows per page',
-                      },
-                      native: true,
-                    }}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                    ActionsComponent={TablePaginationActions}
-                  />
-                </TableRow>
-              </TableFooter>
-            </Table>
-          </TableContainer>
+                </TableFooter>
+              </Table>
+            </TableContainer>
+
+            :
+            <>
+              <ListRolesForMobile 
+              currentTableData={currentTableData} 
+              rows={rows}
+              setTeamRole={setTeamRole}
+              handleOpenAddUpdate={handleOpenAddUpdate}
+              handleOpenDelete={handleOpenDelete}
+              sortDirection={sortDirection}
+              toggleSortDirection={toggleSortDirection}
+              />
+            </>
+          }
 
         </div>
       }
@@ -311,7 +346,7 @@ const TeamRoles = () => {
           <Modal
             open={openAddUpdate.open}
             handleClose={handleCloseAddUpdate}
-            title={openAddUpdate.action === 'add' ? "Add new role" : (<>{"Update "} <br /> {"[" + teamRole.teamRoleName + "]"}</>)}
+            title={openAddUpdate.action === 'add' ? "Add new role" : (<>{"Update"} <br /> {"[" + teamRole.teamRoleName + "]"}</>)}
             content={
               <Input
                 type="text"
@@ -339,7 +374,7 @@ const TeamRoles = () => {
           <Modal
             open={openDelete}
             handleClose={handleCloseDelete}
-            title={(<>{"Delete "} <br /> {"[" + teamRole.teamRoleName + "]"}</>)}
+            title={(<>{"Delete"} <br /> {"[" + teamRole.teamRoleName + "]"}</>)}
             content={"This action is permanent!"}
             handleActionYes={() => handleDeleteTeamRole(teamRole.idTeamRole)}
             textActionYes={"Delete"}

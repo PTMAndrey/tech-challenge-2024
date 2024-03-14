@@ -2,6 +2,7 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
+import styles from './Modal.module.scss'
 
 const style = {
     position: 'absolute',
@@ -18,7 +19,7 @@ const style = {
     pb: 3,
 };
 
-export default function NestedModal({ open, handleClose, title, content, handleActionYes, textActionYes, handleActionNo, textActionNo}) {
+export default function NestedModal({ open, handleClose, title, content, handleActionYes, textActionYes, handleActionNo, textActionNo }) {
 
     return (
         <div>
@@ -29,15 +30,20 @@ export default function NestedModal({ open, handleClose, title, content, handleA
                 aria-describedby="parent-modal-description"
             >
                 {/* <Box sx={{ ...style, width: 400 }}> */}
-                <Box sx={{ ...style, width: 250, '& h2': { fontWeight: 'bold' } }}>
+                <Box sx={{
+                    ...style, width: 250,
+                    '& h2': { fontWeight: 'bold', display: 'flex', justifyContent: 'center', alignItems: 'center' }
+                }}>
                     <h2 id="parent-modal-title">{title}</h2>
-                    <br/>
+                    <br />
                     <div id="parent-modal-description">
                         {content}
                     </div>
-                    <br/>
-                    <Button onClick={handleActionYes}>{textActionYes}</Button>
-                    <Button onClick={handleActionNo}>{textActionNo}</Button>
+                    <br />
+                    <div className={styles.modalButtons}>
+                        <Button onClick={handleActionYes}>{textActionYes}</Button>
+                        <Button onClick={handleActionNo}>{textActionNo}</Button>
+                    </div>
                 </Box>
             </Modal>
         </div>
