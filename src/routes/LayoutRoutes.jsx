@@ -7,6 +7,10 @@ export const getLinksForRoute = (user, segment) => {
           { text: 'Info', path: '/profile/info' },
           { text: 'Skills', path: '/profile/skills' },
         ];
+        case 'dashboard':
+        return [
+          { text: 'Dashboard', path: '/dashboard' },
+        ];
       case 'team-roles':
         return [
           { text: 'Team Roles', path: '/team-roles' },
@@ -26,9 +30,15 @@ export const getLinksForRoute = (user, segment) => {
             ];
             case 'employees':
               return [
-                { text: 'Employees', path: '/employees' },
+                { text: 'Employees', path: '/employees/all' },
                 { text: 'Invitations', path: '/employees/invitations' },
               ];
+              case 'proposals':
+                return [
+                  { text: 'Skills', path: '/proposals/skills' },
+                  { text: 'Assignment', path: '/proposals/assignment' },
+                  { text: 'Dealocation', path: '/proposals/dealocation' },
+                ];
               case 'notifications':
                 return [
                   { text: 'Notifications', path: '/notifications' },

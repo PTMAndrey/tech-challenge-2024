@@ -22,9 +22,12 @@ import Teams from './pages/Teams/Teams';
 import Users from './pages/Users/Users';
 import Notifications from './pages/Notifications/Notifications';
 import NotFound from './pages/NotFound/NotFound';
+import useAuthProvider from './hooks/useAuthProvider';
+import Proposals from './pages/Proposals/Proposals';
 
 function App() {
   const { alert } = useStateProvider();
+  const { user } = useAuthProvider();
 
   return (
     <Router>
@@ -44,18 +47,47 @@ function App() {
             <Route path="info" element={<Profile />} />
             <Route path="skills" element={<Profile />} />
           </Route>
-          <Route path="/" element={<Home />} />
-          <Route path="/team-roles" element={<TeamRoles />} />
-          <Route path="/departments" element={<Departments />} />
+
+          <Route path="/">
+            <Route path="dashboard" element={<Home />} />
+          </Route>
+
+          {user?.authorities.some(authority => authority.authority === "ORGANISATION_ADMIN") &&
+            <Route path="/team-roles" element={<TeamRoles />} />
+          }
+          {(user?.authorities.some(authority => authority.authority !== "EMPLOYEE") &&
+            user?.authorities.some(authority => authority.authority !== "PROJECT_MANAGER")) &&
+            <Route path="/departments" element={<Departments />} />
+          }
+
           <Route path="/projects">
             <Route path="past-projects" element={<Projects />} />
           </Route>
-          <Route path="/skills" element={<Skills />} />
-          <Route path="/teams" element={<Teams />} />
-          <Route path="/employees">
-            <Route path="invitations" element={<Users />} />
-          </Route>
+
+          {
+            user?.authorities.some(authority => authority.authority === "DEPARTMENT_MANAGER") &&
+            <Route path="/skills" element={<Skills />} />
+          }
+          {user?.authorities.some(authority => authority.authority === "PROJECT_MANAGER") &&
+            <Route path="/teams" element={<Teams />} />
+          }
+
+          {user?.authorities.some(authority => authority.authority === "ORGANISATION_ADMIN") &&
+            <Route path="/employees">
+              <Route path="all" element={<Users />} />
+              <Route path="invitations" element={<Users />} />
+            </Route>
+          }
+          {user?.authorities.some(authority => authority.authority === "DEPARTMENT_MANAGER") &&
+            <Route path="/proposals">
+              <Route path="skills" element={<Proposals />} />
+              <Route path="assignment" element={<Proposals />} />
+              <Route path="dealocation" element={<Proposals />} />
+            </Route>
+          }
+
           <Route path="/notifications" element={<Notifications />} />
+
         </Route>
 
         <Route
