@@ -36,7 +36,7 @@ const SidebarNavigation = ({ toggleSidebar, isSidebarOpen }) => {
           <button onClick={toggleSidebar} className={styles.buttonToggleSideBar}>
             {isSidebarOpen ? <TbLayoutSidebarRightExpandFilled /> : <TbLayoutSidebarLeftExpandFilled />}
           </button>
-          <Link to="/profile/info" className={location === "/profile/info" ? styles.activeMenuProfile : null}>
+          <Link to="/profile/info" className={(location === "/profile/info" || location === "/profile/skills") ? styles.activeMenuProfile : null}>
             <FaUserCircle className={styles.profileImg} />
             {isSidebarOpen && <span>Profile</span>}
           </Link>
@@ -44,7 +44,7 @@ const SidebarNavigation = ({ toggleSidebar, isSidebarOpen }) => {
       </div>
       <hr />
       <div className={styles.menuItems}>
-        <Link to="/dashboard" className={location === "/dashboard" ? styles.activeMenuItem : styles.menuItem}>
+        <Link to="/" className={location === "/" ? styles.activeMenuItem : styles.menuItem}>
           <FaHome className={styles.img} />
           {isSidebarOpen && <span>Home</span>}
         </Link>
@@ -92,14 +92,14 @@ const SidebarNavigation = ({ toggleSidebar, isSidebarOpen }) => {
           <hr />
         </>}
         {user?.authorities.some(authority => authority.authority === "ORGANISATION_ADMIN") && <>
-          <Link to="/employees/all" className={location === "/employees/all" ? styles.activeMenuItem : styles.menuItem} >
+          <Link to="/employees/all" className={(location === "/employees/all" || location === "/employees/invitations") ? styles.activeMenuItem : styles.menuItem} >
             <LiaUsersSolid className={styles.img} />
             {isSidebarOpen && <span>Employees</span>}
           </Link>
           <hr />
         </>}
         {user?.authorities.some(authority => authority.authority === "DEPARTMENT_MANAGER") && <>
-          <Link to="/proposals/skills" className={location === "/proposals/skills" ? styles.activeMenuItem : styles.menuItem} >
+          <Link to="/proposals/skills" className={(location === "/proposals/skills" || location === "/proposals/assignment" || location === "/proposals/dealocation") ? styles.activeMenuItem : styles.menuItem} >
             <SiPaperspace className={styles.img} />
             {isSidebarOpen && <span>Proposals</span>}
           </Link>

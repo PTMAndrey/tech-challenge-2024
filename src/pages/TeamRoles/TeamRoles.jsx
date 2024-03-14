@@ -44,7 +44,7 @@ import ListRolesForMobile from './ListRolesForMobile';
 
 
 const TeamRoles = () => {
-  const { teamRoles, fetchTeamRoles, currentPageTeamRoles, pageSize  } = useStateProvider();
+  const { teamRoles, fetchTeamRoles, currentPageTeamRoles, pageSize } = useStateProvider();
   const { user } = useAuthProvider();
   const { width } = useWindowDimensions();
 
@@ -236,16 +236,25 @@ const TeamRoles = () => {
     }
     else
       return null;
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPageTeamRoles, pageSize, rows, sortDirection]);
-console.log(rows);
 
   return (
-    <section>
-      {!teamRoles ?
+    <section className={styles.pageTeamRoles}>
+      {teamRoles?.length === 0 ? <>
+        <Button
+          className={styles.addRole}
+          label="Add role"
+          icon={<AddCircleOutlineIcon />}
+          position="left"
+          variant="primary"
+          border={false}
+          onClick={() => { handleOpenAddUpdate('add') }}
+        />
         <TableNotFound />
+      </>
         :
-        <div className={styles.pageTeamRoles}>
+        <div>
           <Button
             className={styles.addRole}
             label="Add role"
@@ -327,14 +336,14 @@ console.log(rows);
 
             :
             <>
-              <ListRolesForMobile 
-              currentTableData={currentTableData} 
-              rows={rows}
-              setTeamRole={setTeamRole}
-              handleOpenAddUpdate={handleOpenAddUpdate}
-              handleOpenDelete={handleOpenDelete}
-              sortDirection={sortDirection}
-              toggleSortDirection={toggleSortDirection}
+              <ListRolesForMobile
+                currentTableData={currentTableData}
+                rows={rows}
+                setTeamRole={setTeamRole}
+                handleOpenAddUpdate={handleOpenAddUpdate}
+                handleOpenDelete={handleOpenDelete}
+                sortDirection={sortDirection}
+                toggleSortDirection={toggleSortDirection}
               />
             </>
           }
