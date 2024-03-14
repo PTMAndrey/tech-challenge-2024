@@ -1,5 +1,5 @@
 /* eslint-disable no-useless-escape */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 import useStateProvider from "../../../hooks/useStateProvider";
@@ -8,34 +8,32 @@ import Button from "../../../components/Button/Button";
 import { registerAdmin, registerUser } from "../../../api/API";
 import RegisterAdmin from "./RegisterAdmin";
 import RegisterUser from "./RegisterUser";
-import { jwtDecode } from "jwt-decode";
 
-const Register = ({id}) => {
-    
+const Register = ({ decodeOrganisation }) => {
+
     const navigate = useNavigate();
-    let decodedToken;
-    if (id) {
-        try {
-            decodedToken = jwtDecode(id);
-        } catch (error) {
-            console.error("Eroare la decodarea JWT", error);
-            // Manevrează eroarea corespunzător (de exemplu, redirectează utilizatorul)
-        }
-    }
 
     const { setAlert } = useStateProvider();
 
     const [passwordShown, setPasswordShown] = useState(true);
-
     const [formValue, setFormValue] = useState({
         firstName: "",
         lastName: "",
         eMailAdress: "",
         password: "",
-        //! organisationName is used for idOrganisation ONLY in case of [employee register]
-        organisationName: id === undefined ? "" : decodedToken?.idOrganisation,
+        organisationName: "",
         headquarterAddress: "",
     });
+    
+//! organisationName is used for idOrganisation ONLY in case of [employee register]
+    useEffect(() => {
+        if (decodeOrganisation) {
+            setFormValue(prev => ({
+                ...prev,
+                organisationName: decodeOrganisation.idOrganisation || "",
+            }));
+        }
+    }, [decodeOrganisation]);
 
     // show errors only if clicked to submit
     const [showErrors, setShowErrors] = useState(false);
@@ -81,11 +79,13 @@ const Register = ({id}) => {
             if (formValue.password.length < 8)
                 return "Password must have at least 8 characters!";
         }
-        if (id === undefined) {
+        if (decodeOrganisation === null) {
             // organisationName
             if (field === "organisationName") {
                 if (formValue.organisationName.length < 5 && formValue.organisationName.length > 0) {
                     return "The name must have at least 5 characters!";
+                } else if (formValue.organisationName.length > 50) {
+                    return "The name must have max 50 characters";
                 } else if (formValue.organisationName.length === 0) {
                     return "This field is mandatory!";
                 }
@@ -95,6 +95,8 @@ const Register = ({id}) => {
             if (field === "headquarterAddress") {
                 if (formValue.headquarterAddress.length < 7 && formValue.headquarterAddress.length > 0) {
                     return "The address must have at least 7 characters!";
+                } else if (formValue.headquarterAddress.length > 50) {
+                    return "The address must have max 50 characters";
                 } else if (formValue.headquarterAddress.length === 0) {
                     return "This field is mandatory!";
                 }
@@ -128,7 +130,7 @@ const Register = ({id}) => {
         if (isFormValid()) {
             setShowErrors(false);
             try {
-                const response = id === undefined ? await registerAdmin(formValue) : await registerUser(formValue);
+                const response = decodeOrganisation?.idOrganisation === undefined ? await registerAdmin(formValue) : await registerUser(formValue);
                 if (response.status === 200) {
                     navigate("/login");
                     setAlert({
@@ -151,8 +153,8 @@ const Register = ({id}) => {
         <div className={styles.auth}>
             <div className={styles.containerAuth}>
                 <div className={styles.contentContainerForm}>
-                    {id !== undefined ?
-                        <RegisterUser decodedToken={decodedToken} formValue={formValue} handleChange={handleChange} showErrors={showErrors} checkErrors={checkErrors} passwordShown={passwordShown} passToggleHandler={passToggleHandler} />
+                    {decodeOrganisation !== null ?
+                        <RegisterUser decodedToken={decodeOrganisation} formValue={formValue} handleChange={handleChange} showErrors={showErrors} checkErrors={checkErrors} passwordShown={passwordShown} passToggleHandler={passToggleHandler} />
                         :
                         <RegisterAdmin formValue={formValue} handleChange={handleChange} showErrors={showErrors} checkErrors={checkErrors} passwordShown={passwordShown} passToggleHandler={passToggleHandler} />
                     }
@@ -167,7 +169,7 @@ const Register = ({id}) => {
                         />
                     </div>
 
-                    {!id &&
+                    {!decodeOrganisation &&
                         <div
                             className={`${styles.contentContainerAuthEndForm} ${styles.authRegister}`}
                         >

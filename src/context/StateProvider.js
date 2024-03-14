@@ -5,7 +5,7 @@ const StateContext = createContext({});
 
 export const StateProvider = ({ children }) => {
 
-  const [teamRoles, setTeamRoles] = useState();
+  const [teamRoles, setTeamRoles] = useState(null);
   
   let pageSize = 3;
   const [currentPageTeamRoles, setCurrentPageTeamRoles] = useState(1);

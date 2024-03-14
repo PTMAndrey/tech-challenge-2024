@@ -32,7 +32,7 @@ console.log(user);
       // setUser(decodedToken);
       fetchUser(decodedToken.userId);
     }
-  }, [])
+  }, [userToken])
 
   const fetchUser = async (userID) => {
     try {
@@ -44,7 +44,7 @@ console.log(user);
       console.log("Error: ", error);
       logout();
       window.location.reload();
-      window.alert("The penguins escaped from the zoo.\n🐧🐧🐧🐧🐧\nThey jumped all over our page and disconneted you.\nYou can login back, we captured them")
+      window.alert("The penguins escaped from the zoo.\n🐧🐧🐧🐧🐧\nThey jumped all over our page and disconnected you.\nYou can login back, we captured them")
     }
   };
 

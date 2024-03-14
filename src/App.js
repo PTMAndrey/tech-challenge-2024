@@ -28,7 +28,6 @@ import Proposals from './pages/Proposals/Proposals';
 function App() {
   const { alert } = useStateProvider();
   const { user } = useAuthProvider();
-
   return (
     <Router>
       <Routes>
@@ -47,11 +46,7 @@ function App() {
             <Route path="info" element={<Profile />} />
             <Route path="skills" element={<Profile />} />
           </Route>
-
-
           <Route path="/" element={<Home />} />
-
-
           {user?.authorities.some(authority => authority.authority === "ORGANISATION_ADMIN") &&
             <Route path="/team-roles" element={<TeamRoles />} />
           }

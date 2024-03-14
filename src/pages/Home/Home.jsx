@@ -3,7 +3,6 @@ import styles from './Home.module.scss';
 import { Container } from 'react-bootstrap';
 
 const Home = () => {
-  console.log(window.location.pathname);
   return (
     <Container fluid className={styles.mainContainer}>
       <div>

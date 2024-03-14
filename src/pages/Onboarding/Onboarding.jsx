@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import AssistLogo from "../../assets/logo/logo-assist-tagline.png";
 import LoginImage from "../../assets/logo/signup.png";
@@ -6,13 +6,12 @@ import styles from "./Onboarding.module.scss";
 import Login from "./Login/Login";
 import Register from "./Register/Register";
 import useAuthProvider from "../../hooks/useAuthProvider";
+import pako from 'pako';
 
 const Onboarding = () => {
-  // debugger
   const navigate = useNavigate();
   const { id } = useParams();
   const location = useLocation().pathname;
-  let regex = /^eyJhbGciOiJSUzI1NiJ9./;
 
   const { isLoggedIn } = useAuthProvider();
 
@@ -20,15 +19,33 @@ const Onboarding = () => {
     if (isLoggedIn()) {
       navigate("/");
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    if (regex.test(id) === false && (location !== "/login" && location !== "/register"))
-      navigate('/not-found', { replace: true });
+  function decodeAndDecompress(data) {
+    // Decodificăm datele din Base64 într-un string reprezentând datele binare comprimate
+    const decodedData = atob(data);
+    // Convertim stringul într-un Uint8Array pentru a putea fi procesat de pako
+    const charData = decodedData.split('').map(c => c.charCodeAt(0));
+    const byteData = new Uint8Array(charData);
+    // Decomprimăm datele folosind pako
+    const decompressedData = pako.inflate(byteData, { to: 'string' });
+    const [idOrganisation, organisationName] = decompressedData.split(":");
+    return { idOrganisation, organisationName };
+  }
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  const [decodeOrganisation, setDecodedOrganisation] = useState({
+    idOrganisation: null,
+    organisationName: null
+  })
+
+  useEffect(() => {
+    if (id) {
+      const organisationDetails = decodeAndDecompress(id);
+      setDecodedOrganisation(organisationDetails);
+      console.log(organisationDetails);
+    }
+  }, [id]);
 
   return (
     <div className={styles.mainContainer}>
@@ -43,20 +60,16 @@ const Onboarding = () => {
           <br />
 
           {location === "/login" && <Login />}
-          {location === "/register" && <Register />}
-          {location === ("/register/employee/" + id) && <Register id={id} />}
-          {/* {jwtid && <Register id={id} />} */}
+          {location === "/register" && <Register decodeOrganisation={null} />}
+          {location === ("/register/employee/" + id) && <Register decodeOrganisation={decodeOrganisation} />}
         </div>
       </div>
       {/* End leftSide */}
-      {/* <div className={styles.rightSide}> */}
       <img
         src={LoginImage}
         className={styles.rightImageOnboarding}
         alt="Login"
       />
-      {/* </div> */}
-      {/* </div> */}
     </div>
   );
 };
