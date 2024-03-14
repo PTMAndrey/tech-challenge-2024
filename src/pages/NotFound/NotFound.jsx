@@ -15,9 +15,10 @@ const NotFound = () => {
                     <img src={imagineNotFound} alt='Pagina nu a fost gasita' className={`${styles.imagineNotFound} ${styles.rotateAndShake}`} />
                     <div className={styles.errorText}>
                         <h1 className={styles.ntf}>#404</h1>
-                        <h2>Aha! Vezi? Și tu poți greși! (sau am greșit noi)...</h2>
-                        <p>... indiferent care e situația, probabil ar trebui să mergi la pagina principală</p>
-                        <Button href='/' variant="outline-primary" className={styles.homeButton}><BiHomeAlt /> Pagina Principală</Button>
+                        <h2>Aha! See? You can make mistakes too! (or did we make a mistake?)...</h2>
+                        <p>... regardless of the situation, you should probably head back to the homepage</p>
+
+                        <Button href='/' variant="outline-primary" className={styles.homeButton}><BiHomeAlt />Homepage</Button>
                     </div>
                 </Col>
             </Row>

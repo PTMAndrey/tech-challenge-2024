@@ -44,7 +44,7 @@ const SidebarNavigation = ({ toggleSidebar, isSidebarOpen }) => {
       </div>
       <hr />
       <div className={styles.menuItems}>
-        <Link to="/dashboard" className={location === "/dashboard" ? styles.activeMenuItem : styles.menuItem}>
+        <Link to="/" className={location === "/" ? styles.activeMenuItem : styles.menuItem}>
           <FaHome className={styles.img} />
           {isSidebarOpen && <span>Home</span>}
         </Link>

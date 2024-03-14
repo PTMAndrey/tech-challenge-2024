@@ -34,7 +34,7 @@ const Layout = ({ children }) => {
       setLinks(getLinksForRoute(user, segment));
     } else {
       document.title = "Team Finder - Home";
-      setLinks([]); // sau link-uri default pentru Home
+      setLinks(getLinksForRoute(user, '/')); // sau link-uri default pentru Home
     }
   }, [location.pathname]);
 

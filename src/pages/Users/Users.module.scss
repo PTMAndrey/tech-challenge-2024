@@ -2,62 +2,79 @@
 @import "../../styles/mixins.scss";
 
 
+.container {
+
+  display: flex;
+  flex-direction: row;
+  min-width: 220px;
+  justify-content: flex-start;
+}
+
+
+
+
 .dropzone {
-    cursor:pointer;
-    background-color: $color-gray-50;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 12px;
-    height: 128px;
-    width: 200px;
-    margin-bottom: 1rem;
-  
-    &:hover {
-      background-color: $color-gray-100;
-    }
-  
-    p {
-      font-weight: $font-body-small;
-      font-size: $font-regular;
-      color: $color-gray-400;
-      margin: 0;
-      padding: 1rem;
-      text-align: center;
-    }
-  }
-  
-  .accept {
-    border: 2px dashed $color-success-400;
-  }
-  
-  .reject {
-    border: 2px dashed $color-alert-400;
-  }
-  
-  .error {
-    color: $color-alert-400;
-    font-size: $font-body-tiny;
-    margin-top: 4px;
-  }
-  
-  .uploadedFileInfo{
-    width: 300px;
+  cursor: pointer;
+  background-color: $color-gray-50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  height: 128px;
+  width: 200px;
+  margin-bottom: 1rem;
+
+  &:hover {
+    background-color: $color-gray-100;
   }
 
-  input:disabled{
-    cursor: not-allowed !important;
+  p {
+    font-weight: $font-body-small;
+    font-size: $font-regular;
+    color: $color-gray-400;
+    margin: 0;
+    padding: 1rem;
+    text-align: center;
   }
-  .spinner {
-    border: 4px solid rgba(0, 0, 0, .1);
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    border-left-color: #09f;
-    animation: spin 1s ease infinite;
+}
+
+.accept {
+  border: 2px dashed $color-success-400;
+}
+
+.reject {
+  border: 2px dashed $color-alert-400;
+}
+
+.error {
+  color: $color-alert-400;
+  font-size: $font-body-tiny;
+  margin-top: 4px;
+}
+
+.uploadedFileInfo {
+  width: 300px;
+}
+
+input:disabled {
+  cursor: not-allowed !important;
+}
+
+.spinner {
+  border: 4px solid rgba(0, 0, 0, .1);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border-left-color: #09f;
+  animation: spin 1s ease infinite;
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
