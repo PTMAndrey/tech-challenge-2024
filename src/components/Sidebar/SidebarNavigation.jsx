@@ -9,6 +9,8 @@ import { GiTeamIdea, GiSkills } from "react-icons/gi";
 import { FaFolderOpen } from "react-icons/fa6";
 import { MdOutlineStars } from "react-icons/md";
 import { BiLogOutCircle } from "react-icons/bi";
+import { SiPaperspace } from "react-icons/si";
+
 import useAuthProvider from "../../hooks/useAuthProvider";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import useStateProvider from "../../hooks/useStateProvider";
@@ -16,7 +18,8 @@ import useStateProvider from "../../hooks/useStateProvider";
 
 const SidebarNavigation = ({ toggleSidebar, isSidebarOpen }) => {
   const { logout } = useAuthProvider();
-  
+  const { user } = useAuthProvider();
+
   const navigate = useNavigate();
   const location = useLocation().pathname;
 
@@ -41,41 +44,67 @@ const SidebarNavigation = ({ toggleSidebar, isSidebarOpen }) => {
       </div>
       <hr />
       <div className={styles.menuItems}>
-        <Link to="/" className={location === "/" ? styles.activeMenuItem : styles.menuItem}>
+        <Link to="/dashboard" className={location === "/dashboard" ? styles.activeMenuItem : styles.menuItem}>
           <FaHome className={styles.img} />
           {isSidebarOpen && <span>Home</span>}
         </Link>
         <hr />
-        <Link to="/team-roles" className={location === "/team-roles" ? styles.activeMenuItem : styles.menuItem}>
-          <IoIosPeople className={styles.img} />
-          {isSidebarOpen && <span>Team Roles</span>}
-        </Link>
-        <hr />
-        <Link to="/departments" className={location === "/departments" ? styles.activeMenuItem : styles.menuItem}>
-          <MdOutlineStars className={styles.img} />
-          {isSidebarOpen && <span>Departments</span>}
-        </Link>
-        <hr />
+
+        {user?.authorities.some(authority => authority.authority === "ORGANISATION_ADMIN") && <>
+          <Link to="/team-roles" className={location === "/team-roles" ? styles.activeMenuItem : styles.menuItem}>
+            <IoIosPeople className={styles.img} />
+            {isSidebarOpen && <span>Team Roles</span>}
+          </Link>
+          <hr />
+        </>
+        }
+
+        {(user?.authorities.some(authority => authority.authority !== "EMPLOYEE") &&
+          user?.authorities.some(authority => authority.authority !== "PROJECT_MANAGER")) &&
+          <>
+            <Link to="/departments" className={location === "/departments" ? styles.activeMenuItem : styles.menuItem}>
+              <MdOutlineStars className={styles.img} />
+              {isSidebarOpen && <span>Departments</span>}
+            </Link>
+            <hr />
+          </>
+        }
+
         <Link to="/projects" className={location === "/projects" ? styles.activeMenuItem : styles.menuItem}>
           <FaFolderOpen className={styles.img} />
           {isSidebarOpen && <span>Projects</span>}
         </Link>
         <hr />
-        <Link to="/skills" className={location === "/skills" ? styles.activeMenuItem : styles.menuItem}>
-          <GiSkills className={styles.img} />
-          {isSidebarOpen && <span>Skills</span>}
-        </Link>
-        <hr />
-        <Link to="/teams" className={location === "/teams" ? styles.activeMenuItem : styles.menuItem}>
-          <GiTeamIdea className={styles.img} />
-          {isSidebarOpen && <span>Teams</span>}
-        </Link>
-        <hr />
-        <Link to="/employees" className={location === "/employees" ? styles.activeMenuItem : styles.menuItem} >
-          <LiaUsersSolid className={styles.img} />
-          {isSidebarOpen && <span>Employees</span>}
-        </Link>
-        <hr />
+        {user?.authorities.some(authority => authority.authority === "DEPARTMENT_MANAGER") &&
+          <>
+            <Link to="/skills" className={location === "/skills" ? styles.activeMenuItem : styles.menuItem}>
+              <GiSkills className={styles.img} />
+              {isSidebarOpen && <span>Skills</span>}
+            </Link>
+            <hr />
+          </>
+        }
+        {user?.authorities.some(authority => authority.authority === "PROJECT_MANAGER") && <>
+          <Link to="/teams" className={location === "/teams" ? styles.activeMenuItem : styles.menuItem}>
+            <GiTeamIdea className={styles.img} />
+            {isSidebarOpen && <span>Teams</span>}
+          </Link>
+          <hr />
+        </>}
+        {user?.authorities.some(authority => authority.authority === "ORGANISATION_ADMIN") && <>
+          <Link to="/employees/all" className={location === "/employees/all" ? styles.activeMenuItem : styles.menuItem} >
+            <LiaUsersSolid className={styles.img} />
+            {isSidebarOpen && <span>Employees</span>}
+          </Link>
+          <hr />
+        </>}
+        {user?.authorities.some(authority => authority.authority === "DEPARTMENT_MANAGER") && <>
+          <Link to="/proposals/skills" className={location === "/proposals/skills" ? styles.activeMenuItem : styles.menuItem} >
+            <SiPaperspace className={styles.img} />
+            {isSidebarOpen && <span>Proposals</span>}
+          </Link>
+          <hr />
+        </>}
         <Link to="/notifications" className={location === "/notifications" ? styles.activeMenuItem : styles.menuItem}>
           <FaBell className={styles.img} />
           {isSidebarOpen && <span>Notifications</span>}
