@@ -2,7 +2,6 @@ import React from 'react'
 import styles from './Layout.module.scss'
 
 const SecondaryMenu = ({ links }) => {
-  console.log(links);
   return (
     <nav className={styles.secondaryMenu}>
       {links.map((link, index) => (

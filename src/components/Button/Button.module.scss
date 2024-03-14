@@ -25,6 +25,12 @@
     cursor: not-allowed !important;
   }
 
+  span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
   @media screen and (max-width: 750px) {
     padding: 5px;
     display: flex;
@@ -68,7 +74,6 @@
 .secondary {
   background-color: $color-white;
   color: $color-primary-500;
-  border: 1px solid $color-primary-500;
 
   &:hover {
     border-color: $color-primary-600;

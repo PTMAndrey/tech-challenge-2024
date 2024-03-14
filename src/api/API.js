@@ -111,7 +111,6 @@ export const sendEmailInvitations = async (data) => {
 export const getUserById = async (id) => {
   try {
     const response = await axios.get("/user/getById?idUser=" + id);
-    console.log(response);
     return response;
   } catch (error) {
     if (error.response) {
@@ -139,3 +138,63 @@ export const updateOrganisationAddress = async (idOrganisation, address) => {
   }
 };
 
+// get all team roles
+export const getAllTeamRoles = async (id) => {
+  try {
+    const response = await axios.get("/teamRole/getAll?idOrganisation=" + id);
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data.message || "Something went wrong... Try again later");
+
+    } else {
+      throw new Error("Network error or other issue");
+    }
+  }
+};
+
+// add team roles
+export const addTeamRoles = async (id, data) => {
+  try {
+    const response = await axios.post("/teamRole/addTeamRole?idOrganisationAdmin=" + id, data);
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data.message || "Something went wrong... Try again later");
+
+    } else {
+      throw new Error("Network error or other issue");
+    }
+  }
+};
+
+// update team roles
+export const updateTeamRoles = async (id, data) => {
+  try {
+    const response = await axios.put("/teamRole/updateTeamRole?idTeamRole=" + id, data);
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data.message || "Something went wrong... Try again later");
+
+    } else {
+      throw new Error("Network error or other issue");
+    }
+  }
+};
+
+
+// delete team roles by id
+export const deleteTeamRoles = async (id) => {
+  try {
+    const response = await axios.delete("/teamRole/deleteTeamRole?idTeamRole=" + id);
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data.message || "Something went wrong... Try again later");
+
+    } else {
+      throw new Error("Network error or other issue");
+    }
+  }
+};
