@@ -6,7 +6,6 @@ import { ReactComponent as View } from "../../../assets/icons/view.svg";
 import { ReactComponent as ViewOff } from "../../../assets/icons/view-off.svg";
 
 const RegisterUser = ({decodedToken, formValue, handleChange, showErrors, checkErrors, passwordShown, passToggleHandler }) => {
-console.log(decodedToken);
   return (
     <div className={styles.form}>
       <div className={styles.formTitle}>

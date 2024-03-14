@@ -66,7 +66,6 @@ const Users = () => {
             })
                 .filter(email => email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email));
             setEmailList(emails);
-            console.log(emails);
         };
         reader.readAsArrayBuffer(file);
     }, []);

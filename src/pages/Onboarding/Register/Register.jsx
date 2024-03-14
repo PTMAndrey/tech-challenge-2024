@@ -146,7 +146,6 @@ const Register = ({id}) => {
         }
     };
 
-    // console.log(decodedToken);
     return (
 
         <div className={styles.auth}>
