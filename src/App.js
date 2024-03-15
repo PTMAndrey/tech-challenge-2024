@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   BrowserRouter as Router,
   Routes,
@@ -24,10 +24,32 @@ import Notifications from './pages/Notifications/Notifications';
 import NotFound from './pages/NotFound/NotFound';
 import useAuthProvider from './hooks/useAuthProvider';
 import Proposals from './pages/Proposals/Proposals';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 
 function App() {
   const { alert } = useStateProvider();
   const { user } = useAuthProvider();
+
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 500);
+  }, []);
+
+  if (isLoading) {
+    return <>
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={true}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+    </>;
+  }
+
   return (
     <Router>
       <Routes>
