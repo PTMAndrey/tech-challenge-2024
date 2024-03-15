@@ -1,8 +1,12 @@
 import React from 'react'
+import styles from './Users.module.scss'
 
 const AllEmployees = () => {
+  
   return (
-    <div>AllEmployees</div>
+    <section className={styles.container}>
+
+    </section>
   )
 }
 
