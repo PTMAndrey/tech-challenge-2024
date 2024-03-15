@@ -9,3 +9,4 @@ export { default as BorderColorIcon } from '@mui/icons-material/BorderColor';
 export { default as TextRotationAngleupIcon } from '@mui/icons-material/TextRotationAngleup';
 export { default as TextRotationAngledownIcon } from '@mui/icons-material/TextRotationAngledown';
 export { default as FilterListIcon } from '@mui/icons-material/FilterList';
+export { default as ContentCopyIcon } from '@mui/icons-material/ContentCopy';

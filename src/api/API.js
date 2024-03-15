@@ -198,3 +198,51 @@ export const deleteTeamRoles = async (id) => {
     }
   }
 };
+
+
+// getAllEmployees
+export const getAllEmployees = async (id) => {
+  try {
+    const response = await axios.get("/user/getAll?idOrganisation=" + id);
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data.message || "Something went wrong... Try again later");
+
+    } else {
+      throw new Error("Network error or other issue");
+    }
+  }
+};
+
+
+// add role to employee
+export const addRoleToEmployee = async (id) => {
+  try {
+    const response = await axios.put("/user/addRole?idUser=" + id);
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data.message || "Something went wrong... Try again later");
+
+    } else {
+      throw new Error("Network error or other issue");
+    }
+  }
+};
+
+
+// remove role to employee
+export const deleteRoleToEmployee = async (id) => {
+  try {
+    const response = await axios.delete("/user/removeRole?idUser=" + id);
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data.message || "Something went wrong... Try again later");
+
+    } else {
+      throw new Error("Network error or other issue");
+    }
+  }
+};

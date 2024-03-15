@@ -13,6 +13,12 @@
   @include responsive_W550px{
     height: 100%;
   }
+
+  hr {
+    display: block;
+    width: 100%;
+    border: 2px solid #424;
+  }
 }
 
 .sidebar button {
@@ -56,12 +62,6 @@
   justify-content: center;
   align-items: center;
   margin: 20px 10px;
-}
-
-hr {
-  display: block;
-  width: 100%;
-  border: 2px solid #424;
 }
 
 .profileImg,

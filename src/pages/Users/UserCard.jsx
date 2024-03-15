@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import styles from './TeamRoles.module.scss'
+import styles from './Users.module.scss'
 
 
 import {
@@ -15,7 +15,7 @@ import {
 } from '../imports/muiMaterial';
 
 
-const RoleCard = (props) => {
+const UserCard = (props) => {
   return (
     <div style={{ marginTop: "15%" }}>
       <Card sx={{ minWidth: 200 }}>
@@ -29,14 +29,14 @@ const RoleCard = (props) => {
         </CardContent>
         <CardActions className={styles.cardButtons}>
           <BorderColorIcon className={styles.tableButtons} onClick={() => {
-            props.setTeamRole({ idTeamRole: props.data?.id, teamRoleName: props.data?.teamRoleName }); props.handleOpenAddUpdate('update');
+            props.setEmployee({ emploidUseryeeID: props.data?.id, teamRoleName: props.data?.teamRoleName }); props.handleOpenAddUpdate('update');
           }} />
           <DeleteForeverIcon className={styles.tableButtons} onClick={() => {
-            props.setTeamRole({ idTeamRole: props.data?.id, teamRoleName: props.data?.teamRoleName }); props.handleOpenDelete();
+            props.setEmployee({ idUser: props.data?.id, teamRoleName: props.data?.teamRoleName }); props.handleOpenDelete();
           }} />
         </CardActions>
       </Card>
     </div>
   );
 }
-export default RoleCard;
+export default UserCard;

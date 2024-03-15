@@ -18,7 +18,7 @@ const Users = () => {
     }
   };
   return (
-    <section className={styles.container}>
+    <section>
       <div>{tabSelector()}</div>
     </section>
 

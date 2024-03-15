@@ -8,6 +8,8 @@ import * as XLSX from 'xlsx';
 import useStateProvider from '../../hooks/useStateProvider';
 import useAuthProvider from '../../hooks/useAuthProvider';
 import { sendEmailInvitations } from '../../api/API';
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import { ContentCopyIcon } from '../imports/muiiconsMaterial';
 
 const Invitations = () => {
     const { setAlert } = useStateProvider();
@@ -16,6 +18,15 @@ const Invitations = () => {
     const [emailList, setEmailList] = useState([]);
     const [uploadedFile, setUploadedFile] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
+
+
+    const [value, setValue] = useState(user?.registrationUrl);
+    const [copied, setCopied] = useState(false);
+    const otherCopy = () => setCopied(true);
+    const onClick = ({ target: { innerHTML } }) => {
+        setAlert({ type: "success", message: "You can now use invitation link" });
+    };
+
 
     const handleInputChange = (e) => {
         setSingleEmail(e.target.value);
@@ -26,23 +37,6 @@ const Invitations = () => {
         }
     };
 
-    // const handleFileUpload = useCallback((files) => {
-    //     const file = files[0];
-    //     setUploadedFile(file);
-    //     setSingleEmail(''); // Clear single email input when file is uploaded
-
-    //     const reader = new FileReader();
-    //     reader.onload = (e) => {
-    //         const data = new Uint8Array(e.target.result);
-    //         const workbook = XLSX.read(data, { type: 'array' });
-    //         const sheetName = workbook.SheetNames[0];
-    //         const worksheet = workbook.Sheets[sheetName];
-    //         const json = XLSX.utils.sheet_to_json(worksheet);
-    //         const emails = json.map(row => row.email || row.Email || row.EMAIL).filter(email => email);
-    //         setEmailList(emails);
-    //     };
-    //     reader.readAsArrayBuffer(file);
-    // }, []);
     const handleFileUpload = useCallback((files) => {
         const file = files[0];
         setUploadedFile(file);
@@ -101,31 +95,67 @@ const Invitations = () => {
     };
 
     return (
-        <Container fluid>
-            <Input
-                type="email"
-                placeholder="Email"
-                label="Email"
-                id="singleEmail"
-                name="singleEmail"
-                value={singleEmail}
-                onChange={handleInputChange}
-                disabled={!!uploadedFile}
-            />
+        <Container fluid className={styles.pageInvitations}>
+            <div className={styles.containerInvitiations}>
+                <Input
+                    disabled
+                    type="text"
+                    id="registerURL"
+                    name="registerURL"
+                    value={user?.registrationUrl}
+                />
+                <CopyToClipboard
+                    onCopy={otherCopy}
+                    options={{ message: "Whoa!" }}
+                    text={value}
+                >
+                    <Button
+                        label="Copy to clipboard"
+                        icon={<ContentCopyIcon />}
+                        position="left"
+                        variant="transparent"
+                        border={false}
+                        onClick={onClick}
+                    />
+
+                </CopyToClipboard>
+            </div>
+            <hr/>
+
+            <div className={styles.containerInvitiations}>
+                <Input
+                    type="email"
+                    placeholder="Email"
+                    label="Email"
+                    id="singleEmail"
+                    name="singleEmail"
+                    value={singleEmail}
+                    onChange={handleInputChange}
+                    disabled={!!uploadedFile}
+                />
+            </div>
             <h2>OR</h2>
-            <Dropzone onDrop={handleFileUpload} />
-            {uploadedFile && (
-                <div className={styles.uploadedFileInfo}>
-                    <p>Uploaded file: {uploadedFile.name}</p>
-                    {!isLoading && <Button variant="destructive" label="Cancel file" onClick={handleCancelFile} />}
-                </div>
-            )}
-            {isLoading ? (
-                <div className={styles.spinner}></div>
-            ) : (
-                <Button variant="primary" label="Send Invitations" onClick={sendInvitations} disabled={!singleEmail && emailList.length === 0 || isLoading} />
-            )}
-        </Container>
+
+            <div className={styles.containerInvitiations}>
+                <p>Only excel ( *.xlsx ) file accepted</p>
+                <Dropzone onDrop={handleFileUpload} />
+                {
+                    uploadedFile && (
+                        <div className={styles.uploadedFileInfo}>
+                            <p>Uploaded file: {uploadedFile.name}</p>
+                            {!isLoading && <Button variant="destructive" label="Cancel file" onClick={handleCancelFile} />}
+                        </div>
+                    )
+                }
+                {
+                    isLoading ? (
+                        <div className={styles.spinner}></div>
+                    ) : (
+                        <Button variant="primary" label="Send Invitations" onClick={sendInvitations} disabled={!singleEmail && emailList.length === 0 || isLoading} />
+                    )
+                }
+            </div>
+        </Container >
     );
 };
 
