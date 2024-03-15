@@ -11,7 +11,6 @@ import pako from 'pako';
 const Onboarding = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  console.log(id);
   const location = useLocation().pathname;
 
   const { isLoggedIn } = useAuthProvider();
