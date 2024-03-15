@@ -11,6 +11,7 @@ import pako from 'pako';
 const Onboarding = () => {
   const navigate = useNavigate();
   const { id } = useParams();
+  console.log(id);
   const location = useLocation().pathname;
 
   const { isLoggedIn } = useAuthProvider();
@@ -22,9 +23,22 @@ const Onboarding = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  function makeUrlBase64Safe(encodedData) {
+    // Înlocuiește caracterele pentru a face string-ul compatibil cu decodarea Base64
+    let base64String = encodedData.replace(/-/g, '+').replace(/_/g, '/');
+    // Adaugă padding-ul '=' dacă este necesar
+    while (base64String.length % 4) {
+        base64String += '=';
+    }
+    return base64String;
+}
   function decodeAndDecompress(data) {
     // Decodificăm datele din Base64 într-un string reprezentând datele binare comprimate
-    const decodedData = atob(data);
+    
+    // Transformă datele pentru a le face sigure pentru decodarea Base64
+    const url = makeUrlBase64Safe(data);
+
+    const decodedData = atob(url);
     // Convertim stringul într-un Uint8Array pentru a putea fi procesat de pako
     const charData = decodedData.split('').map(c => c.charCodeAt(0));
     const byteData = new Uint8Array(charData);
@@ -43,7 +57,6 @@ const Onboarding = () => {
     if (id) {
       const organisationDetails = decodeAndDecompress(id);
       setDecodedOrganisation(organisationDetails);
-      console.log(organisationDetails);
     }
   }, [id]);
 
