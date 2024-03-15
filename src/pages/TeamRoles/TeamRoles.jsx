@@ -24,7 +24,7 @@ import {
   Box,
   TableFooter,
   TablePagination
-} from './imports/muiMaterial';
+} from '../imports/muiMaterial';
 
 import {
   FirstPageIcon,
@@ -36,7 +36,7 @@ import {
   BorderColorIcon,
   TextRotationAngleupIcon,
   TextRotationAngledownIcon
-} from './imports/muiiconsMaterial';
+} from '../imports/muiiconsMaterial';
 
 import { useTheme } from '@emotion/react';
 import PropTypes from 'prop-types';

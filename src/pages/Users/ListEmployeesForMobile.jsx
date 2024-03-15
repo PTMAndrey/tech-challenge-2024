@@ -1,8 +1,8 @@
 import useStateProvider from "../../hooks/useStateProvider";
 import { Fragment, } from "react";
 import Pagination from "../../components/Pagination/Pagination";
-import styles from "./TeamRoles.module.scss"
-import RoleCard from "./RoleCard";
+import styles from "./Users.module.scss"
+import RoleCard from "./UserCard";
 
 import { TextRotationAngleupIcon, TextRotationAngledownIcon, FilterListIcon} from '../imports/muiiconsMaterial';
 
