@@ -7,10 +7,97 @@
   flex-direction: row;
   min-width: 220px;
   justify-content: flex-start;
+
+}
+
+// all employees
+
+
+.pageAllEmployees,
+.pageInvitations {
+  display: flex;
+  flex-direction: column;
+  margin: 2em;
+
+  hr {
+    border: 1px solid #000 !important;
+    margin:10px 0;
+  }
+
+  @include responsive_W550px {
+    align-items: center;
+  }
+
+}
+
+.refreshTable {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+
 }
 
 
+.tableButtons {
+  cursor: pointer;
 
+  @include responsive_W550px {
+    font-size: 17px !important;
+  }
+}
+
+.authError {
+  color: $color-alert-400;
+  font-size: $font-body-small;
+  width: 415px;
+}
+
+.iconWhite {
+  color: $color-white !important;
+}
+
+.paginationBar {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.cardButtons {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.sortButtonCard {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: $color-primary-300;
+  color: $color-white !important;
+
+  p {
+    padding: 5px;
+    font-size: $font-body-small;
+  }
+}
+
+.empRole {
+  border-bottom: 1px solid $color-gray-200;
+}
+
+// invitations
+.pageInvitations h2 {
+  margin: 2em 0;
+  font-weight: $font-bold;
+}
+
+.containerInvitiations {
+  width: 500px;
+
+  @include responsive_W750px {
+    width: 100%;
+  }
+}
 
 .dropzone {
   cursor: pointer;
@@ -22,6 +109,10 @@
   height: 128px;
   width: 200px;
   margin-bottom: 1rem;
+
+  @include responsive_W550px {
+    width: 167px;
+  }
 
   &:hover {
     background-color: $color-gray-100;

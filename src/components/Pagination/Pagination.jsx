@@ -54,8 +54,6 @@ const Pagination = props => {
     
     let lastPage = Math.ceil(totalCount / pageSize);
 
-
-console.log(currentPage, lastPage);
     return (
         <ul
             className={classnames(`${styles.paginationContainer}`, { [className]: className })}
