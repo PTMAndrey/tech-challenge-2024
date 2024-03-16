@@ -51,16 +51,6 @@ console.log(props.currentTableData);
                     </Fragment>
                 )
             )}
-            {props.currentTableData?.length > 1 &&
-                <Pagination
-                    data={props.rows}
-                    className={styles.paginationBar}
-                    totalCount={props.rows?.length}
-                    pageSize={pageSize}
-                    currentPage={currentPageEmployees}
-                    onPageChange={page => setCurrentPageEmployees(page)}
-                />
-            }
 
         </>
     );

@@ -453,7 +453,7 @@ const AllEmployees = () => {
                   onChange={(e) => {
                     e === null ?
                       setFormValue({ ...formValue, idRole: '' }) :
-                      setFormValue({ idUser: employeeInTable.idUser, idRole: e.value });
+                      setFormValue({ idUser: employeeInTable.id, idRole: e.value });
                   }}
                   error={showErrors && checkErrors('idRole') ? true : false}
                   helper={showErrors ? checkErrors('idRole') : ''}
@@ -482,7 +482,7 @@ const AllEmployees = () => {
                   onChange={(e) => {
                     e === null ?
                       setFormValue({ ...formValue, idRole: '' }) :
-                      setFormValue({ idUser: employeeInTable.idUser, idRole: e.value });
+                      setFormValue({ idUser: employeeInTable.id, idRole: e.value });
                   }}
                   error={showErrors && checkErrors('idRole') ? true : false}
                   helper={showErrors ? checkErrors('idRole') : ''}
