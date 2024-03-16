@@ -1,13 +1,15 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import styles from './Users.module.scss';
-import { addRoleToEmployee, addTeamRoles, deleteRoleFromEmployee, deleteTeamRoles, updateTeamRoles } from '../../api/API';
+import { addRoleToEmployee, deleteRoleFromEmployee } from '../../api/API';
 import TableNotFound from '../../components/Tables/TableNotFound'
-import Button from '../../components/Button/Button'
 import Modal from '../../components/ModalDialog/Modal';
-import Input from '../../components/input/Input'
 import useStateProvider from '../../hooks/useStateProvider'
 import useAuthProvider from '../../hooks/useAuthProvider';
 import useWindowDimensions from '../../hooks/useWindowDimensions';
+import { useTheme } from '@emotion/react';
+import PropTypes from 'prop-types';
+import ListEmployeesForMobile from './ListEmployeesForMobile';
+import DropdownComponent from '../../components/Dropdown/Dropdown';
 
 import {
   styled,
@@ -38,11 +40,6 @@ import {
   TextRotationAngleupIcon,
   TextRotationAngledownIcon
 } from '../imports/muiiconsMaterial';
-
-import { useTheme } from '@emotion/react';
-import PropTypes from 'prop-types';
-import ListRolesForMobile from './ListEmployeesForMobile';
-import DropdownComponent from '../../components/Dropdown/Dropdown';
 
 const AllEmployees = () => {
   const { employees, fetchEmployees,
@@ -75,7 +72,7 @@ const AllEmployees = () => {
 
   const [rows, setRows] = useState([]);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(3); // Numarul de linii pe o pagina in tabel
+  const [rowsPerPage, setRowsPerPage] = useState(3); // Numarul de informatii pe o paginatie
   const [sortBy, setSortBy] = useState('firstName');
   const [sortDirection, setSortDirection] = useState('Ascending');
 
@@ -190,8 +187,8 @@ const AllEmployees = () => {
   };
 
 
-  function createData(idUser, firstName, lastName, emailAdress, authorities) {
-    return { idUser, firstName, lastName, emailAdress, authorities };
+  function createData(id, firstName, lastName, emailAdress, authorities) {
+    return { id, firstName, lastName, emailAdress, authorities };
   }
 
   useEffect(() => {
@@ -207,6 +204,7 @@ const AllEmployees = () => {
     setRows(sortedEmployees || []);
   }, [employees, sortDirection, sortBy]);
 
+  console.log(rows);
 
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows[0].length) : 0;
@@ -243,10 +241,11 @@ const AllEmployees = () => {
       .join(' ');
   };
 
-  const renderUserRoles = (info) => {
+  const renderUserRoles = (data,info) => {
+    console.log();
     if (Array.isArray(info)) {
-      return info.map(item => (
-        <li key={item.id}>{formatAuthority(item.authority)}</li>
+      return info.map((item,index) => (
+        <li key={`${data.id}_${item.id}_${Math.random()}`}>{formatAuthority(item.authority)}</li>
       ))
     }
     else return info;
@@ -272,7 +271,7 @@ const AllEmployees = () => {
           availableRolesToAdd.push({ value: item.value, label: item.label })
         );
 
-        userRolesPerRow
+      userRolesPerRow
         .filter(role =>
           employeeInTable?.authorities.map(authority =>
             formatAuthority(authority.authority)
@@ -294,7 +293,7 @@ const AllEmployees = () => {
         <TableNotFound />
         :
         <div>
-          {width > 460 ?
+          {width > 550 ?
             <TableContainer component={Paper} className={styles.table}>
               <Table sx={{ minWidth: 500 }} aria-label="custom pagination customized table">
                 <TableHead>
@@ -343,7 +342,7 @@ const AllEmployees = () => {
                     ? rows?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     : rows
                   )?.map((row, index) => (
-                    <TableRow key={row?.idUser} >
+                    <TableRow key={row?.id} >
                       <TableCell component="th" scope="row" style={{ width: 160 }} align="center">
                         {index + 1}
                       </TableCell>
@@ -357,7 +356,7 @@ const AllEmployees = () => {
                         {row?.emailAdress}
                       </TableCell>
                       <TableCell style={{ width: 160 }} align="center">
-                        <ul className={styles.listOfRoles}>{renderUserRoles(row?.authorities)}</ul>
+                        <ul key={`${row?.id}&${2 * index}`} className={styles.listOfRoles}>{renderUserRoles(row, row?.authorities)}</ul>
                       </TableCell>
                       <TableCell style={{ width: 160 }} align="center">
                         <div className={styles.allEmployeesButtonsAction}>
@@ -423,7 +422,7 @@ const AllEmployees = () => {
 
             :
             <>
-              <ListRolesForMobile
+              <ListEmployeesForMobile
                 currentTableData={currentTableData}
                 rows={rows}
                 setEmployeeInTable={setEmployeeInTable}
@@ -431,6 +430,8 @@ const AllEmployees = () => {
                 handleOpenDeleteRole={handleOpenDeleteRole}
                 sortDirection={sortDirection}
                 toggleSortDirection={toggleSortDirectionAndColumn}
+                renderUserRoles={renderUserRoles}
+                sortBy={sortBy}
               />
             </>
           }
@@ -445,18 +446,18 @@ const AllEmployees = () => {
             title={"Assign new role"}
             content={
               <>
-                <p>Choose a role from menu</p><br/>
-              <DropdownComponent
-                title={formValue.idRole === '' && 'Roles'}
-                options={availableRolesToAdd}
-                onChange={(e) => {
-                  e === null ?
-                    setFormValue({ ...formValue, idRole: '' }) :
-                    setFormValue({ idUser: employeeInTable.idUser, idRole: e.value });
-                }}
-                error={showErrors && checkErrors('idRole') ? true : false}
-                helper={showErrors ? checkErrors('idRole') : ''}
-              />
+                <p>Choose a role from menu</p><br />
+                <DropdownComponent
+                  title={formValue.idRole === '' && 'Roles'}
+                  options={availableRolesToAdd}
+                  onChange={(e) => {
+                    e === null ?
+                      setFormValue({ ...formValue, idRole: '' }) :
+                      setFormValue({ idUser: employeeInTable.idUser, idRole: e.value });
+                  }}
+                  error={showErrors && checkErrors('idRole') ? true : false}
+                  helper={showErrors ? checkErrors('idRole') : ''}
+                />
               </>
             }
             handleActionYes={() => handleAddUserRole()}
@@ -474,7 +475,7 @@ const AllEmployees = () => {
             title={"Delete a role"}
             content={
               <>
-                <p>This action is permanent!</p><br/>
+                <p>This action is permanent!</p><br />
                 <DropdownComponent
                   title={formValue.idRole === '' && 'Roles'}
                   options={currentRolesToDelete}
