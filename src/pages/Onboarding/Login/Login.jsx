@@ -21,11 +21,6 @@ const Login = () => {
 
   // const { setUser } = useAuthProvider();
   const [passwordShown, setPasswordShown] = useState(true);
-
-  // form values
-  const [email, setEmail] = useState(""); // ""
-  const [pwd, setPwd] = useState(""); // ""
-
   // error states
   const [emailError, setEmailError] = useState(null);
   const [pwdError, setPwdError] = useState(null);
@@ -82,7 +77,7 @@ const Login = () => {
     if (isFormValid()) {
       setShowErrors(false);
       try {
-        const response = await login(email, pwd);
+        const response = await login(formValue.eMailAdress, formValue.password);
         if (response !== null) {
           const decodedToken = jwtDecode(response.data.jwt);
           console.log(decodedToken);
