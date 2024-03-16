@@ -217,9 +217,9 @@ export const getAllEmployees = async (id) => {
 
 
 // add role to employee
-export const addRoleToEmployee = async (id) => {
+export const addRoleToEmployee = async (idUser, idRole) => {
   try {
-    const response = await axios.put("/user/addRole?idUser=" + id);
+    const response = await axios.put("/user/addRole?idUser=" + idUser + "&idRole="+idRole);
     return response;
   } catch (error) {
     if (error.response) {
@@ -233,9 +233,25 @@ export const addRoleToEmployee = async (id) => {
 
 
 // remove role to employee
-export const deleteRoleToEmployee = async (id) => {
+export const deleteRoleFromEmployee = async (idUser, idRole) => {
   try {
-    const response = await axios.delete("/user/removeRole?idUser=" + id);
+    const response = await axios.delete("/user/removeRole?idUser=" + idUser +"&idRole="+idRole);
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data.message || "Something went wrong... Try again later");
+
+    } else {
+      throw new Error("Network error or other issue");
+    }
+  }
+};
+
+
+// get all organisation roles
+export const getAllRoles = async () => {
+  try {
+    const response = await axios.get("/role/getAll");
     return response;
   } catch (error) {
     if (error.response) {

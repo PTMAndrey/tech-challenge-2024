@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import styles from './Users.module.scss';
-import { addTeamRoles, deleteTeamRoles, updateTeamRoles } from '../../api/API';
+import { addRoleToEmployee, addTeamRoles, deleteRoleFromEmployee, deleteTeamRoles, updateTeamRoles } from '../../api/API';
 import TableNotFound from '../../components/Tables/TableNotFound'
 import Button from '../../components/Button/Button'
 import Modal from '../../components/ModalDialog/Modal';
@@ -23,7 +23,8 @@ import {
   IconButton,
   Box,
   TableFooter,
-  TablePagination
+  TablePagination,
+  Tooltip,
 } from '../imports/muiMaterial';
 
 import {
@@ -41,30 +42,74 @@ import {
 import { useTheme } from '@emotion/react';
 import PropTypes from 'prop-types';
 import ListRolesForMobile from './ListEmployeesForMobile';
-
+import DropdownComponent from '../../components/Dropdown/Dropdown';
 
 const AllEmployees = () => {
-  const { employees, fetchEmployees, currentPageEmployees, pageSize } = useStateProvider();
+  const { employees, fetchEmployees,
+    currentPageEmployees, pageSize,
+    organisationRoles, fetchOrganisationRoles
+  } = useStateProvider();
   const { user } = useAuthProvider();
   const { width } = useWindowDimensions();
 
   useEffect(() => {
     fetchEmployees(user?.idOrganisation);
+    fetchOrganisationRoles(user?.idOrganisation);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
-  console.log(employees);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  let userRolesPerRow = [];
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  let availableRolesToAdd = [];
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  let currentRolesToDelete = [];
+
+  const { setAlert } = useStateProvider();
   const [showErrors, setShowErrors] = useState(false);
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setEmployeeInTable((prev) => {
-      return { ...prev, [name]: value };
-    });
+
+  const [employeeInTable, setEmployeeInTable] = useState(null);
+  const [openAddRole, setOpenAddRole] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
+
+
+  const [rows, setRows] = useState([]);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(3); // Numarul de linii pe o pagina in tabel
+  const [sortBy, setSortBy] = useState('firstName');
+  const [sortDirection, setSortDirection] = useState('Ascending');
+
+  const [formValue, setFormValue] = useState({
+    idUser: user?.idUser,
+    idRole: '',
+  });
+
+  const handleOpenAddRole = () => {
+    setOpenAddRole(true);
+  }
+  const handleCloseAddRole = () => {
+    setOpenAddRole(false);
+    setEmployeeInTable(null)
+    userRolesPerRow = [];
+    availableRolesToAdd = [];
+    setFormValue({ ...formValue, idRole: '' })
+  }
+
+  const handleOpenDeleteRole = () => {
+    setOpenDelete(true);
+
+  };
+  const handleCloseDelete = () => {
+    setOpenDelete(false);
+    setEmployeeInTable(null)
+    userRolesPerRow = [];
+    availableRolesToAdd = [];
+    setFormValue({ ...formValue, idRole: '' })
   };
 
   const isFormValid = () => {
     let isValid = true;
-    Object.keys(employeeInTable).forEach((field) => {
+    Object.keys(formValue).forEach((field) => {
       if (checkErrors(field)) {
         isValid = false;
       }
@@ -73,57 +118,30 @@ const AllEmployees = () => {
   };
 
   const checkErrors = (field) => {
-    if (field === "teamRoleName") {
-      if (employeeInTable.teamRoleName.length < 4 && employeeInTable.teamRoleName.length > 0) {
-        return "Min 4 characters required.";
-      } else if (employeeInTable.teamRoleName.length === 0) {
-        return "Min 4 characters required.";
+    console.log(formValue);
+    if (field === 'idRole') {
+      if (formValue.idRole === '') {
+        return "Choose a role!";
       }
     }
     return "";
   }
 
-  const { setAlert } = useStateProvider();
-
-  const [employeeInTable, setEmployeeInTable] = useState({ idUser: null, firstName: '', lastName: '', emailAdress: '', authorities: [] });
-  const [openAddUpdate, setOpenAddUpdate] = useState({ open: false, action: '' });
-
-  const [openDelete, setOpenDelete] = useState(false);
-  const handleOpenDelete = () => {
-    setOpenDelete(true);
-
-  };
-  const handleCloseDelete = () => {
-    setOpenDelete(false);
-    setEmployeeInTable({ idUser: null, firstName: '', lastName: '', emailAdress: '', authorities: [] })
-    setShowErrors(false);
-  };
-
-  const handleOpenAddUpdate = (action) => {
-    setOpenAddUpdate({ open: true, action: action });
-  }
-  const handleCloseAddUpdate = () => {
-    setOpenAddUpdate({ open: false, action: '' });
-    setEmployeeInTable({ idUser: null, firstName: '', lastName: '', emailAdress: '', authorities: [] })
-    setShowErrors(false);
-
-  }
-
-  const handleAddTeamRole = async () => {
+  const handleAddUserRole = async () => {
     if (!isFormValid()) {
       setShowErrors(true);
     }
     if (isFormValid()) {
       setShowErrors(false);
       try {
-        const response = await addTeamRoles(user?.idUser, { teamRoleName: employeeInTable.teamRoleName, idOrganisation: user?.idOrganisation });
+        const response = await addRoleToEmployee(formValue.idUser, formValue.idRole);
         if (response.status === 200 || response.status === 201) {
-          fetchEmployees(user?.idOrganisation);
+          const x = await fetchEmployees(user?.idOrganisation);
           setAlert({
             type: "success",
             message: "You added a new role!",
           });
-          handleCloseAddUpdate();
+          handleCloseAddRole();
         }
       } catch (error) {
         console.log(error.message, "error");
@@ -135,21 +153,21 @@ const AllEmployees = () => {
     }
   }
 
-  const handleUpdateTeamRole = async (idTeamRole) => {
+  const handleDeleteTeamRole = async () => {
     if (!isFormValid()) {
       setShowErrors(true);
     }
     if (isFormValid()) {
       setShowErrors(false);
       try {
-        const response = await updateTeamRoles(idTeamRole, { teamRoleName: employeeInTable.teamRoleName, idOrganisation: user?.idOrganisation });
+        const response = await deleteRoleFromEmployee(formValue.idUser, formValue.idRole);
         if (response.status === 200 || response.status === 201) {
-          fetchEmployees(user?.idOrganisation);
+          const x = await fetchEmployees(user?.idOrganisation);
           setAlert({
             type: "success",
-            message: "Update complete!",
+            message: "You added a new role!",
           });
-          handleCloseAddUpdate();
+          handleCloseDelete();
         }
       } catch (error) {
         console.log(error.message, "error");
@@ -161,68 +179,26 @@ const AllEmployees = () => {
     }
   }
 
-  const handleDeleteTeamRole = async (idTeamRole) => {
-    try {
-      const response = await deleteTeamRoles(idTeamRole);
-      if (response.status === 200 || response.status === 201) {
-        fetchEmployees(user?.idOrganisation);
-        setAlert({
-          type: "success",
-          message: "Team-role deleted!",
-        });
-        handleCloseDelete();
-      }
-    } catch (error) {
-      console.log(error.message, "error");
-      setAlert({
-        type: "danger",
-        message: error.message || "Something went wrong...",
-      });
+
+  const toggleSortDirectionAndColumn = (column) => {
+    if (sortBy === column) {
+      setSortDirection(sortDirection === 'Ascending' ? 'Descending' : 'Ascending');
+    } else {
+      setSortBy(column);
+      setSortDirection('Ascending');
     }
-  }
+  };
+
 
   function createData(idUser, firstName, lastName, emailAdress, authorities) {
     return { idUser, firstName, lastName, emailAdress, authorities };
   }
 
-  const [rows, setRows] = useState([]);
-
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(3);
-  const [sortBy, setSortBy] = useState('firstName'); // Starea pentru coloana după care se sortează
-
-  const [sortDirection, setSortDirection] = useState('asc'); // 'asc' pentru crescător, 'desc' pentru descrescător
-
-  // const toggleSortDirection = () => {
-  //   setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
-  // };
-
-  // useEffect(() => {
-  //   const sortedEmployees = employees?.map(emp =>
-  //     createData(emp.idUser, emp.firstName, emp.lastName, emp.emailAdress, emp.authorities)
-  //   ).sort((a, b) => {
-  //     if (sortDirection === 'asc') {
-  //       return a.firstName.localeCompare(b.firstName);
-  //     } else {
-  //       return b.firstName.localeCompare(a.firstName);
-  //     }
-  //   });
-  //   setRows(sortedEmployees || []);
-  // }, [employees, sortDirection]);
-
-  const toggleSortDirectionAndColumn = (column) => {
-    if (sortBy === column) {
-      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
-    } else {
-      setSortBy(column);
-      setSortDirection('asc'); // Resetăm direcția sortării la ascendent când schimbăm coloana
-    }
-  };
   useEffect(() => {
     const sortedEmployees = employees?.map(emp =>
       createData(emp.idUser, emp.firstName, emp.lastName, emp.emailAdress, emp.authorities)
     ).sort((a, b) => {
-      if (sortDirection === 'asc') {
+      if (sortDirection === 'Ascending') {
         return a[sortBy].localeCompare(b[sortBy]);
       } else {
         return b[sortBy].localeCompare(a[sortBy]);
@@ -259,6 +235,7 @@ const AllEmployees = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPageEmployees, pageSize, rows, sortDirection]);
 
+  // formatAuthority and renderUserRoles used for display roles in table
   const formatAuthority = (authority) => {
     return authority
       .split('_')
@@ -269,11 +246,47 @@ const AllEmployees = () => {
   const renderUserRoles = (info) => {
     if (Array.isArray(info)) {
       return info.map(item => (
-        <p key={item.id} className={styles.empRole}>{formatAuthority(item.authority)}</p>
+        <li key={item.id}>{formatAuthority(item.authority)}</li>
       ))
     }
     else return info;
   };
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    organisationRoles?.map(item =>
+      userRolesPerRow.push({ value: item.id, label: `${formatAuthority(item.authority)}` })
+    );
+  }, [organisationRoles, userRolesPerRow]);
+
+  useEffect(() => {
+    if (employeeInTable) {
+      userRolesPerRow
+        .filter(role =>
+          !employeeInTable?.authorities.map(authority =>
+            formatAuthority(authority.authority)
+          ).includes(role.label)
+        )
+        .filter(role => formValue.idRole !== '' ? role.value !== formValue.idRole : role.value)
+        .map(item =>
+          availableRolesToAdd.push({ value: item.value, label: item.label })
+        );
+
+        userRolesPerRow
+        .filter(role =>
+          employeeInTable?.authorities.map(authority =>
+            formatAuthority(authority.authority)
+          ).includes(role.label)
+        )
+        .filter(role => formValue.idRole !== '' ? role.value !== formValue.idRole : role.value)
+        .map(item =>
+          currentRolesToDelete.push({ value: item.value, label: item.label })
+        );
+    }
+  }, [availableRolesToAdd, employeeInTable, userRolesPerRow, formValue.idRole, currentRolesToDelete]);
+
+
+
 
   return (
     <section className={styles.pageAllEmployees}>
@@ -289,15 +302,36 @@ const AllEmployees = () => {
                     <StyledTableCell align="center">Nr. crt.</StyledTableCell>
                     <StyledTableCell align="center">
                       First Name
-                      <IconButton onClick={() => toggleSortDirectionAndColumn('firstName')} className={styles.iconWhite}>
-                        {sortDirection === 'asc' && sortBy === 'firstName' ? <TextRotationAngledownIcon /> : <TextRotationAngleupIcon />}
-                      </IconButton>
+                      {/* <IconButton onClick={() => toggleSortDirectionAndColumn('firstName')} className={styles.iconWhite}>
+                        {sortDirection === 'Ascending' && sortBy === 'firstName' ? <TextRotationAngledownIcon /> : <TextRotationAngleupIcon />}
+                      </IconButton> */}
+                      <Tooltip
+                        title={"Order by first name"}
+                        placement='top-end'
+                        arrow
+                        onClick={() => toggleSortDirectionAndColumn('firstName')} className={styles.iconWhite}
+                      >
+                        <IconButton className={styles.iconStyle}>
+                          {sortDirection === 'Ascending' && sortBy === 'firstName' ? <TextRotationAngledownIcon /> : <TextRotationAngleupIcon />}
+
+                        </IconButton>
+                      </Tooltip>
                     </StyledTableCell>
                     <StyledTableCell align="center">
                       Last Name
-                      <IconButton onClick={() => toggleSortDirectionAndColumn('lastName')} className={styles.iconWhite}>
-                        {sortDirection === 'asc' && sortBy === 'lastName' ? <TextRotationAngledownIcon /> : <TextRotationAngleupIcon />}
-                      </IconButton>
+                      {/* <IconButton>
+                        </IconButton> */}
+                      <Tooltip
+                        title={"Order by last name"}
+                        placement='top-end'
+                        arrow
+                        onClick={() => toggleSortDirectionAndColumn('lastName')} className={styles.iconWhite}
+                      >
+                        <IconButton className={styles.iconStyle}>
+                          {sortDirection === 'Ascending' && sortBy === 'lastName' ? <TextRotationAngledownIcon /> : <TextRotationAngleupIcon />}
+
+                        </IconButton>
+                      </Tooltip>
                     </StyledTableCell>
                     <StyledTableCell align="center">Email</StyledTableCell>
                     <StyledTableCell align="center">Roles</StyledTableCell>
@@ -309,7 +343,7 @@ const AllEmployees = () => {
                     ? rows?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     : rows
                   )?.map((row, index) => (
-                    <TableRow key={index}>
+                    <TableRow key={row?.idUser} >
                       <TableCell component="th" scope="row" style={{ width: 160 }} align="center">
                         {index + 1}
                       </TableCell>
@@ -323,15 +357,37 @@ const AllEmployees = () => {
                         {row?.emailAdress}
                       </TableCell>
                       <TableCell style={{ width: 160 }} align="center">
-                        {renderUserRoles(row?.authorities)}
+                        <ul className={styles.listOfRoles}>{renderUserRoles(row?.authorities)}</ul>
                       </TableCell>
                       <TableCell style={{ width: 160 }} align="center">
-                        <BorderColorIcon className={styles.tableButtons} onClick={() => {
-                          setEmployeeInTable({ idUser: row?.idUser, firstName: row?.firstName, lastName: row?.lastName, emailAdress: row?.emailAdress, authorities: row?.authorities }); handleOpenAddUpdate('update');
-                        }} />
-                        <DeleteForeverIcon className={styles.tableButtons} onClick={() => {
-                          setEmployeeInTable({ idUser: row?.idUser, firstName: row?.firstName, lastName: row?.lastName, emailAdress: row?.emailAdress, authorities: row?.authorities }); handleOpenDelete();
-                        }} />
+                        <div className={styles.allEmployeesButtonsAction}>
+                          {row?.authorities.length !== 3 &&
+                            <Tooltip
+                              title='Add role'
+                              placement='top-end'
+                              arrow
+                              onClick={() => {
+                                setEmployeeInTable(row); handleOpenAddRole();
+                              }} >
+                              <IconButton className={styles.iconStyle}>
+                                <AddCircleOutlineIcon className={styles.tableButtons} />
+                              </IconButton>
+                            </Tooltip>
+                          }
+                          {row?.authorities.some(authority => authority.authority !== "EMPLOYEE") &&
+                            <Tooltip
+                              title='Delete role'
+                              placement='top-end'
+                              arrow
+                              onClick={() => {
+                                setEmployeeInTable(row); handleOpenDeleteRole();
+                              }}>
+                              <IconButton className={styles.iconStyle}>
+                                <DeleteForeverIcon className={styles.tableButtons} />
+                              </IconButton>
+                            </Tooltip>
+                          }
+                        </div>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -371,8 +427,8 @@ const AllEmployees = () => {
                 currentTableData={currentTableData}
                 rows={rows}
                 setEmployeeInTable={setEmployeeInTable}
-                handleOpenAddUpdate={handleOpenAddUpdate}
-                handleOpenDelete={handleOpenDelete}
+                handleOpenAddRole={handleOpenAddRole}
+                handleOpenDeleteRole={handleOpenDeleteRole}
                 sortDirection={sortDirection}
                 toggleSortDirection={toggleSortDirectionAndColumn}
               />
@@ -381,30 +437,31 @@ const AllEmployees = () => {
 
         </div>
       }
-      {openAddUpdate.open &&
+      {openAddRole &&
         <StyledEngineProvider injectFirst>
           <Modal
-            open={openAddUpdate.open}
-            handleClose={handleCloseAddUpdate}
-            title={openAddUpdate.action === 'add' ? "Add new role" : (<>{"Update"} <br /> {"[" + employeeInTable.teamRoleName + "]"}</>)}
+            open={openAddRole}
+            handleClose={handleCloseAddRole}
+            title={"Assign new role"}
             content={
-              <Input
-                type="text"
-                placeholder="Role"
-                label="Team role"
-                id="teamRoleName"
-                name="teamRoleName"
-                value={employeeInTable.teamRoleName}
-                onChange={handleChange}
-
-                required
-                error={showErrors && checkErrors("teamRoleName") ? true : false}
-                helper={showErrors ? checkErrors("teamRoleName") : ""}
+              <>
+                <p>Choose a role from menu</p><br/>
+              <DropdownComponent
+                title={formValue.idRole === '' && 'Roles'}
+                options={availableRolesToAdd}
+                onChange={(e) => {
+                  e === null ?
+                    setFormValue({ ...formValue, idRole: '' }) :
+                    setFormValue({ idUser: employeeInTable.idUser, idRole: e.value });
+                }}
+                error={showErrors && checkErrors('idRole') ? true : false}
+                helper={showErrors ? checkErrors('idRole') : ''}
               />
+              </>
             }
-            handleActionYes={() => openAddUpdate.action === 'add' ? handleAddTeamRole() : handleUpdateTeamRole(employeeInTable.idTeamRole)}
+            handleActionYes={() => handleAddUserRole()}
             textActionYes={"Confirm"}
-            handleActionNo={handleCloseAddUpdate}
+            handleActionNo={handleCloseAddRole}
             textActionNo={"Cancel"}
           />
         </StyledEngineProvider>
@@ -414,9 +471,23 @@ const AllEmployees = () => {
           <Modal
             open={openDelete}
             handleClose={handleCloseDelete}
-            title={(<>{"Delete"} <br /> {"[" + employeeInTable.teamRoleName + "]"}</>)}
-            content={"This action is permanent!"}
-            handleActionYes={() => handleDeleteTeamRole(employeeInTable.idTeamRole)}
+            title={"Delete a role"}
+            content={
+              <>
+                <p>This action is permanent!</p><br/>
+                <DropdownComponent
+                  title={formValue.idRole === '' && 'Roles'}
+                  options={currentRolesToDelete}
+                  onChange={(e) => {
+                    e === null ?
+                      setFormValue({ ...formValue, idRole: '' }) :
+                      setFormValue({ idUser: employeeInTable.idUser, idRole: e.value });
+                  }}
+                  error={showErrors && checkErrors('idRole') ? true : false}
+                  helper={showErrors ? checkErrors('idRole') : ''}
+                />
+              </>}
+            handleActionYes={() => handleDeleteTeamRole()}
             textActionYes={"Delete"}
             handleActionNo={handleCloseDelete}
             textActionNo={"Cancel"}

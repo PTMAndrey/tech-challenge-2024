@@ -23,7 +23,8 @@ import {
   IconButton,
   Box,
   TableFooter,
-  TablePagination
+  TablePagination,
+  Tooltip
 } from '../imports/muiMaterial';
 
 import {
@@ -293,14 +294,30 @@ const TeamRoles = () => {
                         {row?.teamRoleName}
                       </TableCell>
                       <TableCell style={{ width: 160 }} align="center">
-                        <BorderColorIcon className={styles.tableButtons} onClick={() => {
-                          setTeamRole({ idTeamRole: row?.id, teamRoleName: row?.teamRoleName }); handleOpenAddUpdate('update');
-                        }} />
+                        <Tooltip
+                          title='Update team role'
+                          placement='top-start'
+                          arrow
+                          onClick={() => {
+                            setTeamRole({ idTeamRole: row?.id, teamRoleName: row?.teamRoleName }); handleOpenAddUpdate('update');
+                          }} >
+                          <IconButton>
+                            <BorderColorIcon className={styles.tableButtons} />
+                          </IconButton>
+                        </Tooltip>
                       </TableCell>
                       <TableCell style={{ width: 160 }} align="center">
-                        <DeleteForeverIcon className={styles.tableButtons} onClick={() => {
-                          setTeamRole({ idTeamRole: row?.id, teamRoleName: row?.teamRoleName }); handleOpenDelete();
-                        }} />
+                        <Tooltip
+                          title='Delete team role'
+                          placement='top-start'
+                          arrow
+                          onClick={() => {
+                            setTeamRole({ idTeamRole: row?.id, teamRoleName: row?.teamRoleName }); handleOpenDelete();
+                          }} >
+                          <IconButton>
+                            <DeleteForeverIcon className={styles.tableButtons} />
+                          </IconButton>
+                        </Tooltip>
                       </TableCell>
                     </TableRow>
                   ))}
