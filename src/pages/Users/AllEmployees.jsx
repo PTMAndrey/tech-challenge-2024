@@ -162,7 +162,7 @@ const AllEmployees = () => {
           const x = await fetchEmployees(user?.idOrganisation);
           setAlert({
             type: "success",
-            message: "You added a new role!",
+            message: "You removed the role!",
           });
           handleCloseDelete();
         }
