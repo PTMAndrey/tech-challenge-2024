@@ -1,21 +1,22 @@
 @import "../../../styles/variables.scss";
 @import "../../../styles/mixins.scss";
 
-div a{
+div a {
     text-decoration: none;
 }
+
 .auth {
     display: flex;
     flex-direction: column;
     align-items: center;
- 
+
     @include medium {
         min-width: 135px;
     }
 
-    @include small {
-        min-width: 226px;
-    }
+    // @include small {
+    //     min-width: 226px;
+    // }
     margin:0px auto;
 }
 
@@ -24,6 +25,7 @@ div a{
     display: flex;
     flex-direction: column;
     align-items: center;
+    min-width: 240px;
     padding: 0 32px 32px 32px;
 }
 
@@ -33,7 +35,7 @@ div a{
     align-items: flex-start;
     width: 415px;
     min-width: 150px;
-    margin-bottom:30px;
+    // margin-bottom:30px;
 }
 
 .form {
@@ -66,9 +68,9 @@ div a{
 }
 
 
-.title{
+.title {
     color: $color-black;
-    
+
     font-size: $font-h4;
     font-weight: $font-bold;
 
@@ -77,7 +79,7 @@ div a{
     flex-grow: 0;
 }
 
-.subTitle{
+.subTitle {
     color: $color-gray-300;
     font-size: $font-body-small;
     font-weight: $font-semibold;
@@ -94,16 +96,16 @@ div a{
     flex-grow: 0;
 }
 
-.authError{
+.authError {
     color: $color-alert-400;
     font-size: $font-body-small;
-    width:415px;
+    width: 415px;
 }
 
-.textpwdInfo{
+.textpwdInfo {
     width: 415px;
     height: 20px;
-    font-size:$font-body-tiny;
+    font-size: $font-body-tiny;
     font-weight: $font-regular;
     line-height: 20px;
     color: $color-gray-300;
@@ -114,27 +116,44 @@ div a{
 }
 
 .contentContainerAuthOptions {
+    //old
+    // gap: 24px;
+    // width: 415px;
+    // // height: 142px;
+    // min-width: 150px;
+    // flex: none;
+    // order: 1;
+    // flex-grow: 0;
+
+
+    // new
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
     gap: 24px;
     width: 415px;
-    // height: 142px;
-    min-width: 150px;
-    flex: none;
-    order: 1;
-    flex-grow: 0;
+    height: 142px;
+    min-width: 240px;
 }
 
-.contentContainerButtons{
+.contentContainerButtons {
+    //new
+    display: flex;
+    //old
     flex-direction: column;
     align-items: flex-start;
     padding: 0px;
     gap: 8px;
     width: 415px;
-    height: 70px;
+    // height: 70px;
+
 }
 
 
 
-.contentContainerAuthEndForm{
+.contentContainerAuthEndForm {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -146,34 +165,113 @@ div a{
 }
 
 
-.textAuthEndForm{
+.textAuthEndForm {
     font-size: $font-body-small;
     font-weight: $font-semibold;
     line-height: 22px;
     align-items: center;
 
-    span{
-      color: $color-primary-400;
-      cursor:pointer;
+    span {
+        color: $color-primary-400;
+        cursor: pointer;
     }
 }
 
-@media (max-width : 860px){
+@media (max-width : 860px) {
+
+    //new
+    .contentContainerForm {
+        padding: 0px;
+        gap: 0px;
+        width: auto;
+        height: auto;
+        min-width: 240px;
+    }
+
     .authError {
         font-size: $font-body-tiny;
     }
-    .authError{
+
+    .authError {
         font-size: $font-body-tiny;
     }
 
-    .contentContainerButtons Button, .formInput Button{
-        padding:9px;
+    .contentContainerButtons {
+
+        Button,
+        .formInput Button {
+            padding: 9px;
+        }
     }
 }
 
-@media (max-width : 550px){
+@include responsive_W550px {
+
+    //new
+    .containerAuth {
+        display: flex;
+        flex-direction: column;
+        width: 281px;
+        align-items: center;
+    }
+
+    //new
+    .contentContainerForm {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 0px;
+        gap: 0px;
+        width: auto;
+        height: auto;
+        min-width: 240px;
+    }
+
+    //new
+    .form {
+        padding: 0px;
+        width: auto;
+        height: 100%;
+        min-width: 240px;
+        flex: none;
+        order: 0;
+        align-self: stretch;
+        flex-grow: 0;
+    }
+
+
+    // new
+    .formTitle {
+        padding: 0px;
+        width: auto;
+        height: 58px;
+    }
+
+    //new
+    .title {
+        font-size: $font-h6;
+    }
+
+    //new
+    .contentContainerAuthOptions {
+        width: auto;
+    }
+
+    //new
+    .contentContainerButtons {
+        width: 100%;
+    }
+
     .formInput button {
         margin-bottom: 15px;
+    }
+
+    .contentContainerButtons Button,
+    .formInput Button,
+    .formInput input {
+        padding: 2px;
+        padding-left: 5px;
+        font-size: 12px;
     }
 
 }
@@ -182,6 +280,7 @@ div a{
     .formInput {
         margin-top: 20px
     }
+
     .contentContainerButtons Button,
     .formInput Button,
     .formInput input {

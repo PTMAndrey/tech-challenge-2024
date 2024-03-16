@@ -1,4 +1,5 @@
 @import "../../styles/variables.scss";
+@import "../../styles/mixins.scss";
 
 .containerInput {
   position: relative;
@@ -29,8 +30,8 @@
       border: unset;
     }
 
-    @media screen and (max-width:350px) {
-      padding: 7px 45px 7px 12px !important;
+    @media screen and (max-width:360px) {
+      // padding: 7px 45px 7px 12px !important;
       line-height: 12px;
     }
   }
@@ -42,7 +43,7 @@
     line-height: 24px;
     white-space: pre;
 
-    @media screen and (max-width:350px) {
+    @media screen and (max-width:360px) {
       font-size: $font-body-small;
       line-height: 12px;
     }
@@ -83,6 +84,25 @@
 
     &:hover {
       cursor: pointer;
+    }
+
+
+  }
+
+  @include responsive_W550px {
+    .icon {
+      margin-left: -10px;
+    }
+
+    svg {
+      width: 16px;
+      // height: 16px;
+    }
+  }
+
+  @media screen and (max-width:360px){
+    svg {
+      height: 16px;
     }
   }
 

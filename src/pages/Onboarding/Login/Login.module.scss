@@ -14,9 +14,9 @@ div a {
         min-width: 135px;
     }
 
-    @include small {
-        min-width: 226px;
-    }
+    // @include small {
+    //     min-width: 226px;
+    // }
 
     margin:0px auto;
 }
@@ -30,13 +30,16 @@ div a {
 }
 
 .contentContainerForm {
+    
+    display: flex;
     flex-direction: column;
     align-items: flex-start;
     padding: 0px;
     gap: 28px;
 
     width: 415px;
-    height: 250px;
+    //height: 250px;// old
+    height: auto;
     min-width: 150px;
 }
 
@@ -183,24 +186,40 @@ div a {
 
 // login button, login with google, signup option
 .contentContainerAuthOptions {
-    padding: 0px;
-    gap: 24px;
+    // old
+    // padding: 0px;
+    // gap: 24px;
 
+    // width: 415px;
+    // height: 142px;
+    // min-width: 150px; // older
+    // min-width: 240px;
+    // flex: none;
+    // order: 1;
+    // flex-grow: 0;
+
+    // new
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
     width: 415px;
     height: 142px;
-    min-width: 150px;
-    flex: none;
-    order: 1;
-    flex-grow: 0;
+    min-width: 240px;
 }
 
 .contentContainerButtons {
+    //new
+    display: flex;
+
+    //old
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     padding: 0px;
     gap: 8px;
     width: 415px;
-    height: 96px;
+    // height: 96px; //old
 
     Button,
     .formInput Button {
@@ -228,9 +247,9 @@ div a {
 
 }
 
-.authRegister {
-    margin-top: -35px;
-}
+// .authRegister {
+//     margin-top: 0px;
+// }
 
 .textAuthEndForm {
     font-size: $font-body-small;
@@ -245,6 +264,15 @@ div a {
 }
 
 @media (max-width : 860px) {
+    //new
+    .contentContainerForm {
+        padding: 0px;
+        gap: 0px;
+        width: auto;
+        height: auto;
+        min-width: 240px;
+    }
+    //old
     .authError {
         font-size: $font-body-tiny;
     }
@@ -269,15 +297,81 @@ div a {
     }
 
     .textAuthEndForm {
-        margin-top: -15px;
+        // margin-top: -15px; // old
+        margin-top:0; // new
     }
 
     .authRegister {
-        margin-top: -10px;
+        // margin-top: -10px; // old
+        margin-top: 30px; // new
     }
 }
 
-@media (max-width : 550px) {
+@include responsive_W550px {
+
+    //new
+    .containerAuth {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        align-items: center;
+    }
+
+    //new
+    .contentContainerForm {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 0px;
+        gap: 0px;
+        width: auto;
+        height: auto;
+        min-width: 240px;
+    }
+
+    //new
+    .form {
+        padding: 0px;
+        width: auto;
+        height: 100%;
+        min-width: 240px;
+        flex: none;
+        order: 0;
+        align-self: stretch;
+        flex-grow: 0;
+    }
+
+
+    // new
+    .formTitle{
+        padding: 0px;
+        width: auto;
+        height: 58px;
+    }
+    .title{
+        font-size: $font-h6;
+    }
+    
+    //new
+    .contentContainerAuthOptions{
+        width: auto;
+    }
+
+    .contentContainerButtons{
+        width:100%;
+    }
+
+    //new
+    .contentContainerAuthEndForm {
+        width: auto;
+    }
+
+
+
+
+
+
+
 
     .formInput button {
         margin-bottom: 15px;
@@ -285,13 +379,19 @@ div a {
 
 
     .formInput {
-        margin-top: 20px
+        //old
+        margin-top: 20px;
+        //new
+        padding: 0px;
     }
 
     .rememberMe {
+        //old
         flex-direction: column;
         align-items: center;
         justify-content: center;
+        //new
+        width: auto;
     }
 
     .forgotPassword {
@@ -303,6 +403,7 @@ div a {
     .formInput input {
         padding: 2px;
         padding-left: 5px;
+        font-size: 12px;
     }
 }
 

@@ -11,7 +11,7 @@ const RegisterUser = ({decodedToken, formValue, handleChange, showErrors, checkE
       <div className={styles.formTitle}>
         <h4 className={styles.title}>Create account</h4>
         <p className={styles.subTitle}>
-          Sign up to {decodedToken?.organisationName} 
+          Sign up to [ {decodedToken?.organisationName} ]
         </p>
       </div>
 

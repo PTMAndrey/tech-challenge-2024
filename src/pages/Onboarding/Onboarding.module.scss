@@ -1,4 +1,5 @@
 @import "../../styles/variables.scss";
+@import "../../styles/mixins.scss";
 
 .mainContainer{
     display: flex;
@@ -28,8 +29,9 @@
     // position: absolute;
     width: 101px;
     height: 30.77px;
-    margin-left: 32px;
+    margin: 0 auto 25px auto;;
 }
+
 .rightImageOnboarding{
     height: auto;
     width: auto;
@@ -40,9 +42,31 @@
     .rightImageOnboarding{
         display: none;
     }
+    .leftSide{
+        margin-top:50px !important;
+        margin:0 auto;
+    }
 }
-@media (max-width : 550px){
-    .logoImageOnboarding{
-        margin-left:30%;
+@include responsive_W550px{
+    .mainContainer{
+        display: flex;
+        align-items: center;
+        // justify-content: center;
+        // margin-top: 50px !important;
+        margin: 0 auto;
+    }
+
+    .contentContainer{
+        display: flex;
+        flex-direction: column;
+    }
+
+}
+
+@media (max-width : 280px){
+    .mainContainer{
+        display: flex;
+        justify-content:unset;
+        align-items: center;
     }
 }
