@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { getAllEmployees, getAllTeamRoles } from "../api/API";
+import { getAllEmployees, getAllRoles, getAllTeamRoles } from "../api/API";
 
 const StateContext = createContext({});
 
@@ -7,6 +7,7 @@ export const StateProvider = ({ children }) => {
 
   const [teamRoles, setTeamRoles] = useState(null);
   const [employees, setEmployees] = useState(null);
+  const [organisationRoles, setOrganisationRoles] = useState(null);
   
   let pageSize = 3;
   const [currentPageTeamRoles, setCurrentPageTeamRoles] = useState(1);
@@ -65,6 +66,23 @@ export const StateProvider = ({ children }) => {
     }
   };
 
+  const fetchOrganisationRoles = async (idOrganisation) => {
+    try {
+      const response = await getAllRoles(idOrganisation);
+      if (response?.status === 200) {
+        setOrganisationRoles(response.data);
+      }
+
+    } catch (error) {
+      console.log(error.message, "error");
+      setAlert({
+        type: "danger",
+        message: error.message || "Something went wrong...", // Use the error message from the catch
+      });
+    }
+  };
+
+
   return <StateContext.Provider
     value={{
       alert,
@@ -80,6 +98,9 @@ export const StateProvider = ({ children }) => {
       setCurrentPageTeamRoles,
       currentPageEmployees,
       setCurrentPageEmployees,
+      organisationRoles,
+      setOrganisationRoles,
+      fetchOrganisationRoles,
     }}
   >{children}</StateContext.Provider>;
 };

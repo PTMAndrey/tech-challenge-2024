@@ -46,6 +46,11 @@
   }
 }
 
+.allEmployeesButtonsAction{
+  display:flex;
+  justify-content: space-evenly;
+}
+
 .authError {
   color: $color-alert-400;
   font-size: $font-body-small;
@@ -81,8 +86,13 @@
   }
 }
 
-.empRole {
-  border-bottom: 1px solid $color-gray-200;
+.listOfRoles {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  li{
+    padding:5px 0;
+  }
 }
 
 // invitations

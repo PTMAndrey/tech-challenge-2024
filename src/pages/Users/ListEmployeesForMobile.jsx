@@ -2,19 +2,25 @@ import useStateProvider from "../../hooks/useStateProvider";
 import { Fragment, } from "react";
 import Pagination from "../../components/Pagination/Pagination";
 import styles from "./Users.module.scss"
-import RoleCard from "./UserCard";
+import UserCard from "./UserCard";
 
-import { TextRotationAngleupIcon, TextRotationAngledownIcon, FilterListIcon} from '../imports/muiiconsMaterial';
+import { TextRotationAngleupIcon, TextRotationAngledownIcon, FilterListIcon } from '../imports/muiiconsMaterial';
 
-const ListRolesForMobile = (props) => {
-    const { pageSize, currentPageTeamRoles, setCurrentPageTeamRoles } = useStateProvider();
-
+const ListEmployeesForMobile = (props) => {
+    const { currentPageEmployees, pageSize, setCurrentPageEmployees } = useStateProvider();
+console.log(props.currentTableData);
     return (
         <>
-            <div onClick={props.toggleSortDirection} className={styles.sortButtonCard}>
-                <FilterListIcon/>
-                <p>Sort the roles </p>
-                {props.sortDirection === 'asc' ? <TextRotationAngledownIcon /> : <TextRotationAngleupIcon />}
+            <div onClick={()=>props.toggleSortDirection('firstName')} className={styles.sortButtonCard}>
+                <FilterListIcon />
+                <p>Sort by first name </p>
+                {props.sortDirection === 'Ascending' && props.sortBy === 'firstName'? <TextRotationAngledownIcon /> : <TextRotationAngleupIcon />}
+            </div>
+
+            <div onClick={()=>props.toggleSortDirection('lastName')} className={styles.sortButtonCard}>
+                <FilterListIcon />
+                <p>Sort by last name </p>
+                {props.sortDirection === 'Ascending' && props.sortBy === 'lastName' ? <TextRotationAngledownIcon /> : <TextRotationAngleupIcon />}
             </div>
             {props.currentTableData?.length >= 1 &&
                 <Pagination
@@ -22,24 +28,24 @@ const ListRolesForMobile = (props) => {
                     className={styles.paginationBar}
                     totalCount={props.rows?.length}
                     pageSize={pageSize}
-                    currentPage={currentPageTeamRoles}
-                    onPageChange={page => setCurrentPageTeamRoles(page)}
+                    currentPage={currentPageEmployees}
+                    onPageChange={page => setCurrentPageEmployees(page)}
                 />
             }
 
 
             {props.currentTableData?.map(
-                (role, index) =>
+                (user, index) =>
                 (
-                    <Fragment key={`${role?.id}_${index}`}>
+                    <Fragment key={`${user?.emailAdress}`}>
                         {
-                            // <p key={`${role?.id}_${index + Math.random()}`}>{role.teamRoleName}</p>
-                            <RoleCard
-                                key={`${role?.id}_${index + Math.random()}`}
-                                data={role}
-                                setTeamRole={props.setTeamRole}
-                                handleOpenAddUpdate={props.handleOpenAddUpdate}
-                                handleOpenDelete={props.handleOpenDelete}
+                            <UserCard
+                                key={`${user?.id}@${user?.emailAdress}`}
+                                data={user}
+                                setEmployeeInTable={props.setEmployeeInTable}
+                                handleOpenAddRole={props.handleOpenAddRole}
+                                handleOpenDeleteRole={props.handleOpenDeleteRole}
+                                renderUserRoles={props.renderUserRoles}
                             />
                         }
                     </Fragment>
@@ -51,8 +57,8 @@ const ListRolesForMobile = (props) => {
                     className={styles.paginationBar}
                     totalCount={props.rows?.length}
                     pageSize={pageSize}
-                    currentPage={currentPageTeamRoles}
-                    onPageChange={page => setCurrentPageTeamRoles(page)}
+                    currentPage={currentPageEmployees}
+                    onPageChange={page => setCurrentPageEmployees(page)}
                 />
             }
 
@@ -60,4 +66,4 @@ const ListRolesForMobile = (props) => {
     );
 };
 
-export default ListRolesForMobile
+export default ListEmployeesForMobile

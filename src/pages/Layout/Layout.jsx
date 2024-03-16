@@ -44,14 +44,13 @@ const Layout = ({ children }) => {
         <PageTitle title={document.title.replace('Team Finder - ', '')} secondNav={links} />
       )}
       {links && links.length > 0 && <SecondaryMenu links={links} />}
-      <main>
+    
         {React.Children.map(children, child => {
           if (React.isValidElement(child)) {
             return React.cloneElement(child, { toggleSidebar, isSidebarOpen });
           }
           return child;
         })}
-      </main>
     </div>
   );
 };
