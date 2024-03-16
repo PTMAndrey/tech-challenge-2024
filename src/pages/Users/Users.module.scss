@@ -26,6 +26,11 @@
 
   @include responsive_W550px {
     align-items: center;
+
+    hr{
+      width: 100%;
+      margin:15px 0;
+    }
   }
 
 }
@@ -79,7 +84,7 @@
   align-items: center;
   background-color: $color-primary-300;
   color: $color-white !important;
-
+  margin-bottom:20px;
   p {
     padding: 5px;
     font-size: $font-body-small;
