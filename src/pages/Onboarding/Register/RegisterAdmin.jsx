@@ -10,10 +10,8 @@ const RegisterAdmin = ({ formValue, handleChange, showErrors, checkErrors, passw
   return (
     <div className={styles.form}>
       <div className={styles.formTitle}>
-        <h4 className={styles.title}>Create account</h4>
-        <p className={styles.subTitle}>
-          Sign up for free and register your organisation
-        </p>
+        <p className={styles.title}>WELCOME</p>
+        <p className={styles.title}>TO TEAM FINDER</p>
       </div>
 
       <div className={styles.formInput}>
@@ -73,7 +71,7 @@ const RegisterAdmin = ({ formValue, handleChange, showErrors, checkErrors, passw
           onIconClick={passToggleHandler}
         />
         <span className={styles.textpwdInfo}>
-          At least 8 characters.
+          At least 7 characters.
         </span>
 
         <Input

@@ -76,8 +76,8 @@ const Register = ({ decodeOrganisation }) => {
 
         // password
         if (field === "password") {
-            if (formValue.password.length < 8)
-                return "Password must have at least 8 characters!";
+            if (formValue.password.length < 7)
+                return "Password must have at least 7 characters!";
         }
         if (decodeOrganisation === null) {
             // organisationName

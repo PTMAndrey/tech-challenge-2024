@@ -28,65 +28,89 @@ const Login = () => {
 
   // error states
   const [emailError, setEmailError] = useState(null);
-  const [pwdError, setPwdError] = useState(null); 
+  const [pwdError, setPwdError] = useState(null);
+  const [formValue, setFormValue] = useState({
+    eMailAdress: "",
+    password: "",
+  });
+  const [showErrors, setShowErrors] = useState(false);
 
-  const handleEmailError = (e) => {
-    let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
-    if (reg.test(e) === false) {
-      setEmailError("Invalid e-mail address!");
-    } else {
-      setEmailError("");
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormValue((prev) => {
+      return { ...prev, [name]: value };
+    });
+  };
+  const checkErrors = (field) => {
+    // email
+    if (field === "eMailAdress") {
+      let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+      if (formValue.eMailAdress.length === 0)
+        return "This field is mandatory!";
+      else if (reg.test(formValue.eMailAdress) === false)
+        return "Email address is invalid!";
     }
+
+    // password
+    if (field === "password") {
+      if (formValue.password.length < 7)
+        return "Password must have at least 7 characters!";
+    }
+
+    return "";
   };
 
-
-  const handlePwdError = (e) => {
-    if (e.length < 7) {
-      setPwdError("The password must be atleast 7 characters long!");
-    } else setPwdError("");
+  // check if form is valid
+  const isFormValid = () => {
+    let isValid = true;
+    Object.keys(formValue).forEach((field) => {
+      if (checkErrors(field)) {
+        isValid = false;
+      }
+    });
+    return isValid;
   };
 
   const handleLogin = async () => {
-    try {
-      if (emailError === "" && pwdError === "") {
-        if (pwd.length > 6) {
-          const response = await login(email, pwd);
-          if (response !== null) {
-            const decodedToken = jwtDecode(response.data.jwt);
-            console.log(decodedToken);
-
-            if (rememberMe) localStorage.setItem('token', response.data.jwt);
-            else sessionStorage.setItem('token', response.data.jwt);
-            // setUser(decodedToken);
-            const user = await fetchUser(decodedToken.userId);
-            navigate("/");
-
-            setAlert({
-              type: "success",
-              message: "Login successfully",
-            });
-          }
-          else {
-            setAlert({
-              type: "danger",
-              message: "Something went wrong! Check your credentials",
-            });
-          }
-        }
-      } else {
-        if (emailError !== "") handleEmailError("");
-        if (pwdError !== "") handlePwdError("");
-        setAlert({
-          type: "danger",
-          message: "Fill all the required fields correctly.",
-        });
-      }
-    } catch (error) {
-      console.log(error.message, "error");
+    if (!isFormValid()) {
+      setShowErrors(true);
       setAlert({
         type: "danger",
-        message: error.message || "Something went wrong...", // Use the error message from the catch
+        message: "Fill all the required fields correctly.",
       });
+    }
+    if (isFormValid()) {
+      setShowErrors(false);
+      try {
+        const response = await login(email, pwd);
+        if (response !== null) {
+          const decodedToken = jwtDecode(response.data.jwt);
+          console.log(decodedToken);
+
+          if (rememberMe) localStorage.setItem('token', response.data.jwt);
+          else sessionStorage.setItem('token', response.data.jwt);
+          // setUser(decodedToken);
+          const user = await fetchUser(decodedToken.userId);
+          navigate("/");
+
+          setAlert({
+            type: "success",
+            message: "Login successfully",
+          });
+        }
+        else {
+          setAlert({
+            type: "danger",
+            message: "Something went wrong! Check your credentials",
+          });
+        }
+      } catch (error) {
+        console.log(error.message, "error");
+        setAlert({
+          type: "danger",
+          message: error.message || "Something went wrong...", // Use the error message from the catch
+        });
+      }
     }
   };
 
@@ -100,44 +124,45 @@ const Login = () => {
         <div className={styles.contentContainerForm}>
           <div className={styles.form}>
             <div className={styles.formTitle}>
-              <h4 className={styles.title}>Login</h4>
-              <p className={styles.subTitle}>Insert your credentials.</p>
+              <p className={styles.title}>WELCOME</p>
+              <p className={styles.title}>TO TEAM FINDER</p>
             </div>
 
             <div className={styles.formInput}>
               {/* email */}
               {emailError && <div className={styles.authError}>{emailError}</div>}
               <Input
-                label="Email"
-                id="email"
-                name="email"
-                value={email}
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                  handleEmailError(e.target.value);
-                }}
                 type="email"
                 placeholder={"Email"}
                 required
+                label="Email *"
+                id="eMailAdress"
+                name="eMailAdress"
+                value={formValue.eMailAdress}
+                onChange={handleChange}
+                error={showErrors && checkErrors("eMailAdress") ? true : false}
+                helper={showErrors ? checkErrors("eMailAdress") : ""}
               />
 
-              {/* password */}
-              {pwdError && <div className={styles.authError}>{pwdError}</div>}
+
               <Input
-                label="Password"
-                id="password"
-                name="password"
-                value={pwd}
-                onChange={(e) => {
-                  setPwd(e.target.value);
-                  handlePwdError(e.target.value);
-                }}
                 type={passwordShown ? "password" : "text"}
                 placeholder={"Password"}
+                required
+                label="Password *"
+                id="password"
+                name="password"
+                value={formValue.password}
+                onChange={handleChange}
+                error={showErrors && checkErrors("password") ? true : false}
+                helper={showErrors ? checkErrors("password") : ""}
                 icon={passwordShown ? <View /> : <ViewOff />}
                 onIconClick={passToggleHandler}
-                required
               />
+              <span className={styles.textpwdInfo}>
+                At least 7 characters.
+              </span>
+
             </div>
           </div>
 

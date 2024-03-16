@@ -41,8 +41,8 @@ export default function NestedModal({ open, handleClose, title, content, handleA
                     </div>
                     <br />
                     <div className={styles.modalButtons}>
-                        <Button onClick={handleActionYes}>{textActionYes}</Button>
                         <Button onClick={handleActionNo}>{textActionNo}</Button>
+                        <Button onClick={handleActionYes}>{textActionYes}</Button>
                     </div>
                 </Box>
             </Modal>
