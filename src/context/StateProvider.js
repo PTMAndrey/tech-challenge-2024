@@ -18,7 +18,7 @@ export const StateProvider = ({ children }) => {
   if (alert) {
     setTimeout(() => {
       setAlert(null);
-    }, 500000);
+    }, 5000);
   }
 
   const fetchTeamRoles = async (idOrganisation) => {
