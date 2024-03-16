@@ -15,20 +15,12 @@ import { jwtDecode } from "jwt-decode";
 
 
 const Login = () => {
-  const { setUser, rememberMe, fetchUser, setRememberMe } = useAuthProvider();
+  const { rememberMe, fetchUser, setRememberMe } = useAuthProvider();
   const { setAlert } = useStateProvider();
   const navigate = useNavigate();
 
-  // const { setUser } = useAuthProvider();
   const [passwordShown, setPasswordShown] = useState(true);
-
-  // form values
-  const [email, setEmail] = useState(""); // ""
-  const [pwd, setPwd] = useState(""); // ""
-
-  // error states
-  const [emailError, setEmailError] = useState(null);
-  const [pwdError, setPwdError] = useState(null);
+  
   const [formValue, setFormValue] = useState({
     eMailAdress: "",
     password: "",
@@ -82,7 +74,7 @@ const Login = () => {
     if (isFormValid()) {
       setShowErrors(false);
       try {
-        const response = await login(email, pwd);
+        const response = await login(formValue.eMailAdress, formValue.password);
         if (response !== null) {
           const decodedToken = jwtDecode(response.data.jwt);
           console.log(decodedToken);
@@ -130,7 +122,6 @@ const Login = () => {
 
             <div className={styles.formInput}>
               {/* email */}
-              {emailError && <div className={styles.authError}>{emailError}</div>}
               <Input
                 type="email"
                 placeholder={"Email"}
