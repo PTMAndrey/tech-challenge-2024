@@ -79,7 +79,7 @@ function App() {
             </>
           }
           {(user?.authorities.some(authority => authority.authority === "DEPARTMENT_MANAGER") &&
-            user?.idDepartment !== null) &&
+            user?.isDepartmentManager) &&
             <Route path="/departments/myDepartment/:id" element={<Departments/>} />
           }
 

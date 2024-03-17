@@ -71,7 +71,7 @@ const SidebarNavigation = ({ toggleSidebar, isSidebarOpen }) => {
 
         {(
           (user?.authorities.some(authority => authority.authority === "DEPARTMENT_MANAGER") &&
-            user?.idDepartment !== null)
+            user?.isDepartmentManager)
           &&
           !user?.authorities.some(authority => authority.authority === "ORGANISATION_ADMIN") 
           ) &&
