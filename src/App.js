@@ -36,7 +36,7 @@ function App() {
   useEffect(() => {
     setTimeout(() => {
       setIsLoading(false);
-    }, 500);
+    }, 800);
   }, []);
 
   if (isLoading) {
@@ -72,10 +72,17 @@ function App() {
           {user?.authorities.some(authority => authority.authority === "ORGANISATION_ADMIN") &&
             <Route path="/team-roles" element={<TeamRoles />} />
           }
-          {(user?.authorities.some(authority => authority.authority !== "EMPLOYEE") &&
-            user?.authorities.some(authority => authority.authority !== "PROJECT_MANAGER")) &&
-            <Route path="/departments" element={<Departments />} />
+          {user?.authorities.some(authority => authority.authority === "ORGANISATION_ADMIN") &&
+            <>
+              <Route path="/departments/admin/all" element={<Departments/>} />
+              {/* <Route path="/departments/myDepartment/:id" element={<Departments/>} /> */}
+            </>
           }
+          {(user?.authorities.some(authority => authority.authority === "DEPARTMENT_MANAGER") &&
+            user?.idDepartment !== null) &&
+            <Route path="/departments/myDepartment/:id" element={<Departments/>} />
+          }
+
 
           <Route path="/projects">
             <Route path="past-projects" element={<Projects />} />

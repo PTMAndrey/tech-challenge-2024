@@ -41,6 +41,7 @@ console.log(user);
           setUser(response?.data);
         }
     } catch (error) {
+      setUser(null);
       console.log("Error: ", error);
       logout();
       window.location.reload();

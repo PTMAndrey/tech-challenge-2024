@@ -59,12 +59,26 @@ const SidebarNavigation = ({ toggleSidebar, isSidebarOpen }) => {
         </>
         }
 
-        {(user?.authorities.some(authority => authority.authority !== "EMPLOYEE") &&
-          user?.authorities.some(authority => authority.authority !== "PROJECT_MANAGER")) &&
+        {user?.authorities.some(authority => authority.authority === "ORGANISATION_ADMIN") &&
           <>
-            <Link to="/departments" className={location === "/departments" ? styles.activeMenuItem : styles.menuItem}>
+            <Link to="/departments/admin/all" className={location === "/departments/admin/all" || location === ("/departments/myDepartment/" + user?.idDepartment) ? styles.activeMenuItem : styles.menuItem}>
               <MdOutlineStars className={styles.img} />
               {isSidebarOpen && <span>Departments</span>}
+            </Link>
+            <hr />
+          </>
+        }
+
+        {(
+          (user?.authorities.some(authority => authority.authority === "DEPARTMENT_MANAGER") &&
+            user?.idDepartment !== null)
+          &&
+          !user?.authorities.some(authority => authority.authority === "ORGANISATION_ADMIN") 
+          ) &&
+          <>
+            <Link to={"/departments/myDepartment/" + user?.idDepartment} className={location === ("/departments/myDepartment/" + user?.idDepartment) ? styles.activeMenuItem : styles.menuItem}>
+              <MdOutlineStars className={styles.img} />
+              {isSidebarOpen && <span>Department</span>}
             </Link>
             <hr />
           </>
