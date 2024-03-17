@@ -171,6 +171,8 @@ const AdminDepartments = () => {
 
     const handleUpdateDepartment = async () => {
 
+        console.log(formValue, department);
+
         if (!isFormValid()) {
             setShowErrors(true);
         }
@@ -358,7 +360,7 @@ const AdminDepartments = () => {
                         border={false}
                         onClick={() => { handleOpenAddUpdate('add') }}
                     />
-                    {width > 460 ?
+                    {width > 550 ?
                         <TableContainer component={Paper} className={styles.table}>
                             <Table sx={{ minWidth: 500 }} aria-label="custom pagination customized table">
                                 <TableHead>
@@ -484,10 +486,12 @@ const AdminDepartments = () => {
                             <ListDepartments
                                 currentTableData={currentTableData}
                                 rows={rows}
-                                setTeamRole={setDepartment}
+                                setDepartment={setDepartment}
                                 handleOpenAddUpdate={handleOpenAddUpdate}
                                 handleOpenDelete={handleOpenDelete}
                                 sortDirection={sortDirection}
+                                formValue={formValue}
+                                setFormValue={setFormValue}
                                 toggleSortDirectionAndColumn={toggleSortDirectionAndColumn}
                             />
                         </>
@@ -567,53 +571,10 @@ const AdminDepartments = () => {
                                         }
                                     </>
                                 }
-                                {/* {openAddUpdate.action === 'update' &&
-                                    <>
-                                        {(department.departmentManager) &&
-                                            <Input
-                                                type="checkbox"
-                                                checked={removeDM}
-                                                label={"Remove " + department.departmentManagerName + " as department manager"}
-                                                value={department.departmentManagerName}
-                                                onChange={toggleRemoveDM}
-                                            />
-                                        }
-                                        <h2>OR</h2>
-                                        {!removeDM &&
-                                            <><p>Change the department manager</p><br />
-                                                <DropdownComponent
-                                                    title={department.departmentManager && 'Department managers'}
-                                                    options={managersWithoutDepartments_dropdown}
-                                                    onChange={(e) => {
-                                                        e === null ?
-                                                            setDepartment({ ...department, departmentManager: '', departmentManagerName: '' }) :
-                                                            // setDepartment({ idUser: department.id, idRole: e.value });
-                                                            setDepartment({ ...department, idDepartment: department.id, departmentManager: e.value, departmentManagerName: e.label })
-
-                                                    }}
-                                                    error={showErrors && checkErrors('departmentManager') ? true : false}
-                                                    helper={showErrors ? checkErrors('departmentManager') : ''}
-                                                />
-                                            </>
-                                        }
-                                    </>
-
-                                } */}
+                               
                             </>
                         }
-                        // handleActionYes={() => {
-                        //     managersWithoutDepartments_dropdown[0] === undefined ?
-                        //         handleCloseAddUpdate()
-                        //         :
-                        //         openAddUpdate.action === 'add' ?
-                        //             handleAddDepartment()
-                        //             :
-                        //             openAddUpdate.action === 'addManager' ?
-                        //                 handleAddManager()
-                        //                 :
-                        //                 handleUpdateDepartment()
-                        //     }
-                        // }
+                        
                         handleActionYes={() => {
                             // Verifică dacă acțiunea este de a adăuga un manager fără a verifica lungimea dropdown-ului
                             if (openAddUpdate.action === 'addManager') {

@@ -11,7 +11,7 @@ const ListDepartments = (props) => {
 
     return (
         <>
-            <div onClick={()=>props.toggleSortDirection('departmentName')} className={styles.sortButtonCard}>
+            <div onClick={()=>props.toggleSortDirectionAndColumn('departmentName')} className={styles.sortButtonCard}>
                 <FilterListIcon />
                 <p>Sort by department name </p>
                 {props.sortDirection === 'Ascending' && props.sortBy === 'departmentName'? <TextRotationAngledownIcon /> : <TextRotationAngleupIcon />}
@@ -30,17 +30,19 @@ const ListDepartments = (props) => {
 
 
             {props.currentTableData?.map(
-                (role, index) =>
+                (dept, index) =>
                 (
-                    <Fragment key={`${role?.id}_${index}`}>
+                    <Fragment key={`${dept?.id}_${index}`}>
                         {
-                            // <p key={`${role?.id}_${index + Math.random()}`}>{role.teamRoleName}</p>
+                            // <p key={`${dept?.id}_${index + Math.random()}`}>{dept.teamRoleName}</p>
                             <DepartmentCard
-                                key={`${role?.id}_${index + Math.random()}`}
-                                data={role}
-                                setTeamRole={props.setTeamRole}
+                                key={`${dept?.id}_${index + Math.random()}`}
+                                data={dept}
+                                setDepartment={props.setDepartment}
                                 handleOpenAddUpdate={props.handleOpenAddUpdate}
                                 handleOpenDelete={props.handleOpenDelete}
+                                formValue={props.formValue}
+                                setFormValue={props.setFormValue}
                             />
                         }
                     </Fragment>

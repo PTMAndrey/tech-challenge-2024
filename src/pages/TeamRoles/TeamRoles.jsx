@@ -265,7 +265,7 @@ const TeamRoles = () => {
             border={false}
             onClick={() => { handleOpenAddUpdate('add') }}
           />
-          {width > 460 ?
+          {width > 550 ?
             <TableContainer component={Paper} className={styles.table}>
               <Table sx={{ minWidth: 500 }} aria-label="custom pagination customized table">
                 <TableHead>

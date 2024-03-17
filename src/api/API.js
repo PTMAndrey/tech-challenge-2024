@@ -348,7 +348,7 @@ export const addDepartment = async (id, data) => {
 // update Department
 export const updateDepartment = async (id, data) => {
   try {
-    const response = await axios.put("/department/updateDepartent?idDepartment=" + id, data);
+    const response = await axios.put("/department/updateDepartment?idDepartment=" + id, data);
     return response;
   } catch (error) {
     if (error.response) {
