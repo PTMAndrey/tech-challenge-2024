@@ -9,9 +9,11 @@ export const StateProvider = ({ children }) => {
   const [employees, setEmployees] = useState(null);
   const [organisationRoles, setOrganisationRoles] = useState(null);
   const [departments, setDepartments] = useState(null);
-  let managersWithoutDepartments_dropdown = [];
+  // let managersWithoutDepartments_dropdown = [];
   const [unassignedDepartmentManagers, setUnassignedDepartmentManagers] = useState(null);
-  let employeesWithoutDepartments_dropdown = [];
+  const [managersWithoutDepartments_dropdown, setManagersWithoutDepartments_dropdown] = useState([]);
+  const [employeesWithoutDepartments_dropdown, setEmployeesWithoutDepartments_dropdown] = useState([]);
+
   const [unassignedEmployeesOnDepartment, setunassignedEmployeesOnDepartment] = useState(null);
 
   let pageSize = 3;
@@ -95,6 +97,7 @@ export const StateProvider = ({ children }) => {
       const response = await getAllDepartments(idOrganisation);
       if (response?.status === 200) {
         setDepartments(response.data);
+        console.log('DEPARTMENTS', response.data);
       }
 
     } catch (error) {
@@ -111,10 +114,7 @@ export const StateProvider = ({ children }) => {
       const response = await getUnassignedDepartmentManagers(idOrganisation);
       if (response?.status === 200) {
         setUnassignedDepartmentManagers(response.data);
-        response.data.map(item =>
-          managersWithoutDepartments_dropdown.push({ value: item.idUser, label: (item.firstName + ' ' + item.lastName) })
-        );
-        console.log(response.data);
+        console.log('MANAGERS', response.data);
       }
 
     } catch (error) {
@@ -131,7 +131,6 @@ export const StateProvider = ({ children }) => {
       const response = await getUsersWithoutDepartment(idOrganisation);
       if (response?.status === 200) {
         setunassignedEmployeesOnDepartment(response.data);
-        console.log(response.data);
       }
 
     } catch (error) {
@@ -144,20 +143,41 @@ export const StateProvider = ({ children }) => {
   };
 
 
+  // useEffect(() => {
+  //   if (unassignedDepartmentManagers)
+  //     unassignedDepartmentManagers?.map(item =>
+  //       managersWithoutDepartments_dropdown.push({ value: item.idUser, label: (item.firstName + ' ' + item.lastName) })
+  //     );
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [unassignedDepartmentManagers]);
+
+  // useEffect(() => {
+  //   unassignedEmployeesOnDepartment?.map(item =>
+  //     employeesWithoutDepartments_dropdown.push({ value: item.idUser, label: (item.firstName + ' ' + item.lastName) })
+  //   );
+
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [unassignedEmployeesOnDepartment]);
+
+
   useEffect(() => {
-    unassignedDepartmentManagers?.map(item =>
-      managersWithoutDepartments_dropdown.push({ value: item.idUser, label: (item.firstName + ' ' + item.lastName) })
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const newDropdownOptions = unassignedDepartmentManagers?.map(item => ({
+      value: item.idUser,
+      label: `${item.firstName} ${item.lastName}`,
+    })) || [];
+    console.log("fetched again",newDropdownOptions);
+    setManagersWithoutDepartments_dropdown(newDropdownOptions);
   }, [unassignedDepartmentManagers]);
 
   useEffect(() => {
-    unassignedEmployeesOnDepartment?.map(item =>
-      employeesWithoutDepartments_dropdown.push({ value: item.idUser, label: (item.firstName + ' ' + item.lastName) })
-    );
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const newDropdownOptions = unassignedEmployeesOnDepartment?.map(item => ({
+      value: item.idUser,
+      label: `${item.firstName} ${item.lastName}`,
+    })) || [];
+    setEmployeesWithoutDepartments_dropdown(newDropdownOptions);
   }, [unassignedEmployeesOnDepartment]);
+
+
 
   return <StateContext.Provider
     value={{
