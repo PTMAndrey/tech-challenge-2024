@@ -282,7 +282,7 @@ export const addDepartmentManager = async (idUser, idDepartment) => {
 
 export const removeDepartmentManagerFromDepartment = async (idUser, idDepartment) => {
   try {
-    const response = await axios.delete("/user/removeDepartmentManagerFromDepartment?idUser=" + idUser);
+    const response = await axios.put("/user/removeDepartmentManagerFromDepartment?idUser=" + idUser);
     return response;
   } catch (error) {
     if (error.response) {

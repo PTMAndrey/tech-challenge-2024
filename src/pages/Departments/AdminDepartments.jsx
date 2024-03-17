@@ -56,7 +56,6 @@ const AdminDepartments = () => {
     const { width } = useWindowDimensions();
     const navigate = useNavigate();
     const [department, setDepartment] = useState({ idDepartment: "", departmentName: "", idOrganisation: user?.idOrganisation, departmentManager: "", departmentManagerName: "" });
-    const [formValue, setFormValue] = useState({ idDepartment: "", departmentName: "", idOrganisation: user?.idOrganisation, departmentManager: "", departmentManagerName: "" });
 
     useEffect(() => {
         fetchDepartments(user?.idOrganisation);
@@ -84,14 +83,14 @@ const AdminDepartments = () => {
     }
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormValue((prev) => {
+        setDepartment((prev) => {
             return { ...prev, [name]: value };
         });
     };
 
     const isFormValid = () => {
         let isValid = true;
-        Object.keys(formValue).forEach((field) => {
+        Object.keys(department).forEach((field) => {
             if (checkErrors(field)) {
                 isValid = false;
             }
@@ -101,9 +100,9 @@ const AdminDepartments = () => {
 
     const checkErrors = (field) => {
         if (field === "departmentName") {
-            if (formValue.departmentName.length < 4 && formValue.departmentName.length > 0) {
+            if (department.departmentName.length < 4 && department.departmentName.length > 0) {
                 return "Min 4 characters required.";
-            } else if (formValue.departmentName.length === 0) {
+            } else if (department.departmentName.length === 0) {
                 return "Min 4 characters required.";
             }
         }
@@ -116,9 +115,7 @@ const AdminDepartments = () => {
     const handleCloseDelete = () => {
         setOpenDelete(false);
         setDepartment({ idDepartment: "", departmentName: "", idOrganisation: user?.idOrganisation, departmentManager: "", departmentManagerName: "" })
-        setFormValue({ idDepartment: "", departmentName: "", idOrganisation: user?.idOrganisation, departmentManager: "", departmentManagerName: "" })
         setShowErrors(false);
-        setRemoveDM(false);
     };
 
     const handleOpenAddUpdate = (action) => {
@@ -127,9 +124,7 @@ const AdminDepartments = () => {
     const handleCloseAddUpdate = () => {
         setOpenAddUpdate({ open: false, action: '' });
         setDepartment({ idDepartment: "", departmentName: "", idOrganisation: user?.idOrganisation, departmentManager: "", departmentManagerName: "" })
-        setFormValue({ idDepartment: "", departmentName: "", idOrganisation: user?.idOrganisation, departmentManager: "", departmentManagerName: "" })
         setShowErrors(false);
-        setRemoveDM(false);
     }
 
     const handleAddDepartment = async () => {
@@ -139,14 +134,14 @@ const AdminDepartments = () => {
         if (isFormValid()) {
             setShowErrors(false);
             try {
-                const response = await addDepartment(user?.idUser, { idOrganisation: formValue.idOrganisation, departmentName: formValue.departmentName, departmentManager: formValue.departmentManager });
+                const response = await addDepartment(user?.idUser, { idOrganisation: department.idOrganisation, departmentName: department.departmentName, departmentManager: department.departmentManager });
                 if (response.status === 200 || response.status === 201) {
-                    handleCloseAddUpdate();
                     const x = await fetchDepartments(user?.idOrganisation);
                     setAlert({
                         type: "success",
                         message: "You added a new department!",
                     });
+                    handleCloseAddUpdate();
                 }
             } catch (error) {
                 console.log(error.message, "error");
@@ -165,15 +160,15 @@ const AdminDepartments = () => {
         if (isFormValid()) {
             setShowErrors(false);
             try {
-                const response = await updateDepartment(formValue.idDepartment, { idOrganisation: formValue.idOrganisation, departmentName: formValue.departmentName })
+                const response = await updateDepartment(department.idDepartment, { idOrganisation: department.idOrganisation, departmentName: department.departmentName, departmentManager: department.departmentManager })
                 if (response.status === 200 || response.status === 201) {
-                    handleCloseAddUpdate();
                     const x = await fetchDepartments(user?.idOrganisation);
-                    // const y = await fetchUnassignedDepartmentManagers(user?.idOrganisation); 
+                    const y = await fetchUnassignedDepartmentManagers(user?.idOrganisation);
                     setAlert({
                         type: "success",
                         message: "Update complete!",
                     });
+                    handleCloseAddUpdate();
                 }
             } catch (error) {
                 console.log(error.message, "error");
@@ -192,15 +187,15 @@ const AdminDepartments = () => {
         if (isFormValid()) {
             setShowErrors(false);
             try {
-                const response = await addDepartmentManager(formValue.departmentManager, formValue.idDepartment)
+                const response = await addDepartmentManager(department.departmentManager, department.idDepartment)
                 if (response.status === 200 || response.status === 201) {
-                    handleCloseAddUpdate();
                     const x = await fetchDepartments(user?.idOrganisation);
+                    const y = await fetchUnassignedDepartmentManagers(user?.idOrganisation);
                     setAlert({
                         type: "success",
-                        message: "Manager assigned to " + formValue.departmentName + "!",
+                        message: "Manager assigned to " + department.departmentName + "!",
                     });
-                    const y = await fetchUnassignedDepartmentManagers(user?.idOrganisation);
+                    handleCloseAddUpdate();
                 }
             } catch (error) {
                 console.log(error.message, "error");
@@ -218,17 +213,15 @@ const AdminDepartments = () => {
         if (isFormValid()) {
             setShowErrors(false);
             try {
-                console.log(formValue.departmentManager);
-                const response = await removeDepartmentManagerFromDepartment(formValue.departmentManager)
+                const response = await removeDepartmentManagerFromDepartment(department.departmentManager)
                 if (response.status === 200 || response.status === 201) {
-                    
-                    handleCloseAddUpdate();
                     const x = await fetchDepartments(user?.idOrganisation);
+                    const y = await fetchUnassignedDepartmentManagers(user?.idOrganisation);
                     setAlert({
                         type: "success",
                         message: "Department manager removed!",
                     });
-                    const y = await fetchUnassignedDepartmentManagers(user?.idOrganisation);
+                    handleCloseAddUpdate();
                 }
             } catch (error) {
                 console.log(error.message, "error");
@@ -241,17 +234,16 @@ const AdminDepartments = () => {
     }
 
 
-    const handleDeleteDepartment = async () => {
+    const handleDeleteDepartment = async (idDepartment) => {
         try {
-            const response = await deleteDepartment(formValue.idDepartment);
+            const response = await deleteDepartment(idDepartment);
             if (response.status === 200 || response.status === 201) {
-                handleCloseDelete();
-                const x = await fetchDepartments(user?.idOrganisation);
+                const x = fetchDepartments(user?.idOrganisation);
                 setAlert({
                     type: "success",
                     message: "Department deleted!",
                 });
-                const y = await fetchUnassignedDepartmentManagers(user?.idOrganisation);
+                handleCloseDelete();
             }
         } catch (error) {
             console.log(error.message, "error");
@@ -431,11 +423,11 @@ const AdminDepartments = () => {
                                             </TableCell>
                                             <TableCell style={{ width: 160 }} align="center">
                                                 <Tooltip
-                                                    title='Delete deaprtment'
+                                                    title='Delete team role'
                                                     placement='top-start'
                                                     arrow
                                                     onClick={() => {
-                                                        setFormValue({ idDepartment: row?.id, departmentName: row?.departmentName, idOrganisation: user?.idOrganisation, departmentManager: row?.departmentManager, departmentManagerName: row?.departmentManagerName });
+                                                        setDepartment({ idDepartment: row?.id, departmentName: row?.departmentName, idOrganisation: user?.idOrganisation, departmentManager: row?.departmentManager, departmentManagerName: row?.departmentManagerName });
                                                         handleOpenDelete();
                                                     }} >
                                                     <IconButton>
@@ -496,7 +488,7 @@ const AdminDepartments = () => {
                     <Modal
                         open={openAddUpdate.open}
                         handleClose={handleCloseAddUpdate}
-                        title={openAddUpdate.action === 'add' ? "Add new department" : openAddUpdate.action === 'addManager' ? "Add new manager" : (<>{"Update"} <br /> {"[" + formValue.departmentName + "]"}</>)}
+                        title={openAddUpdate.action === 'add' ? "Add new department" : openAddUpdate.action === 'addManager' ? "Add new manager" : (<>{"Update"} <br /> {"[" + department.departmentName + "]"}</>)}
                         content={
                             <>
                                 {(openAddUpdate.action === 'add' || openAddUpdate.action === 'update') &&
@@ -506,7 +498,7 @@ const AdminDepartments = () => {
                                         label="Department name"
                                         id="departmentName"
                                         name="departmentName"
-                                        value={formValue.departmentName}
+                                        value={department.departmentName}
                                         onChange={handleChange}
 
                                         required
@@ -514,26 +506,24 @@ const AdminDepartments = () => {
                                         helper={showErrors ? checkErrors("departmentName") : ""}
                                     />
                                 }
-                                {(openAddUpdate.action === 'addManager' || openAddUpdate.action === 'update') &&
+                                {(openAddUpdate.action === 'addManager') &&
                                     <>
                                         {managersWithoutDepartments_dropdown[0] !== null ?
                                             <>
-                                                {!removeDM && <>
-                                                    <p>Choose a department manager</p><br />
-                                                    <DropdownComponent
-                                                        title={formValue.departmentManager === '' && 'Department managers'}
-                                                        options={managersWithoutDepartments_dropdown}
-                                                        onChange={(e) => {
-                                                            e === null ?
-                                                                setFormValue({ ...formValue, idDepartment:'', departmentManager: '', departmentManagerName: '' }) :
-                                                                // setDepartment({ idUser: formValue.id, idRole: e.value });
-                                                                setFormValue({ ...formValue, idDepartment: department.idDepartment, departmentManager: e.value, departmentManagerName: e.label })
+                                                <p>Choose a department manager</p><br />
+                                                <DropdownComponent
+                                                    title={department.departmentManager === '' && 'Department managers'}
+                                                    options={managersWithoutDepartments_dropdown}
+                                                    onChange={(e) => {
+                                                        e === null ?
+                                                            setDepartment({ ...department, departmentManager: '', departmentManagerName: '' }) :
+                                                            // setDepartment({ idUser: department.id, idRole: e.value });
+                                                            setDepartment({ ...department, idDepartment: department.idDepartment, departmentManager: e.value, departmentManagerName: e.label })
 
-                                                        }}
-                                                        error={showErrors && checkErrors('departmentManager') ? true : false}
-                                                        helper={showErrors ? checkErrors('departmentManager') : ''}
-                                                    />
-                                                </>}
+                                                    }}
+                                                    error={showErrors && checkErrors('departmentName') ? true : false}
+                                                    helper={showErrors ? checkErrors('departmentName') : ''}
+                                                />
                                             </>
                                             :
                                             <>
@@ -552,34 +542,33 @@ const AdminDepartments = () => {
                                 }
                                 {openAddUpdate.action === 'update' &&
                                     <>
-                                        {(formValue.departmentManager) && <>
-                                            <h2>OR</h2>
+                                        {(department.departmentManager) &&
                                             <Input
                                                 type="checkbox"
                                                 checked={removeDM}
-                                                label={"Remove " + formValue.departmentManagerName + " as department manager"}
-                                                value={formValue.departmentManagerName}
+                                                label={"Remove " + department.departmentManagerName + " as department manager"}
+                                                value={department.departmentManagerName}
                                                 onChange={toggleRemoveDM}
                                             />
-                                        </>
                                         }
-                                        {/* {!removeDM &&
+                                        <h2>OR</h2>
+                                        {!removeDM &&
                                             <><p>Change the department manager</p><br />
                                                 <DropdownComponent
-                                                    title={formValue.departmentManager && 'Department managers'}
+                                                    title={department.departmentManager && 'Department managers'}
                                                     options={managersWithoutDepartments_dropdown}
                                                     onChange={(e) => {
                                                         e === null ?
                                                             setDepartment({ ...department, departmentManager: '', departmentManagerName: '' }) :
-                                                            // setDepartment({ idUser: formValue.id, idRole: e.value });
-                                                            setDepartment({ ...department, idDepartment: formValue.id, departmentManager: e.value, departmentManagerName: e.label })
+                                                            // setDepartment({ idUser: department.id, idRole: e.value });
+                                                            setDepartment({ ...department, idDepartment: department.id, departmentManager: e.value, departmentManagerName: e.label })
 
                                                     }}
-                                                    error={showErrors && checkErrors('departmentManager') ? true : false}
-                                                    helper={showErrors ? checkErrors('departmentManager') : ''}
+                                                    error={showErrors && checkErrors('departmentName') ? true : false}
+                                                    helper={showErrors ? checkErrors('departmentName') : ''}
                                                 />
                                             </>
-                                        } */}
+                                        }
                                     </>
 
                                 }
@@ -589,7 +578,7 @@ const AdminDepartments = () => {
                             openAddUpdate.action === 'add' ?
                                 handleAddDepartment()
                                 :
-                                openAddUpdate.action === 'addManager' || openAddUpdate.action === 'update'?
+                                openAddUpdate.action === 'addManager' ?
                                     handleAddManager()
                                     :
                                     removeDM ?
@@ -603,22 +592,21 @@ const AdminDepartments = () => {
                     />
                 </StyledEngineProvider>
             }
-            {
-                openDelete &&
+            {openDelete &&
                 <StyledEngineProvider injectFirst>
                     <Modal
                         open={openDelete}
                         handleClose={handleCloseDelete}
-                        title={(<>{"Delete"} <br /> {"[" + formValue.departmentName + "]"}</>)}
+                        title={(<>{"Delete"} <br /> {"[" + department.departmentName + "]"}</>)}
                         content={"This action is permanent!"}
-                        handleActionYes={() => handleDeleteDepartment()}
+                        handleActionYes={() => handleDeleteDepartment(department.idDepartment)}
                         textActionYes={"Delete"}
                         handleActionNo={handleCloseDelete}
                         textActionNo={"Cancel"}
                     />
                 </StyledEngineProvider>
             }
-        </section >
+        </section>
     )
 }
 
