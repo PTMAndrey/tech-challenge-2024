@@ -8,7 +8,6 @@ import { TextRotationAngleupIcon, TextRotationAngledownIcon, FilterListIcon } fr
 
 const ListEmployeesForMobile = (props) => {
     const { currentPageEmployees, pageSize, setCurrentPageEmployees } = useStateProvider();
-console.log(props.currentTableData);
     return (
         <>
             <div onClick={()=>props.toggleSortDirection('firstName')} className={styles.sortButtonCard}>

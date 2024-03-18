@@ -19,7 +19,6 @@ import useStateProvider from "../../../hooks/useStateProvider";
 
 
 const DepartmentCard = (props) => {
-  console.log(props.data);
   const { user } = useAuthProvider();
   const { fetchUnassignedDepartmentManagers } = useStateProvider();
   return (

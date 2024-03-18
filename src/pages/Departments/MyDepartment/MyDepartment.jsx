@@ -4,22 +4,22 @@ import { useNavigate, useParams } from 'react-router';
 import useWindowDimensions from '../../../hooks/useWindowDimensions';
 import useStateProvider from '../../../hooks/useStateProvider';
 import useAuthProvider from '../../../hooks/useAuthProvider';
-import { getDepartmentByID } from '../../../api/API';
+import { getDepartmentByID, removeUserFromDepartment } from '../../../api/API';
 import ListAvailableEmployees from './ListAvailableEmployees';
 
 import {
-    DeleteForeverIcon,
     AddCircleOutlineIcon,
-    BorderColorIcon,
 } from '../../imports/muiiconsMaterial';
 import {
     Card,
     CardContent,
     CardActions,
+    Stack,
+    Box,
     Typography,
-    Tooltip,
-    IconButton,
+    Chip,
 } from '../../imports/muiMaterial';
+import Modal from '../../../components/ModalDialog/Modal';
 
 const MyDepartment = () => {
 
@@ -43,6 +43,7 @@ const MyDepartment = () => {
 
     const [openAddUpdate, setOpenAddUpdate] = useState({ open: false, action: '' });
     const [openDelete, setOpenDelete] = useState(false);
+    const [fetchDepartmentID,  setFetchDepartmentID] = useState(false);
 
     // get department from API
     useEffect(() => {
@@ -51,7 +52,6 @@ const MyDepartment = () => {
                 const response = await getDepartmentByID(user?.idDepartment);
                 if (response?.status === 200) {
                     setDepartment(response.data);
-                    console.log(response.data);
                 }
 
             } catch (error) {
@@ -62,18 +62,16 @@ const MyDepartment = () => {
                 });
             }
         })();
-    }, [user?.idDepartment]);
+    }, [user?.idDepartment,fetchDepartmentID]);
+
+    const [showAllSkills, setShowAllSkills] = useState(false);
+
+    const handleShowAllSkills = () => {
+        setShowAllSkills(true);
+    };
 
     const handleOpenDelete = () => {
         setOpenDelete(true);
-
-    };
-    const handleCloseDelete = () => {
-        setOpenDelete(false);
-        setDepartment({ idDepartment: "", departmentName: "", idOrganisation: user?.idOrganisation, departmentManager: "", departmentManagerName: "" })
-        // setFormValue({ idDepartment: "", departmentName: "", idOrganisation: user?.idOrganisation, departmentManager: "", departmentManagerName: "" })
-        setShowErrors(false);
-        // setRemoveDM(false);
 
     };
 
@@ -85,7 +83,7 @@ const MyDepartment = () => {
         setDepartment({ idDepartment: "", departmentName: "", idOrganisation: user?.idOrganisation, departmentManager: "", departmentManagerName: "" })
         // setFormValue({ idDepartment: "", departmentName: "", idOrganisation: user?.idOrganisation, departmentManager: "", departmentManagerName: "" })
         setShowErrors(false);
-        // setRemoveDM(false);
+        setFetchDepartmentID(false);
 
     }
 
@@ -143,44 +141,99 @@ const MyDepartment = () => {
     }, [pageSizeMyDepartmentEmployees, currentPageMyDepartmentEmployees, rows, sortDirection]);
 
 
+    const handleRemoveUserFromDepartment = async (id) => {
+        try {
+            const response = await removeUserFromDepartment(id)
+            if (response.status === 200 || response.status === 201) {
+                handleCloseAddUpdate();
+                setFetchDepartmentID(true);
+                // const x = await fetchDepartments(user?.idOrganisation);
+                setAlert({
+                    type: "success",
+                    message: "User removed from department!",
+                });
+                // const y = await fetchUnassignedDepartmentManagers(user?.idOrganisation);
+            }
+        } catch (error) {
+            console.log(error.message, "error");
+            handleCloseAddUpdate();
+            setAlert({
+                type: "danger",
+                message: error.message || "Something went wrong...",
+            });
+        }
+    }
     return (
         <section className={styles.cardMyDepartment}>
-            <Card sx={{ minWidth:"180px !important" }}>
+            <Card sx={{ minWidth: "180px !important" }}>
                 <CardContent component="div">
-                    <Typography>
+                    <Typography variant="h4">
                         Department name
                     </Typography>
 
-                    <Typography >
+                    <Typography variant="subtitle2" sx={{ marginLeft: 2 }}>
                         {department.departmentName}
                     </Typography>
 
-                    <Typography sx={{ marginTop: 2 }}>
+                    <Typography variant="h6" sx={{ marginTop: 2 }}>
                         Department Manager
                     </Typography>
 
-                    <Typography variant="body2">
+                    <Typography variant="subtitle2" sx={{ marginLeft: 2 }}>
                         You
                     </Typography>
+                    <Typography variant="h6" sx={{ marginTop: 2 }}>
+                        Department skills
+                    </Typography>
+
+                    <Typography variant="subtitle2" sx={{ marginLeft: 2 }}>
+
+                        {department?.skills?.length !== 0 &&
+                            <>
+                                <CardContent className={`${styles.displaySkills} `}>
+                                    {department?.skills?.length > 2 ? (
+                                        <>
+                                            {department?.skills?.slice(0, 3).map((skill) =>
+                                                <Chip label={skill.skillName} sx={{ backgroundColor: "white" }} variant="outlined" color="primary" key={skill.idSkill} />
+                                            )}
+                                            <Chip label={`+${department?.skills?.length - 2}`} sx={{ backgroundColor: "white" }} variant="outlined" color="primary" onClick={handleShowAllSkills} />
+                                        </>
+                                    ) : (
+                                        <>
+                                            {department?.skills?.map((skill) =>
+                                                <Chip label={skill.skillName} sx={{ backgroundColor: "white" }} variant="outlined" color="primary" key={skill.idSkill} />
+                                            )}
+                                        </>
+                                    )
+                                    }
+                                </CardContent>
+
+                            </>
+                        }
+
+                    </Typography>
                 </CardContent>
-                <CardContent sx={{ display: "flex", flexDirection: "column"}}>
-                    <Typography gutterBottom variant="h5" component="div">
+                <CardContent sx={{ display: "flex", flexDirection: "column" }}>
+                    <Typography gutterBottom variant="h6" component="div">
                         Employees in department
                     </Typography>
+                    {currentTableData.length > 0 &&
+                        <Typography variant="subtitle1">
+                            <ListAvailableEmployees
+                                currentTableData={currentTableData}
+                                rows={rows}
+                                handleOpenAddUpdate={handleOpenAddUpdate}
+                                handleOpenDelete={handleOpenDelete}
+                                sortDirection={sortDirection}
+                                handleActionYes={handleRemoveUserFromDepartment}
+                                // formValue={formValue}
+                                // setFormValue={setFormValue}
+                                toggleSortDirectionAndColumn={toggleSortDirectionAndColumn}
 
-                    <Typography variant="subtitle1">
-                        <ListAvailableEmployees
-                            currentTableData={currentTableData}
-                            rows={rows}
-                            handleOpenAddUpdate={handleOpenAddUpdate}
-                            handleOpenDelete={handleOpenDelete}
-                            sortDirection={sortDirection}
-                            // formValue={formValue}
-                            // setFormValue={setFormValue}
-                            toggleSortDirectionAndColumn={toggleSortDirectionAndColumn}
+                            />
+                        </Typography>
 
-                        />
-                    </Typography>
+                    }
 
                     <Typography gutterBottom variant="h6" sx={{ marginTop: 2 }}>
                         <p>Department Manager</p>
@@ -194,6 +247,30 @@ const MyDepartment = () => {
                     <AddCircleOutlineIcon className={styles.tableButtons} />
                 </CardActions>
             </Card>
+
+            {
+                showAllSkills && (
+                    <Modal
+                        open={showAllSkills}
+                        handleClose={() => setShowAllSkills(false)}
+                        title="Department skills"
+                        content={
+                            <Stack direction="column" spacing={2}>
+                                {department?.skills?.map((skill, index) => (
+                                    <Box key={skill.idUserSkill}>
+                                        <Typography variant="body1" component="div">
+                                            <>{index + 1}. {skill.skillName}</>
+                                        </Typography>
+                                        <Typography variant="body2" component="div" sx={{ marginLeft: 1 }}>
+                                            <>* {skill.skillDescription}</>
+                                        </Typography>
+                                    </Box>
+                                ))}
+                            </Stack>
+                        }
+                    />
+                )
+            }
         </section>
     )
 }

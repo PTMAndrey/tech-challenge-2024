@@ -118,7 +118,6 @@ const AllEmployees = () => {
   };
 
   const checkErrors = (field) => {
-    console.log(formValue);
     if (field === 'idRole') {
       if (formValue.idRole === '') {
         return "Choose a role!";
@@ -228,8 +227,6 @@ const AllEmployees = () => {
     setRows(sortedEmployees || []);
   }, [employees, sortDirection, sortBy]);
 
-  console.log(rows);
-
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows[0].length) : 0;
 
@@ -266,7 +263,6 @@ const AllEmployees = () => {
   };
 
   const renderUserRoles = (data, info) => {
-    console.log();
     if (Array.isArray(info)) {
       return info.map((item, index) => (
         <li key={`${data.id}_${item.id}_${Math.random()}`}>{formatAuthority(item.authority)}</li>

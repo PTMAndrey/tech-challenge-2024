@@ -12,27 +12,33 @@ import {
   CardContent,
   CardActions,
   Typography,
+  Divider,
 } from '../imports/muiMaterial';
+import GetAvatar from "../../components/Card/GetAvatar";
 
 
 const UserCard = (props) => {
-  console.log(props.data);
   return (
     <div style={{ marginTop: "15%" }}>
-      <Card sx={{ minWidth: 200 }}>
+      <Card sx={{ minWidth: 200 }} className={styles.card}>
+        <CardContent>
+          <GetAvatar fullName={`${props.data.firstName} ${props.data.lastName}`} />
+        </CardContent>
+
+        <Divider />
         <CardContent sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
           <Typography gutterBottom variant="p" component="div">
             Full name
           </Typography>
-          <Typography variant="body2" color="text.secondary">
+          <Typography variant="body2" color="text.secondary" className={styles.selectable}>
             {props.data.firstName + " " + props.data.lastName}
           </Typography>
-          
+
           <Typography variant="p" component="div" sx={{ marginTop: 2 }}>
             Email
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            {props.data.emailAdress}
+            <a href={`mailto:${props.data.emailAdress}?subject = Team Finder`}>{props.data.emailAdress}</a>
           </Typography>
 
           <Typography variant="p" component="div" sx={{ marginTop: 2 }}>

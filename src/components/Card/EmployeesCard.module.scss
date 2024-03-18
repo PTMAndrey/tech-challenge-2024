@@ -12,8 +12,8 @@
 .card {
     display: flex;
     flex-direction: column;
-    min-height: 350px;
-    min-width: 180px !important;
+    min-height: 360px;
+    min-width: 220px !important;
     margin: 0 auto;
     background-color: #95c9f49e !important;
     box-shadow: 10px 10px 5px 5px $color-gray-200;
@@ -31,12 +31,15 @@
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .employeesCardContainer {
-        justify-content: unset;
+        justify-content: center;
     }
 
     .card {
         flex-basis: calc(50% - 32px);
         max-width: calc(50% - 32px);
+    }
+    .email{
+        font-size: $font-body-tiny;
     }
 }
 
@@ -124,4 +127,8 @@
         flex-direction: row;
         margin-top: 25px;
     }
+}
+.displaySkills{
+    display: flex;
+    justify-content: space-around;
 }
