@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import styles from './Departments.module.scss'
 import { useLocation } from 'react-router';
-import AdminDepartments from './AdminDepartments';
-import MyDepartment from './MyDepartment';
+import AdminDepartments from './Admin/AdminDepartments';
+import MyDepartment from './MyDepartment/MyDepartment';
 import useAuthProvider from '../../hooks/useAuthProvider';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Departments = () => {
   const {user} = useAuthProvider();

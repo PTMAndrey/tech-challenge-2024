@@ -10,13 +10,17 @@
 
     @include responsive_W550px {
         align-items: center;
+        flex-direction: unset;
+        margin-top: 2em !important;
+        margin: 0 auto;
+        width: auto;
     }
 
 }
 
 .addDepartment {
     display: flex;
-    width:auto;
+    width: auto;
     margin-bottom: 1em;
 }
 
@@ -56,8 +60,29 @@
     align-items: center;
     background-color: $color-primary-300;
     color: $color-white !important;
+
     p {
         padding: 5px;
         font-size: $font-body-small;
     }
+
+    @include responsive_W550px {
+        width: 100%;
+    }
+}
+
+// .employeesContainer{
+
+//     display: flex;
+//     flex-wrap: wrap;
+//     justify-content: flex-start; /* sau 'center' dacă dorești să fie centrate */
+//     gap: 20px; /* acesta adaugă un spațiu între carduri */
+// }
+
+
+.cardMyDepartment {
+    display: flex;
+    flex-direction: column;
+    border-bottom: 2px solid black;
+    min-width: 120px !important;
 }
