@@ -48,7 +48,7 @@ const EmployeesCard = (props) => {
 
                         <Card.Title>
                             <Stack direction="row" spacing={2}>
-                                {props.data?.userSkill.map(skill =>
+                                {props.data?.userSkill?.map(skill =>
                                     <Chip label={skill.numeSkill} sx={{ backgroundColor: "white" }} variant="outlined" color="primary" key={skill.idUserSkill} />
                                 )}
                             </Stack>
