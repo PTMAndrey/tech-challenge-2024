@@ -17,7 +17,7 @@ export const StateProvider = ({ children }) => {
   const [unassignedEmployeesOnDepartment, setunassignedEmployeesOnDepartment] = useState(null);
 
   let pageSize = 3;
-  let pageSizeDepartments = 7;
+  let pageSizeDepartments = 3;
   const [currentPageTeamRoles, setCurrentPageTeamRoles] = useState(1);
   const [currentPageEmployees, setCurrentPageEmployees] = useState(1);
   const [currentPageDepartments, setCurrentPageDepartments] = useState(1);

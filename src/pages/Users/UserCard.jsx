@@ -22,15 +22,25 @@ const UserCard = (props) => {
       <Card sx={{ minWidth: 200 }}>
         <CardContent sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
           <Typography gutterBottom variant="p" component="div">
+            Full name
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
             {props.data.firstName + " " + props.data.lastName}
+          </Typography>
+          
+          <Typography variant="p" component="div" sx={{ marginTop: 2 }}>
+            Email
           </Typography>
           <Typography variant="body2" color="text.secondary">
             {props.data.emailAdress}
           </Typography>
-          <Typography variant="subtitle2" color="text.secondary" sx={{ marginTop: 2 }}>
+
+          <Typography variant="p" component="div" sx={{ marginTop: 2 }}>
+            Roles
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
             <ul className={styles.listOfRoles} key={`${props.data.id}-roles`}>
               {props.renderUserRoles(props.data, props.data.authorities)}
-              {console.log(props.data, props.data.authorities)}
             </ul>
           </Typography>
         </CardContent>

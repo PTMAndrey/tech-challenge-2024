@@ -39,7 +39,7 @@ const MyDepartment = () => {
 
 
     return (
-        <div>MyDepartment</div>
+        <section>MyDepartment</section>
     )
 }
 

@@ -6,6 +6,7 @@ import styles from './Departments.module.scss'
 import {
   DeleteForeverIcon,
   AddCircleOutlineIcon,
+  BorderColorIcon,
 } from '../imports/muiiconsMaterial';
 import {
   Card,
@@ -60,7 +61,7 @@ const DepartmentCard = (props) => {
           </Typography>
         </CardContent>
         <CardActions className={styles.cardButtons}>
-          <AddCircleOutlineIcon className={styles.tableButtons} onClick={() => {
+          <BorderColorIcon className={styles.tableButtons} onClick={() => {
             props.setDepartment({ idDepartment: props.data.id, departmentName: props.data.departmentName, idOrganisation: user?.idOrganisation, departmentManager: props.data.departmentManager, departmentManagerName: props.data.departmentManagerName });
             props.handleOpenAddUpdate("update");
             props.setFormValue({ ...props.formValue, idDepartment: props.data.id, departmentName: props.data.departmentName })//, departmentManager: props.data.departmentManager, departmentManagerName: props.data.departmentManagerName });

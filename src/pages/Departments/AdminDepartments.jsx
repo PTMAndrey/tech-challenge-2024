@@ -336,7 +336,7 @@ const AdminDepartments = () => {
 
 
     return (
-        <section className={styles.pageTeamRoles}>
+        <section>
             {departments?.length === 0 ? <>
                 <Button
                     className={styles.addDepartment}
