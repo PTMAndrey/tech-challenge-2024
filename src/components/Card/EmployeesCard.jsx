@@ -43,12 +43,12 @@ const EmployeesCard = (props) => {
                     <Card.Link type="email">{props.data.emailAdress}</Card.Link>
                     <Divider />
                     <Card.Title className={`${styles.alignCenter} ${styles.nume}`} >{props.data.firstName + ' ' + props.data.lastName}</Card.Title>
-                    {props.data.userSkill.length !== 0 && <>
+                    {props.data?.userSkill?.length !== 0 && <>
                         <Card.Title className={`${styles.alignCenter} `} >Skills</Card.Title>
 
                         <Card.Title>
                             <Stack direction="row" spacing={2}>
-                                {props.data.userSkill.map(skill =>
+                                {props.data?.userSkill.map(skill =>
                                     <Chip label={skill.numeSkill} sx={{ backgroundColor: "white" }} variant="outlined" color="primary" key={skill.idUserSkill} />
                                 )}
                             </Stack>
