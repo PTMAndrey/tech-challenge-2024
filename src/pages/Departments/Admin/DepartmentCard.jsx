@@ -1,13 +1,11 @@
 import * as React from "react";
-
-import styles from './Departments.module.scss'
-
+import styles from '../Departments.module.scss'
 
 import {
   DeleteForeverIcon,
   AddCircleOutlineIcon,
   BorderColorIcon,
-} from '../imports/muiiconsMaterial';
+} from '../../imports/muiiconsMaterial';
 import {
   Card,
   CardContent,
@@ -15,9 +13,9 @@ import {
   Typography,
   Tooltip,
   IconButton,
-} from '../imports/muiMaterial';
-import useAuthProvider from "../../hooks/useAuthProvider";
-import useStateProvider from "../../hooks/useStateProvider";
+} from '../../imports/muiMaterial';
+import useAuthProvider from "../../../hooks/useAuthProvider";
+import useStateProvider from "../../../hooks/useStateProvider";
 
 
 const DepartmentCard = (props) => {

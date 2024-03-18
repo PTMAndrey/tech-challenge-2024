@@ -1,10 +1,10 @@
-import useStateProvider from "../../hooks/useStateProvider";
+import useStateProvider from "../../../hooks/useStateProvider";
 import { Fragment, } from "react";
-import Pagination from "../../components/Pagination/Pagination";
-import styles from "./Departments.module.scss"
+import Pagination from "../../../components/Pagination/Pagination";
+import styles from '../Departments.module.scss'
 import DepartmentCard from "./DepartmentCard";
 
-import { TextRotationAngleupIcon, TextRotationAngledownIcon, FilterListIcon} from '../imports/muiiconsMaterial';
+import { TextRotationAngleupIcon, TextRotationAngledownIcon, FilterListIcon} from '../../imports/muiiconsMaterial';
 
 const ListDepartments = (props) => {
     const { pageSizeDepartments, currentPageDepartments, setCurrentPageDepartments } = useStateProvider();

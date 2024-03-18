@@ -49,8 +49,7 @@ ul {
         }
 
         &:hover {
-            background-color: rgb(0, 0, 0);
-            color: $color-white;
+            background-color: $color-gray-200;
             cursor: pointer;
         }
 
@@ -61,7 +60,9 @@ ul {
         }
 
         &.activePage {
-            background-color: $color-gray-300;
+            background-color: rgb(0, 0, 0);
+            color: red;
+            font-weight: $font-bold;
         }
 
         .arrow {

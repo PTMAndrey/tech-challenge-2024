@@ -16,11 +16,14 @@ export const StateProvider = ({ children }) => {
 
   const [unassignedEmployeesOnDepartment, setunassignedEmployeesOnDepartment] = useState(null);
 
-  let pageSize = 3;
+  let pageSize = 3; // teamroles + employees
   let pageSizeDepartments = 3;
+  let pageSizeMyDepartmentEmployees = 3;
   const [currentPageTeamRoles, setCurrentPageTeamRoles] = useState(1);
   const [currentPageEmployees, setCurrentPageEmployees] = useState(1);
   const [currentPageDepartments, setCurrentPageDepartments] = useState(1);
+  
+  const [currentPageMyDepartmentEmployees, setCurrentPageMyDepartmentEmployees] = useState(1);
 
   // alert
   const [alert, setAlert] = useState(null);
@@ -143,23 +146,6 @@ export const StateProvider = ({ children }) => {
   };
 
 
-  // useEffect(() => {
-  //   if (unassignedDepartmentManagers)
-  //     unassignedDepartmentManagers?.map(item =>
-  //       managersWithoutDepartments_dropdown.push({ value: item.idUser, label: (item.firstName + ' ' + item.lastName) })
-  //     );
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [unassignedDepartmentManagers]);
-
-  // useEffect(() => {
-  //   unassignedEmployeesOnDepartment?.map(item =>
-  //     employeesWithoutDepartments_dropdown.push({ value: item.idUser, label: (item.firstName + ' ' + item.lastName) })
-  //   );
-
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [unassignedEmployeesOnDepartment]);
-
-
   useEffect(() => {
     const newDropdownOptions = unassignedDepartmentManagers?.map(item => ({
       value: item.idUser,
@@ -211,6 +197,9 @@ export const StateProvider = ({ children }) => {
       setunassignedEmployeesOnDepartment,
       managersWithoutDepartments_dropdown,
       employeesWithoutDepartments_dropdown,
+      pageSizeMyDepartmentEmployees,
+      currentPageMyDepartmentEmployees,
+      setCurrentPageMyDepartmentEmployees,
     }}
   >{children}</StateContext.Provider>;
 };

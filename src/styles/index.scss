@@ -44,7 +44,9 @@ div {
   user-select: none;
   /* Standard syntax */
 }
-
+p{
+  margin-bottom:0 !important;
+}
 img {
   max-width: 100%;
 }

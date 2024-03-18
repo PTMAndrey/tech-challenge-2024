@@ -1,0 +1,127 @@
+@import '../../styles/variables.scss';
+@import '../../styles/mixins.scss';
+@import "../../styles/index.scss";
+
+.employeesCardContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    min-height: 350px;
+    min-width: 180px !important;
+    margin: 0 auto;
+    background-color: #95c9f49e !important;
+    box-shadow: 10px 10px 5px 5px $color-gray-200;
+    opacity: 1 !important;
+    margin: 30px 0;
+    width: calc(100%/3 - 20px) !important;
+    flex: 1 0 120px;
+    max-width: calc(100%/3 - 20px);
+
+    @include responsive_W550px {
+        width: 100%;
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .employeesCardContainer {
+        justify-content: unset;
+    }
+
+    .card {
+        flex-basis: calc(50% - 32px);
+        max-width: calc(50% - 32px);
+    }
+}
+
+@media (max-width: 480px) {
+    .card {
+        width: 100%;
+    }
+}
+
+
+
+
+.nume {
+    font-size: 17px !important;
+    // width: auto;
+    // padding-left:20px;
+    // text-overflow: ellipsis;
+    // white-space: nowrap;
+    // overflow: hidden;
+
+    @include medium {
+        font-size: 16px !important;
+    }
+
+    @media(max-width: 750px) {
+        font-size: 15px !important;
+    }
+
+    @include responsive_W550px {
+        font-size: 13px !important;
+    }
+
+    @include small {
+        font-size: 13px !important;
+    }
+}
+
+
+
+.controls {
+    display: flex;
+    justify-content: space-around;
+    border-top: 1px solid black;
+    width: 100%;
+    padding: 10px 0;
+    font-size: 20px;
+
+    .delete {
+        fill: white !important;
+
+        &:hover {
+            background-color: $color-primary-500;
+            box-sizing: border-box;
+            cursor: pointer;
+        }
+    }
+
+    .edit {
+        fill: white !important;
+
+        &:hover {
+            background-color: $color-primary-500;
+            box-sizing: border-box;
+            cursor: pointer;
+        }
+    }
+}
+
+
+.alignCenter {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    color: white;
+}
+
+.butoane {
+    .edit {
+        margin-right: 50px;
+    }
+
+    @include small {
+        display: flex;
+        flex-direction: row;
+        margin-top: 25px;
+    }
+}

@@ -1,14 +1,14 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import useAuthProvider from '../../hooks/useAuthProvider';
-import useWindowDimensions from '../../hooks/useWindowDimensions';
-import useStateProvider from '../../hooks/useStateProvider';
-import styles from './Departments.module.scss'
-import TableNotFound from '../../components/Tables/TableNotFound'
-import Button from '../../components/Button/Button'
-import Modal from '../../components/ModalDialog/Modal';
-import Input from '../../components/input/Input'
+import useAuthProvider from '../../../hooks/useAuthProvider';
+import useWindowDimensions from '../../../hooks/useWindowDimensions';
+import useStateProvider from '../../../hooks/useStateProvider';
+import styles from '../Departments.module.scss'
+import TableNotFound from '../../../components/Tables/TableNotFound'
+import Button from '../../../components/Button/Button'
+import Modal from '../../../components/ModalDialog/Modal';
+import Input from '../../../components/input/Input'
 import ListDepartments from './ListDepartments';
-import DropdownComponent from '../../components/Dropdown/Dropdown';
+import DropdownComponent from '../../../components/Dropdown/Dropdown';
 
 import PropTypes from 'prop-types';
 
@@ -28,7 +28,7 @@ import {
     TableFooter,
     TablePagination,
     Tooltip
-} from '../imports/muiMaterial';
+} from '../../imports/muiMaterial';
 
 import {
     FirstPageIcon,
@@ -40,9 +40,9 @@ import {
     BorderColorIcon,
     TextRotationAngleupIcon,
     TextRotationAngledownIcon
-} from '../imports/muiiconsMaterial';
+} from '../../imports/muiiconsMaterial';
 import { useTheme } from '@emotion/react';
-import { addDepartment, addDepartmentManager, deleteDepartment, removeDepartmentManagerFromDepartment, updateDepartment } from '../../api/API';
+import { addDepartment, addDepartmentManager, deleteDepartment, removeDepartmentManagerFromDepartment, updateDepartment } from '../../../api/API';
 import { useNavigate } from 'react-router';
 
 
