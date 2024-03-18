@@ -77,8 +77,6 @@ const Login = () => {
         const response = await login(formValue.eMailAdress, formValue.password);
         if (response !== null) {
           const decodedToken = jwtDecode(response.data.jwt);
-          console.log(decodedToken);
-
           if (rememberMe) localStorage.setItem('token', response.data.jwt);
           else sessionStorage.setItem('token', response.data.jwt);
           // setUser(decodedToken);

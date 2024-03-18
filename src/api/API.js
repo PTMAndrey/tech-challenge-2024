@@ -40,7 +40,6 @@ export const login = async (email, password) => {
       'password': password,
     }
     );
-    console.log(response);
     if (response.data.jwt === '')
       return null;
     else
@@ -122,11 +121,29 @@ export const getUserById = async (id) => {
   }
 };
 
+
+
+//remove User From Department
+export const removeUserFromDepartment = async (id) => {
+  try {
+    const response = await axios.put("/user/removeUserFromDepartment?idUser=" + id);
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data.message || "Something went wrong... Try again later");
+
+    } else {
+      throw new Error("Network error or other issue");
+    }
+  }
+};
+
+
+
 // update organisation headquarter address
 export const updateOrganisationAddress = async (idOrganisation, address) => {
   try {
     const response = await axios.put("/organisation/updateHeadquarterAddress?idOrganisation=" + idOrganisation + "&newHeadquarterAddress=" + address);
-    console.log(response);
     return response;
   } catch (error) {
     if (error.response) {
@@ -405,4 +422,6 @@ export const getDepartmentByID = async (id) => {
     }
   }
 };
+
+
 

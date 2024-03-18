@@ -18,7 +18,7 @@ export const StateProvider = ({ children }) => {
 
   let pageSize = 3; // teamroles + employees
   let pageSizeDepartments = 3;
-  let pageSizeMyDepartmentEmployees = 3;
+  let pageSizeMyDepartmentEmployees = 2;
   const [currentPageTeamRoles, setCurrentPageTeamRoles] = useState(1);
   const [currentPageEmployees, setCurrentPageEmployees] = useState(1);
   const [currentPageDepartments, setCurrentPageDepartments] = useState(1);
@@ -100,7 +100,6 @@ export const StateProvider = ({ children }) => {
       const response = await getAllDepartments(idOrganisation);
       if (response?.status === 200) {
         setDepartments(response.data);
-        console.log('DEPARTMENTS', response.data);
       }
 
     } catch (error) {
@@ -117,7 +116,6 @@ export const StateProvider = ({ children }) => {
       const response = await getUnassignedDepartmentManagers(idOrganisation);
       if (response?.status === 200) {
         setUnassignedDepartmentManagers(response.data);
-        console.log('MANAGERS', response.data);
       }
 
     } catch (error) {
@@ -151,7 +149,6 @@ export const StateProvider = ({ children }) => {
       value: item.idUser,
       label: `${item.firstName} ${item.lastName}`,
     })) || [];
-    console.log("fetched again",newDropdownOptions);
     setManagersWithoutDepartments_dropdown(newDropdownOptions);
   }, [unassignedDepartmentManagers]);
 

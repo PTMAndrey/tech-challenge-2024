@@ -66,12 +66,6 @@ const AdminDepartments = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user]);
 
-    // useEffect(() => {
-    //     fetchUnassignedDepartmentManagers(user?.idOrganisation);
-    //     console.log("\nANAAA\n");
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [managersWithoutDepartments_dropdown]);
-
     const [openAddUpdate, setOpenAddUpdate] = useState({ open: false, action: '' });
     const [openDelete, setOpenDelete] = useState(false);
 
@@ -198,19 +192,9 @@ const AdminDepartments = () => {
                 });
             }
         }
-        // console.log("UPDATE add manager", department, formValue, "---------------------------");
-        // if (!removeDM && formValue.departmentManager && formValue.departmentManagerName) {
-        //     const x = await handleAddManager();
-        // }
-        // if (removeDM && formValue.departmentManager && formValue.departmentManagerName) {
-        //     const x = await handleRemoveDM();
-        // }
-
     }
 
     const handleAddManager = async () => {
-        console.log("add manager", formValue.departmentManager, formValue.idDepartment);
-
         try {
             const response = await addDepartmentManager(formValue.departmentManager, formValue.idDepartment)
             if (response.status === 200 || response.status === 201) {

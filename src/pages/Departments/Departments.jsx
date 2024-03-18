@@ -10,7 +10,6 @@ const Departments = () => {
   const {user} = useAuthProvider();
   const location = useLocation();
   const currentTab = location.pathname.split("/")[2];
-  console.log(currentTab);
   const tabSelector = () => {
     switch (currentTab) {
       case "admin":

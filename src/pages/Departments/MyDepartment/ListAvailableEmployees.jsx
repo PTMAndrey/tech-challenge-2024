@@ -28,24 +28,6 @@ const ListAvailableEmployees = (props) => {
           onPageChange={page => setCurrentPageMyDepartmentEmployees(page)}
         />
       }
-      {/* <Container className={styles.employeesContainer}>
-        <Row>
-          {props.currentTableData?.map((user, index) =>
-          (
-            <Col>
-              {
-                <EmployeesCard
-                  key={user.idUser}
-                  data={user}
-                  handleOpenAddUpdate={props.handleOpenAddUpdate}
-                  handleOpenDelete={props.handleOpenDelete}
-                />
-              }
-            </Col>
-          )
-          )}
-        </Row>
-      </Container> */}
 
       <Container className={styles.yourContainerStyle}>
         <Row>
@@ -55,6 +37,7 @@ const ListAvailableEmployees = (props) => {
                 key={user.idUser}
                 data={user}
                 handleOpenAddUpdate={props.handleOpenAddUpdate}
+                handleActionYes={props.handleActionYes}
                 handleOpenDelete={props.handleOpenDelete}
               />
             </Col>

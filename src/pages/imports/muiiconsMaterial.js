@@ -10,3 +10,5 @@ export { default as TextRotationAngleupIcon } from '@mui/icons-material/TextRota
 export { default as TextRotationAngledownIcon } from '@mui/icons-material/TextRotationAngledown';
 export { default as FilterListIcon } from '@mui/icons-material/FilterList';
 export { default as ContentCopyIcon } from '@mui/icons-material/ContentCopy';
+export { default as PersonRemoveIcon } from '@mui/icons-material/PersonRemove';
+export { default as PersonAddAlt1Icon } from '@mui/icons-material/PersonAddAlt1';

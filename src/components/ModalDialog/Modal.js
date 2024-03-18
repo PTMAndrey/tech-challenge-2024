@@ -9,14 +9,19 @@ const style = {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 400,
-    minWidth: 100,
+    // width: 400,
+    minWidth: 300,
+    maxHeight: 400,
     bgcolor: 'background.paper',
     border: '2px solid #000',
     boxShadow: 24,
     pt: 2,
     px: 4,
-    pb: 3,
+    pb: 3, 
+    pr: 2,
+    width: 'auto', // Ajustat pentru a se adapta la conținut
+    maxWidth: '80%', // Sau o valoare care se potrivește bine pe ecran
+    overflowY: 'auto', // Permite scroll pe orizontală dacă este necesar
 };
 
 export default function NestedModal({ open, handleClose, title, content, handleActionYes, textActionYes, handleActionNo, textActionNo }) {

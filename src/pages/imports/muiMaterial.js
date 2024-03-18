@@ -19,3 +19,4 @@ export { default as Tooltip } from '@mui/material/Tooltip';
 export { default as Avatar } from '@mui/material/Avatar';
 export { default as Stack } from '@mui/material/Stack';
 export { default as Chip } from '@mui/material/Chip';
+export { default as Divider } from '@mui/material/Divider';

@@ -60,6 +60,8 @@
     align-items: center;
     background-color: $color-primary-300;
     color: $color-white !important;
+    width:250px;
+    justify-content: center;
 
     p {
         padding: 5px;
@@ -71,18 +73,26 @@
     }
 }
 
-// .employeesContainer{
-
-//     display: flex;
-//     flex-wrap: wrap;
-//     justify-content: flex-start; /* sau 'center' dacă dorești să fie centrate */
-//     gap: 20px; /* acesta adaugă un spațiu între carduri */
-// }
-
-
 .cardMyDepartment {
     display: flex;
     flex-direction: column;
     border-bottom: 2px solid black;
-    min-width: 120px !important;
+    min-width: 120px !important;  
+    p,
+    div,
+    a,
+    ul,
+    li {
+      -webkit-user-select: auto;
+      /* Safari */
+      -ms-user-select: auto;
+      /* IE 10 and IE 11 */
+      user-select: auto;
+    }
+}
+
+
+.title{
+    font-size: $font-h4;
+    font-weight: $font-bold;
 }
