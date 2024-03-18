@@ -40,14 +40,17 @@ import {
   TextRotationAngleupIcon,
   TextRotationAngledownIcon
 } from '../imports/muiiconsMaterial';
+import { useNavigate } from 'react-router';
 
 const AllEmployees = () => {
   const { employees, fetchEmployees,
     currentPageEmployees, pageSize,
     organisationRoles, fetchOrganisationRoles
   } = useStateProvider();
-  const { user } = useAuthProvider();
+  const { user, fetchUser } = useAuthProvider();
   const { width } = useWindowDimensions();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchEmployees(user?.idOrganisation);
@@ -134,10 +137,19 @@ const AllEmployees = () => {
         const response = await addRoleToEmployee(formValue.idUser, formValue.idRole);
         if (response.status === 200 || response.status === 201) {
           const x = await fetchEmployees(user?.idOrganisation);
+          if (formValue.idUser === user?.idUser) {
+            const y = await fetchUser(user?.idUser);
+            setAlert({
+              type: "success",
+              message: "Your roles has been updated!",
+            });
+          }
+          else{
           setAlert({
             type: "success",
             message: "You added a new role!",
           });
+        }
           handleCloseAddRole();
         }
       } catch (error) {
@@ -160,11 +172,23 @@ const AllEmployees = () => {
         const response = await deleteRoleFromEmployee(formValue.idUser, formValue.idRole);
         if (response.status === 200 || response.status === 201) {
           const x = await fetchEmployees(user?.idOrganisation);
-          setAlert({
-            type: "success",
-            message: "You removed the role!",
-          });
+
+
           handleCloseDelete();
+          if (formValue.idUser === user?.idUser) {
+            const y = await fetchUser(user?.idUser);
+            navigate('/');
+            setAlert({
+              type: "warning",
+              message: "Your role has been revoked!",
+            });
+          }
+          else {
+            setAlert({
+              type: "success",
+              message: "You removed the role!",
+            });
+          }
         }
       } catch (error) {
         console.log(error.message, "error");
@@ -241,10 +265,10 @@ const AllEmployees = () => {
       .join(' ');
   };
 
-  const renderUserRoles = (data,info) => {
+  const renderUserRoles = (data, info) => {
     console.log();
     if (Array.isArray(info)) {
-      return info.map((item,index) => (
+      return info.map((item, index) => (
         <li key={`${data.id}_${item.id}_${Math.random()}`}>{formatAuthority(item.authority)}</li>
       ))
     }

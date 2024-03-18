@@ -1,0 +1,63 @@
+@import '../../styles/variables.scss';
+@import '../../styles/mixins.scss';
+@import "../../styles/index.scss";
+
+
+.pageDepartments {
+    display: flex;
+    flex-direction: column;
+    margin: 2em;
+
+    @include responsive_W550px {
+        align-items: center;
+    }
+
+}
+
+.addDepartment {
+    display: flex;
+    width:auto;
+    margin-bottom: 1em;
+}
+
+.tableButtons {
+    cursor: pointer;
+
+    @include responsive_W550px {
+        font-size: 17px !important;
+    }
+}
+
+.authError {
+    color: $color-alert-400;
+    font-size: $font-body-small;
+    width: 415px;
+}
+
+.iconWhite {
+    color: $color-white !important;
+}
+
+.paginationBar {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.cardButtons {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.sortButtonCard {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: $color-primary-300;
+    color: $color-white !important;
+    p {
+        padding: 5px;
+        font-size: $font-body-small;
+    }
+}

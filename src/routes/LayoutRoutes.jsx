@@ -17,7 +17,10 @@ export const getLinksForRoute = (user, segment) => {
       ];
     case 'departments':
       return [
-        { text: 'Departments', path: '/departments' },
+        user?.authorities.some(authority => authority.authority === "ORGANISATION_ADMIN") &&
+        { text: 'Departments', path: '/departments/admin/all' },
+        user?.isDepartmentManager &&
+        { text: 'My Department', path: '/departments/myDepartment/' + user?.idDepartment },
       ];
     case 'projects':
       return [

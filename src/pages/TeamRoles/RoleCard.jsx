@@ -21,11 +21,11 @@ const RoleCard = (props) => {
       <Card sx={{ minWidth: 200 }}>
         <CardContent sx={{display:"flex", flexDirection:"column", alignItems:"center" }}>
           <Typography gutterBottom variant="p" component="div">
+            Team role
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
             {props.data.teamRoleName}
           </Typography>
-          {/* <Typography variant="body2" color="text.secondary">
-            Some details if necessarily
-          </Typography> */}
         </CardContent>
         <CardActions className={styles.cardButtons}>
           <BorderColorIcon className={styles.tableButtons} onClick={() => {
