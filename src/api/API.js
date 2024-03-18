@@ -125,7 +125,7 @@ export const getUserById = async (id) => {
 // update organisation headquarter address
 export const updateOrganisationAddress = async (idOrganisation, address) => {
   try {
-    const response = await axios.put("/organisation/updateHeadquarterAddress?idOrganisation=" + idOrganisation + "&newHeadquarterAddress="+address);
+    const response = await axios.put("/organisation/updateHeadquarterAddress?idOrganisation=" + idOrganisation + "&newHeadquarterAddress=" + address);
     console.log(response);
     return response;
   } catch (error) {
@@ -216,10 +216,25 @@ export const getAllEmployees = async (id) => {
 };
 
 
-// add role to employee
-export const addRoleToEmployee = async (idUser, idRole) => {
+// get department_managers without a department
+export const getUnassignedDepartmentManagers = async (id) => {
   try {
-    const response = await axios.put("/user/addRole?idUser=" + idUser + "&idRole="+idRole);
+    const response = await axios.get("/user/getUnassignedDepartmentManagers?idOrganisation=" + id);
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data.message || "Something went wrong... Try again later");
+
+    } else {
+      throw new Error("Network error or other issue");
+    }
+  }
+};
+
+// get employees without a department
+export const getUsersWithoutDepartment = async (id) => {
+  try {
+    const response = await axios.get("/user/getUsersWithoutDepartment?idOrganisation=" + id);
     return response;
   } catch (error) {
     if (error.response) {
@@ -232,10 +247,60 @@ export const addRoleToEmployee = async (idUser, idRole) => {
 };
 
 
+// add role to employee
+export const addRoleToEmployee = async (idUser, idRole) => {
+  try {
+    const response = await axios.put("/user/addRole?idUser=" + idUser + "&idRole=" + idRole);
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data.message || "Something went wrong... Try again later");
+
+    } else {
+      throw new Error("Network error or other issue");
+    }
+  }
+};
+
+// add department manager to department
+
+export const addDepartmentManager = async (idUser, idDepartment) => {
+  try {
+    const response = await axios.put("/user/addDepartmentManager?idUser=" + idUser + "&idDepartment=" + idDepartment);
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data.message || "Something went wrong... Try again later");
+
+    } else {
+      throw new Error("Network error or other issue");
+    }
+  }
+};
+
+// remove department manager from department
+
+export const removeDepartmentManagerFromDepartment = async (idUser, idDepartment) => {
+  try {
+    const response = await axios.delete("/user/removeDepartmentManagerFromDepartment?idUser=" + idUser);
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data.message || "Something went wrong... Try again later");
+
+    } else {
+      throw new Error("Network error or other issue");
+    }
+  }
+};
+
+
+
+
 // remove role to employee
 export const deleteRoleFromEmployee = async (idUser, idRole) => {
   try {
-    const response = await axios.delete("/user/removeRole?idUser=" + idUser +"&idRole="+idRole);
+    const response = await axios.delete("/user/removeRole?idUser=" + idUser + "&idRole=" + idRole);
     return response;
   } catch (error) {
     if (error.response) {
@@ -262,3 +327,82 @@ export const getAllRoles = async () => {
     }
   }
 };
+
+
+// add Department
+export const addDepartment = async (id, data) => {
+  try {
+    const response = await axios.post("/department/addDepartment?idOrganisationAdmin=" + id, data);
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data.message || "Something went wrong... Try again later");
+
+    } else {
+      throw new Error("Network error or other issue");
+    }
+  }
+};
+
+
+// update Department
+export const updateDepartment = async (id, data) => {
+  try {
+    const response = await axios.put("/department/updateDepartment?idDepartment=" + id, data);
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data.message || "Something went wrong... Try again later");
+
+    } else {
+      throw new Error("Network error or other issue");
+    }
+  }
+};
+
+
+// delete Department
+export const deleteDepartment = async (id) => {
+  try {
+    const response = await axios.delete("/department/deleteDepartment?idDepartment=" + id);
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data.message || "Something went wrong... Try again later");
+
+    } else {
+      throw new Error("Network error or other issue");
+    }
+  }
+};
+// get all departments
+export const getAllDepartments = async (id) => {
+  try {
+    const response = await axios.get("/department/getAll?idOrganisation=" + id);
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data.message || "Something went wrong... Try again later");
+
+    } else {
+      throw new Error("Network error or other issue");
+    }
+  }
+};
+
+
+// get department by id
+export const getDepartmentByID = async (id) => {
+  try {
+    const response = await axios.get("/department/getById?idDepartment=" + id);
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data.message || "Something went wrong... Try again later");
+
+    } else {
+      throw new Error("Network error or other issue");
+    }
+  }
+};
+
