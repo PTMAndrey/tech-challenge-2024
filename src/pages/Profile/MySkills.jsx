@@ -58,22 +58,31 @@ const MySkills = () => {
     allSkillCategory_dropdown,
     allSkillsFromCategory_dropdown,
     managersWithoutDepartments_dropdown,
+
+
+    currentPageMySkills2,
+    setCurrentPageMySkills2,
+    pendingUserSkills,
+    fetchPendingUserSkills,
   } = useStateProvider();
   const { user } = useAuthProvider();
   const { width } = useWindowDimensions();
   const navigate = useNavigate();
-  const [selectedSkillInTable, setSelectedSkillInTable] = useState({ idUserSkill: "", idSkill: "", numeSkill: "", level: "", experience: "" });
 
   useEffect(() => {
     (async () => {
       const x = await fetchApprovedUserSkills(user?.idUser);
-      const y = await fetchAllSkillCategory(user?.idOrganisation);
+      const y = await fetchPendingUserSkills(user?.idUser);
+      const z = await fetchAllSkillCategory(user?.idOrganisation);
     })();
     // const y = await fetchUnassignedDepartmentManagers(user?.idOrganisation);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
+
+// ********************* APPROVED SKILLS ********************************
+  const [selectedSkillInTable, setSelectedSkillInTable] = useState({ idUserSkill: "", idSkill: "", numeSkill: "", level: "", experience: "" });
   const [openAddUpdate, setOpenAddUpdate] = useState({ open: false, action: '' });
   const [openDelete, setOpenDelete] = useState(false);
 
@@ -86,6 +95,7 @@ const MySkills = () => {
   const [sortDirection, setSortDirection] = useState('Ascending');
   const [removeDM, setRemoveDM] = useState(false);
   const [formValue, setFormValue] = useState({ idUserSkill: "", idSkill: "", numeSkill: "", level: "", experience: "" });
+
 
 
   useEffect(() => {
@@ -319,6 +329,154 @@ const MySkills = () => {
   }, [currentPageMySkills, pageSizeMySkills, rows, sortDirection]);
 
 
+
+// ********************* PENDING SKILLS ********************************
+
+const [selectedPendingSkillInTable, setSelectedPendingSkillInTable] = useState({ idUserSkill: "", idSkill: "", numeSkill: "", level: "", experience: "" });
+const [openAddUpdate2, setOpenAddUpdate2] = useState({ open: false, action: '' });
+const [openDelete2, setOpenDelete2] = useState(false);
+
+const [showErrors2, setShowErrors2] = useState(false);
+
+const [rows2, setRows2] = useState([]);
+const [page2, setPage2] = useState(0);
+const [rowsPerPage2, setRowsPerPage2] = useState(3);
+const [sortBy2, setSortBy2] = useState('numeSkill');
+const [sortDirection2, setSortDirection2] = useState('Ascending');
+const [removeDM2, setRemoveDM2] = useState(false);
+const [formValue2, setFormValue2] = useState({ idUserSkill: "", idSkill: "", numeSkill: "", level: "", experience: "" });
+
+useEffect(() => {
+  if (formValue.idUserSkill !== "") {
+    (async () => {
+      const x = await fetchAllSkillsFromCategory(formValue.idUserSkill, user?.idUser)
+      // const y = await fetchAllSkillCategory(user?.idOrganisation);
+    })();
+    // const y = await fetchUnassignedDepartmentManagers(user?.idOrganisation);
+
+  }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+}, [formValue.idUserSkill]);
+
+const toggleRemoveDM2 = () => {
+  setRemoveDM2(!removeDM2);
+}
+const handleChange2 = (e) => {
+  const { name, value } = e.target;
+  setFormValue2((prev) => {
+    return { ...prev, [name]: value };
+  });
+};
+
+const isFormValid2 = () => {
+  let isValid = true;
+  Object.keys(formValue).forEach((field) => {
+    if (checkErrors2(field)) {
+      isValid = false;
+    }
+  });
+  return isValid;
+};
+
+const checkErrors2 = (field) => {
+  if (field === "skillCategory") {
+    if (formValue2.skillCategory === '') {
+      return "Choose a category!";
+    }
+  }
+  if (field === "numeSkill") {
+    if (formValue.numeSkill === '') {
+      return "Choose a skill!";
+    }
+  }
+
+  return "";
+}
+const handleOpenDelete2 = () => {
+  setOpenDelete2(true);
+
+};
+const handleCloseDelete2 = () => {
+  setOpenDelete2(false);
+  setSelectedPendingSkillInTable({ idUserSkill: "", idSkill: "", numeSkill: "", level: "", experience: "" })
+  setFormValue2({ idUserSkill: "", idSkill: "", numeSkill: "", level: "", experience: "" })
+  setShowErrors2(false);
+  setRemoveDM2(false);
+
+};
+
+const handleOpenAddUpdate2 = (action) => {
+  setOpenAddUpdate2({ open: true, action: action });
+}
+const handleCloseAddUpdate2 = () => {
+  setOpenAddUpdate2({ open: false, action: '' });
+  setSelectedPendingSkillInTable({ idUserSkill: "", idSkill: "", numeSkill: "", level: "", experience: "" })
+  setFormValue2({ idUserSkill: "", idSkill: "", numeSkill: "", level: "", experience: "" })
+  setShowErrors2(false);
+  setRemoveDM2(false);
+
+}
+
+
+  const toggleSortDirectionAndColumn2 = (column) => {
+    if (sortBy2 === column) {
+      setSortDirection2(sortDirection2 === 'Ascending' ? 'Descending' : 'Ascending');
+    } else {
+      setSortBy2(column);
+      setSortDirection2('Ascending');
+    }
+  };
+
+  useEffect(() => {
+    const sortedSkills2 = pendingUserSkills?.map(skill =>
+      createData(skill.idUserSkill, skill.idSkill, skill.numeSkill, skill.level, skill.experience)
+    ).sort((a, b) => {
+      if (sortDirection2 === 'Ascending') {
+        return a[sortBy2].localeCompare(b[sortBy2]);
+      } else {
+        return b[sortBy2].localeCompare(a[sortBy2]);
+      }
+    });
+    setRows2(sortedSkills2 || []);
+  }, [pendingUserSkills, sortDirection2, sortBy2]);
+
+  // Avoid a layout jump when reaching the last page with empty rows.
+  const emptyRows2 =
+    page2 > 0 ? Math.max(0, (1 + page2) * rowsPerPage2 - rows2[0].length) : 0;
+
+  const handleChangePage2 = (event, newPage) => {
+    setPage2(newPage);
+  };
+
+  const handleChangeRowsPerPage2 = (event) => {
+    setRowsPerPage2(parseInt(event.target.value, 10));
+    setPage2(0);
+  };
+
+  const currentTableData2 = useMemo(() => {
+    if (rows2) {
+      const firstPageIndex = (currentPageMySkills2 - 1) * pageSizeMySkills;
+      const lastPageIndex = firstPageIndex + pageSizeMySkills;
+
+      if (rows2?.length < lastPageIndex && (lastPageIndex - rows2?.length) > 0)
+        return rows2?.slice(firstPageIndex, lastPageIndex - (lastPageIndex - rows2?.length));
+      else
+        return rows2?.slice(firstPageIndex, lastPageIndex);
+    }
+    else
+      return null;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPageMySkills2, pageSizeMySkills, rows2, sortDirection2]);
+
+
+// ********************* END PENDING SKILLS ********************************
+
+
+
+
+
+
+
   const handleChangeSkillCategory = async (e) => {
     if (e === null) {
       setFormValue({ ...formValue, idUserSkill: '', idSkill: '', skillName: '' })
@@ -355,115 +513,269 @@ const MySkills = () => {
             onClick={() => { handleOpenAddUpdate('add') }}
           />
           {width > 550 ?
-            <TableContainer component={Paper} className={styles.table}>
-              <Table sx={{ minWidth: 500 }} aria-label="custom pagination customized table">
-                <TableHead>
-                  <TableRow>
-                    <StyledTableCell align="center">Nr. crt.</StyledTableCell>
-                    <StyledTableCell align="center">
-                      Skill name
-                      <Tooltip
-                        title={"Order by skill name"}
-                        placement='top-end'
-                        arrow
-                        onClick={() => toggleSortDirectionAndColumn('numeSkill')} className={styles.iconWhite}
-                      >
-                        <IconButton className={styles.iconStyle}>
-                          {sortDirection === 'Ascending' && sortBy === 'numeSkill' ? <TextRotationAngledownIcon /> : <TextRotationAngleupIcon />}
-
-                        </IconButton>
-                      </Tooltip>
-                    </StyledTableCell>
-                    <StyledTableCell align="center">
-                      Level
-                    </StyledTableCell>
-                    <StyledTableCell align="center">
-                      Experience
-                    </StyledTableCell>
-                    <StyledTableCell align="center">Update</StyledTableCell>
-                    <StyledTableCell align="center">Delete</StyledTableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {(rowsPerPage > 0
-                    ? rows?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    : rows
-                  )?.map((row, index) => (
-                    <TableRow key={index}>
-                      <TableCell component="th" scope="row" style={{ width: 160 }} align="center">
-                        {index + 1}
-                      </TableCell>
-                      <TableCell style={{ width: 160 }} align="center">
-                        {row?.numeSkill}
-                      </TableCell>
-                      <TableCell style={{ width: 160 }} align="center">
-                        {row?.level}
-                      </TableCell>
-
-                      <TableCell style={{ width: 160 }} align="center">
-                        {row?.experience}
-                      </TableCell>
-                      <TableCell style={{ width: 160 }} align="center">
+            <>
+              <h5>Approved skills</h5>
+              <TableContainer component={Paper} className={styles.table}>
+                <Table sx={{ minWidth: 500 }} aria-label="custom pagination customized table">
+                  <TableHead>
+                    <TableRow>
+                      <StyledTableCell align="center">Nr. crt.</StyledTableCell>
+                      <StyledTableCell align="center">
+                        Skill name
                         <Tooltip
-                          title='Update skill'
-                          placement='top-start'
+                          title={"Order by skill name"}
+                          placement='top-end'
                           arrow
-                          onClick={() => {
-                            setSelectedSkillInTable({ idDepartment: row?.id, departmentName: row?.departmentName, idOrganisation: user?.idOrganisation, departmentManager: row?.departmentManager, departmentManagerName: row?.departmentManagerName });
-                            setFormValue({ ...formValue, departmentName: row?.departmentName })//, departmentManager: row?.departmentManager, departmentManagerName: row?.departmentManagerName });
-                            handleOpenAddUpdate('update');
-                          }} >
-                          <IconButton>
-                            <BorderColorIcon className={styles.tableButtons} />
+                          onClick={() => toggleSortDirectionAndColumn('numeSkill')} className={styles.iconWhite}
+                        >
+                          <IconButton className={styles.iconStyle}>
+                            {sortDirection === 'Ascending' && sortBy === 'numeSkill' ? <TextRotationAngledownIcon /> : <TextRotationAngleupIcon />}
+
                           </IconButton>
                         </Tooltip>
-                      </TableCell>
-                      <TableCell style={{ width: 160 }} align="center">
+                      </StyledTableCell>
+                      <StyledTableCell align="center">
+                        Level
+                      </StyledTableCell>
+                      <StyledTableCell align="center">
+                        Experience
+                      </StyledTableCell>
+                      <StyledTableCell align="center">Update</StyledTableCell>
+                      <StyledTableCell align="center">Delete</StyledTableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {(rowsPerPage > 0
+                      ? rows?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                      : rows
+                    )?.map((row, index) => (
+                      <TableRow key={index}>
+                        <TableCell component="th" scope="row" style={{ width: 160 }} align="center">
+                          {index + 1}
+                        </TableCell>
+                        <TableCell style={{ width: 160 }} align="center">
+                          {row?.numeSkill}
+                        </TableCell>
+                        <TableCell style={{ width: 160 }} align="center">
+                          {row?.level}
+                        </TableCell>
+
+                        <TableCell style={{ width: 160 }} align="center">
+                          {row?.experience}
+                        </TableCell>
+                        <TableCell style={{ width: 160 }} align="center">
+                          <Tooltip
+                            title='Update skill'
+                            placement='top-start'
+                            arrow
+                            onClick={() => {
+                              setSelectedSkillInTable({ idDepartment: row?.id, departmentName: row?.departmentName, idOrganisation: user?.idOrganisation, departmentManager: row?.departmentManager, departmentManagerName: row?.departmentManagerName });
+                              setFormValue({ ...formValue, departmentName: row?.departmentName })//, departmentManager: row?.departmentManager, departmentManagerName: row?.departmentManagerName });
+                              handleOpenAddUpdate('update');
+                            }} >
+                            <IconButton>
+                              <BorderColorIcon className={styles.tableButtons} />
+                            </IconButton>
+                          </Tooltip>
+                        </TableCell>
+                        <TableCell style={{ width: 160 }} align="center">
+                          <Tooltip
+                            title='Delete skill'
+                            placement='top-start'
+                            arrow
+                            onClick={() => {
+                              setSelectedSkillInTable({ idDepartment: row?.id, departmentName: row?.departmentName, idOrganisation: user?.idOrganisation, departmentManager: row?.departmentManager, departmentManagerName: row?.departmentManagerName });
+                              handleOpenDelete();
+                            }} >
+                            <IconButton>
+                              <DeleteForeverIcon className={styles.tableButtons} />
+                            </IconButton>
+                          </Tooltip>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+
+                    {emptyRows > 0 && (
+                      <TableRow style={{ height: 53 * emptyRows }}>
+                        <TableCell colSpan={6} />
+                      </TableRow>
+                    )}
+                  </TableBody>
+                  <TableFooter>
+                    <TableRow>
+                      <TablePagination
+                        rowsPerPageOptions={[3, 5, 10, { label: 'All', value: -1 }]}
+                        colSpan={5}
+                        count={rows?.length}
+                        rowsPerPage={rowsPerPage}
+                        page={page}
+                        SelectProps={{
+                          inputProps: {
+                            'aria-label': 'rows per page',
+                          },
+                          native: true,
+                        }}
+                        onPageChange={handleChangePage}
+                        onRowsPerPageChange={handleChangeRowsPerPage}
+                        ActionsComponent={TablePaginationActions}
+                      />
+                    </TableRow>
+                  </TableFooter>
+                </Table>
+              </TableContainer>
+
+
+
+
+
+
+
+
+              <h5 className='mt-5'>In pending</h5>
+
+
+
+
+
+
+
+
+
+              <TableContainer component={Paper} className={styles.table}>
+                <Table sx={{ minWidth: 500 }} aria-label="custom pagination customized table">
+                  <TableHead>
+                    <TableRow>
+                      <StyledTableCell align="center">Nr. crt.</StyledTableCell>
+                      <StyledTableCell align="center">
+                        Skill name
                         <Tooltip
-                          title='Delete skill'
-                          placement='top-start'
+                          title={"Order by skill name"}
+                          placement='top-end'
                           arrow
-                          onClick={() => {
-                            setSelectedSkillInTable({ idDepartment: row?.id, departmentName: row?.departmentName, idOrganisation: user?.idOrganisation, departmentManager: row?.departmentManager, departmentManagerName: row?.departmentManagerName });
-                            handleOpenDelete();
-                          }} >
-                          <IconButton>
-                            <DeleteForeverIcon className={styles.tableButtons} />
+                          onClick={() => toggleSortDirectionAndColumn2('numeSkill')} className={styles.iconWhite}
+                        >
+                          <IconButton className={styles.iconStyle}>
+                            {sortDirection2 === 'Ascending' && sortBy2 === 'numeSkill' ? <TextRotationAngledownIcon /> : <TextRotationAngleupIcon />}
+
                           </IconButton>
                         </Tooltip>
-                      </TableCell>
+                      </StyledTableCell>
+                      <StyledTableCell align="center">
+                        Level
+                      </StyledTableCell>
+                      <StyledTableCell align="center">
+                        Experience
+                      </StyledTableCell>
+                      <StyledTableCell align="center">Update</StyledTableCell>
+                      <StyledTableCell align="center">Delete</StyledTableCell>
                     </TableRow>
-                  ))}
+                  </TableHead>
+                  <TableBody>
+                    {(rowsPerPage2 > 0
+                      ? rows2?.slice(page2 * rowsPerPage2, page2 * rowsPerPage2 + rowsPerPage2)
+                      : rows2
+                    )?.map((row, index) => (
+                      <TableRow key={index}>
+                        <TableCell component="th" scope="row" style={{ width: 160 }} align="center">
+                          {index + 1}
+                        </TableCell>
+                        <TableCell style={{ width: 160 }} align="center">
+                          {row?.numeSkill}
+                        </TableCell>
+                        <TableCell style={{ width: 160 }} align="center">
+                          {row?.level}
+                        </TableCell>
 
-                  {emptyRows > 0 && (
-                    <TableRow style={{ height: 53 * emptyRows }}>
-                      <TableCell colSpan={6} />
+                        <TableCell style={{ width: 160 }} align="center">
+                          {row?.experience}
+                        </TableCell>
+                        <TableCell style={{ width: 160 }} align="center">
+                          <Tooltip
+                            title='Update skill'
+                            placement='top-start'
+                            arrow
+                            // onClick={() => {
+                            //   setSelectedPendingSkillInTable({ idDepartment: row?.id, departmentName: row?.departmentName, idOrganisation: user?.idOrganisation, departmentManager: row?.departmentManager, departmentManagerName: row?.departmentManagerName });
+                            //   setFormValue2({ ...formValue, departmentName: row?.departmentName })//, departmentManager: row?.departmentManager, departmentManagerName: row?.departmentManagerName });
+                            //   handleOpenAddUpdate('update');
+                            // }} 
+                            >
+                            <IconButton>
+                              <BorderColorIcon className={styles.tableButtons} />
+                            </IconButton>
+                          </Tooltip>
+                        </TableCell>
+                        <TableCell style={{ width: 160 }} align="center">
+                          <Tooltip
+                            title='Delete skill'
+                            placement='top-start'
+                            arrow
+                            // onClick={() => {
+                            //   setSelectedSkillInTable({ idDepartment: row?.id, departmentName: row?.departmentName, idOrganisation: user?.idOrganisation, departmentManager: row?.departmentManager, departmentManagerName: row?.departmentManagerName });
+                            //   handleOpenDelete();
+                            // }} 
+                            >
+                            <IconButton>
+                              <DeleteForeverIcon className={styles.tableButtons} />
+                            </IconButton>
+                          </Tooltip>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+
+                    {emptyRows2 > 0 && (
+                      <TableRow style={{ height: 53 * emptyRows2 }}>
+                        <TableCell colSpan={6} />
+                      </TableRow>
+                    )}
+                  </TableBody>
+                  <TableFooter>
+                    <TableRow>
+                      <TablePagination
+                        rowsPerPageOptions={[3, 5, 10, { label: 'All', value: -1 }]}
+                        colSpan={5}
+                        count={rows2?.length}
+                        rowsPerPage={rowsPerPage2}
+                        page={page2}
+                        SelectProps={{
+                          inputProps: {
+                            'aria-label': 'rows per page',
+                          },
+                          native: true,
+                        }}
+                        onPageChange={handleChangePage2}
+                        onRowsPerPageChange={handleChangeRowsPerPage2}
+                        ActionsComponent={TablePaginationActions}
+                      />
                     </TableRow>
-                  )}
-                </TableBody>
-                <TableFooter>
-                  <TableRow>
-                    <TablePagination
-                      rowsPerPageOptions={[3, 5, 10, { label: 'All', value: -1 }]}
-                      colSpan={5}
-                      count={rows?.length}
-                      rowsPerPage={rowsPerPage}
-                      page={page}
-                      SelectProps={{
-                        inputProps: {
-                          'aria-label': 'rows per page',
-                        },
-                        native: true,
-                      }}
-                      onPageChange={handleChangePage}
-                      onRowsPerPageChange={handleChangeRowsPerPage}
-                      ActionsComponent={TablePaginationActions}
-                    />
-                  </TableRow>
-                </TableFooter>
-              </Table>
-            </TableContainer>
+                  </TableFooter>
+                </Table>
+              </TableContainer>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            </>
             :
             <>
               <ListSkills

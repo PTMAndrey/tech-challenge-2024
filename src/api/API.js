@@ -473,6 +473,21 @@ export const getAllSkillCategory = async (id) => {
 };
 
 
+// get all pending skills of an user
+export const getUserSkillsByUserAndUnapproved = async (id) => {
+  try {
+    const response = await axios.get("/user_skill/getUserSkillsByUserAndUnapproved?idUser=" + id);
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data.message || "Something went wrong... Try again later");
+
+    } else {
+      throw new Error("Network error or other issue");
+    }
+  }
+};
+
 // get all skills from categorie id
 export const getAllSkillsFromCategory = async (idCategory, idUser) => {
   try {

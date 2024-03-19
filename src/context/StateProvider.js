@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { getAllDepartments, getAllEmployees, getAllRoles, getAllSkillCategory, getAllSkillsFromCategory, getAllTeamRoles, getDepartmentByID, getUnassignedDepartmentManagers, getUserSkillsByUserAndApproved, getUsersWithoutDepartment } from "../api/API";
+import { getAllDepartments, getAllEmployees, getAllRoles, getAllSkillCategory, getAllSkillsFromCategory, getAllTeamRoles, getDepartmentByID, getUnassignedDepartmentManagers, getUserSkillsByUserAndApproved, getUserSkillsByUserAndUnapproved, getUsersWithoutDepartment } from "../api/API";
 
 const StateContext = createContext({});
 
@@ -14,6 +14,7 @@ export const StateProvider = ({ children }) => {
   const [unassignedDepartmentManagers, setUnassignedDepartmentManagers] = useState(null);
   const [unassignedEmployeesOnDepartment, setunassignedEmployeesOnDepartment] = useState(null);
   const [approvedUserSkills, setApprovedUserSkills] = useState(null);
+  const [pendingUserSkills, setPendingUserSkills] = useState(null);
   const [allSkillCategory, setAllSkillCategory] = useState(null);
   const [allSkillsFromCategory, setAllSkillsFromCategory] = useState(null);
 
@@ -36,7 +37,8 @@ export const StateProvider = ({ children }) => {
   const [currentPageMyDepartmentEmployees, setCurrentPageMyDepartmentEmployees] = useState(1);
   const [currentPageMyDepartmentEmployeesWithoutDepartment, setCurrentPageMyDepartmentEmployeesWithoutDepartment] = useState(1);
   const [currentPageMySkills, setCurrentPageMySkills] = useState(1);
-
+  const [currentPageMySkills2, setCurrentPageMySkills2] = useState(1);
+  
   // alert
   const [alert, setAlert] = useState(null);
   if (alert) {
@@ -189,7 +191,7 @@ export const StateProvider = ({ children }) => {
     }
   };
 
-  
+
   const fetchApprovedUserSkills = async (idUser) => {
     try {
       const response = await getUserSkillsByUserAndApproved(idUser);
@@ -197,7 +199,7 @@ export const StateProvider = ({ children }) => {
         setApprovedUserSkills(response.data);
         console.log(response.data);
       }
-      if(response?.status === 400){
+      if (response?.status === 400) {
         setAlert({
           type: "warning",
           message: "You don't have approved skills"
@@ -220,7 +222,7 @@ export const StateProvider = ({ children }) => {
         setAllSkillCategory(response.data);
         console.log(response.data);
       }
-      if(response?.status === 400){
+      if (response?.status === 400) {
         setAlert({
           type: "warning",
           message: "You don't have approved skills"
@@ -235,15 +237,15 @@ export const StateProvider = ({ children }) => {
       // });
     }
   };
-  
-  const fetchAllSkillsFromCategory = async (idCategory,idUser) => {
+
+  const fetchAllSkillsFromCategory = async (idCategory, idUser) => {
     try {
       const response = await getAllSkillsFromCategory(idCategory, idUser);
       if (response?.status === 200) {
         setAllSkillsFromCategory(response.data);
         console.log(response.data);
       }
-      if(response?.status === 400){
+      if (response?.status === 400) {
         setAlert({
           type: "warning",
           message: "You don't have approved skills"
@@ -258,6 +260,30 @@ export const StateProvider = ({ children }) => {
       });
     }
   };
+
+  const fetchPendingUserSkills = async (idUser) => {
+    try {
+      const response = await getUserSkillsByUserAndUnapproved(idUser);
+      if (response?.status === 200) {
+        setPendingUserSkills(response.data);
+        console.log(response.data);
+      }
+      if (response?.status === 400) {
+        setAlert({
+          type: "warning",
+          message: "You don't have approved skills"
+        });
+      }
+
+    } catch (error) {
+      console.log(error.message, "error");
+      setAlert({
+        type: "danger",
+        message: error.message // Use the error message from the catch
+      });
+    }
+  };
+
 
   useEffect(() => {
     const newDropdownOptions = unassignedDepartmentManagers?.map(item => ({
@@ -334,14 +360,14 @@ export const StateProvider = ({ children }) => {
       departmentByID,
       setDepartmentByID,
       fetchGetDepartmentByID,
-      usersWithoutDepartment, 
+      usersWithoutDepartment,
       setUsersWithoutDepartment,
       fetchGetUsersWithoutDepartment,
       pageSizeMyDepartmentEmployeesWithoutDepartment,
-      currentPageMyDepartmentEmployeesWithoutDepartment, 
+      currentPageMyDepartmentEmployeesWithoutDepartment,
       setCurrentPageMyDepartmentEmployeesWithoutDepartment,
       pageSizeMySkills,
-      currentPageMySkills, 
+      currentPageMySkills,
       setCurrentPageMySkills,
       approvedUserSkills,
       setApprovedUserSkills,
@@ -352,6 +378,14 @@ export const StateProvider = ({ children }) => {
 
       fetchAllSkillsFromCategory,
       allSkillsFromCategory_dropdown,
+
+      //pending skills
+
+      currentPageMySkills2,
+      setCurrentPageMySkills2,
+      pendingUserSkills,
+      fetchPendingUserSkills,
+      //end pending skill
     }}
   >{children}</StateContext.Provider>;
 };
