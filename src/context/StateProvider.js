@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { getAllDepartments, getAllEmployees, getAllRoles, getAllTeamRoles, getUnassignedDepartmentManagers, getUsersWithoutDepartment } from "../api/API";
+import { getAllDepartments, getAllEmployees, getAllRoles, getAllTeamRoles, getDepartmentByID, getUnassignedDepartmentManagers, getUsersWithoutDepartment } from "../api/API";
 
 const StateContext = createContext({});
 
@@ -9,28 +9,33 @@ export const StateProvider = ({ children }) => {
   const [employees, setEmployees] = useState(null);
   const [organisationRoles, setOrganisationRoles] = useState(null);
   const [departments, setDepartments] = useState(null);
+  const [departmentByID, setDepartmentByID] = useState(null);
+  const [usersWithoutDepartment, setUsersWithoutDepartment] = useState();
+  
   // let managersWithoutDepartments_dropdown = [];
   const [unassignedDepartmentManagers, setUnassignedDepartmentManagers] = useState(null);
   const [managersWithoutDepartments_dropdown, setManagersWithoutDepartments_dropdown] = useState([]);
+  // these 2 are arrays for drodpown
   const [employeesWithoutDepartments_dropdown, setEmployeesWithoutDepartments_dropdown] = useState([]);
-
   const [unassignedEmployeesOnDepartment, setunassignedEmployeesOnDepartment] = useState(null);
 
   let pageSize = 3; // teamroles + employees
   let pageSizeDepartments = 3;
   let pageSizeMyDepartmentEmployees = 2;
+  let pageSizeMyDepartmentEmployeesWithoutDepartment = 2;
   const [currentPageTeamRoles, setCurrentPageTeamRoles] = useState(1);
   const [currentPageEmployees, setCurrentPageEmployees] = useState(1);
   const [currentPageDepartments, setCurrentPageDepartments] = useState(1);
-  
+
   const [currentPageMyDepartmentEmployees, setCurrentPageMyDepartmentEmployees] = useState(1);
+  const [currentPageMyDepartmentEmployeesWithoutDepartment, setCurrentPageMyDepartmentEmployeesWithoutDepartment] = useState(1);
 
   // alert
   const [alert, setAlert] = useState(null);
   if (alert) {
     setTimeout(() => {
       setAlert(null);
-    }, 5000);
+    }, 4000);
   }
 
   const fetchTeamRoles = async (idOrganisation) => {
@@ -144,6 +149,40 @@ export const StateProvider = ({ children }) => {
   };
 
 
+
+  const fetchGetDepartmentByID = async (idDepartment) => {
+    try {
+      const response = await getDepartmentByID(idDepartment);
+      if (response?.status === 200) {
+        setDepartmentByID(response.data);
+      }
+
+    } catch (error) {
+      console.log(error.message, "error");
+      setAlert({
+        type: "danger",
+        message: error.message || "Something went wrong...", // Use the error message from the catch
+      });
+    }
+  };
+
+  const fetchGetUsersWithoutDepartment = async (idOrganisation) => {
+    try {
+      const response = await getUsersWithoutDepartment(idOrganisation);
+      if (response?.status === 200) {
+        setUsersWithoutDepartment(response.data);
+      }
+
+    } catch (error) {
+      console.log(error.message, "error");
+      setAlert({
+        type: "danger",
+        message: error.message || "Something went wrong...", // Use the error message from the catch
+      });
+    }
+  };
+
+
   useEffect(() => {
     const newDropdownOptions = unassignedDepartmentManagers?.map(item => ({
       value: item.idUser,
@@ -197,6 +236,15 @@ export const StateProvider = ({ children }) => {
       pageSizeMyDepartmentEmployees,
       currentPageMyDepartmentEmployees,
       setCurrentPageMyDepartmentEmployees,
+      departmentByID,
+      setDepartmentByID,
+      fetchGetDepartmentByID,
+      usersWithoutDepartment, 
+      setUsersWithoutDepartment,
+      fetchGetUsersWithoutDepartment,
+      pageSizeMyDepartmentEmployeesWithoutDepartment,
+      currentPageMyDepartmentEmployeesWithoutDepartment, 
+      setCurrentPageMyDepartmentEmployeesWithoutDepartment
     }}
   >{children}</StateContext.Provider>;
 };

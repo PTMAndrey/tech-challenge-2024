@@ -32,7 +32,7 @@ const EmployeesCard = (props) => {
     }
 
     //popup
-    const togglePopup = (props) => {
+    const togglePopup = () => {
         setOpenPopup(!openPopup);
     };
     const [showAllSkills, setShowAllSkills] = useState(false);
@@ -81,36 +81,71 @@ const EmployeesCard = (props) => {
                 <Card.Footer className={`${styles.controls}`}>
                     <div onClick={stopPropagation} className={styles.butoane}>
                         {/* <PersonAddAlt1Icon className={styles.edit} onClick={() => props.handleActionYes()} /> */}
-                        <Tooltip
-                            title='Remove user'
-                            placement='top-start'
-                            arrow
-                            onClick={() => { togglePopup() }} >
-                            <IconButton>
-                                {/* <BorderColorIcon className={styles.tableButtons} /> */}
-                                <PersonRemoveIcon className={styles.tableButtons} />
-                            </IconButton>
-                        </Tooltip>
-
+                        {props.action === 'remove' &&
+                            <>
+                                {user?.idUser !== props.data?.id ?
+                                    <Tooltip
+                                        title='Remove user'
+                                        placement='top-start'
+                                        arrow
+                                        onClick={() => { togglePopup() }} >
+                                        <IconButton>
+                                            <PersonRemoveIcon className={styles.tableButtons} />
+                                        </IconButton>
+                                    </Tooltip>
+                                    :
+                                    <p style={{ fontSize: '19px' }}>You are the manager</p>
+                                }
+                            </>
+                        }
+                        {props.action === 'add' &&
+                            <>
+                                <Tooltip
+                                    title='Add user'
+                                    placement='top-start'
+                                    arrow
+                                    onClick={() => { togglePopup() }} >
+                                    <IconButton>
+                                        <PersonAddAlt1Icon className={styles.tableButtons} />
+                                    </IconButton>
+                                </Tooltip>
+                            </>
+                        }
                     </div>
                 </Card.Footer>
             </Card>
             {/* POPUP delete */}
             {
-                openPopup && (
+                openPopup &&
+                    props.action === 'remove' ? (
                     <StyledEngineProvider injectFirst>
                         <Modal
                             open={openPopup}
-                            handleClose={togglePopup}
-                            title={"Are you sure?"}
+                            handleClose={() => { togglePopup() }}
+                            title={"Remove user from department?"}
                             content={"This action is permanent!"}
-                            handleActionYes={() => props.handleActionYes(props.data?.id)}
+                            handleActionYes={() => { props.handleActionYes(props.data?.id); togglePopup() }}
                             textActionYes={"Remove"}
-                            // handleActionNo={handleCloseDelete}
+                            handleActionNo={() => { togglePopup() }}
                             textActionNo={"Cancel"}
                         />
                     </StyledEngineProvider>
                 )
+                    :
+                    (
+                        <StyledEngineProvider injectFirst>
+                            <Modal
+                                open={openPopup}
+                                handleClose={() => { togglePopup() }}
+                                title={"Add user to your department"}
+                                // content={""}
+                                handleActionYes={() => { props.handleActionYes(props.data?.id); togglePopup() }}
+                                textActionYes={"Add"}
+                                handleActionNo={() => { togglePopup() }}
+                                textActionNo={"Cancel"}
+                            />
+                        </StyledEngineProvider>
+                    )
             }
             {
                 showAllSkills && (
@@ -119,14 +154,6 @@ const EmployeesCard = (props) => {
                         handleClose={() => setShowAllSkills(false)}
                         title="All Skills"
                         content={
-                            // <Stack direction="row" spacing={2} >
-                            //     {props.data?.userSkill?.map((skill, index) => (
-                            //         index % 2 === 1 ?
-                            //             <Chip label={skill.numeSkill} key={skill.idUserSkill} />
-                            //             :
-                            //             <Chip label={skill.numeSkill} key={skill.idUserSkill} />
-                            //     ))}
-                            // </Stack>
                             <Stack direction="column" spacing={2}>
                                 {props.data?.userSkill?.map((skill, index) => (
                                     <Box key={skill.idUserSkill}>
@@ -143,6 +170,8 @@ const EmployeesCard = (props) => {
                                 ))}
                             </Stack>
                         }
+                        textActionNo={'Close'}
+                        handleActionNo={() => setShowAllSkills(false)}
                     />
                 )
             }

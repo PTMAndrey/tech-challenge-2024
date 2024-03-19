@@ -39,7 +39,7 @@ export default function NestedModal({ open, handleClose, title, content, handleA
                     ...style, width: 250,
                     '& h2': { fontWeight: 'bold', display: 'flex', justifyContent: 'center', alignItems: 'center' }
                 }}>
-                    <h2 id="parent-modal-title">{title}</h2>
+                    <h4 id="parent-modal-title">{title}</h4>
                     <br />
                     <div id="parent-modal-description">
                         {content}

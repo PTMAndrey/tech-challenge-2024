@@ -39,7 +39,7 @@
         max-width: calc(50% - 32px);
     }
     .email{
-        font-size: $font-body-tiny;
+        font-size: $font-body-small;
     }
 }
 
@@ -54,6 +54,7 @@
 
 .nume {
     font-size: 17px !important;
+    color:$color-black !important;
     // width: auto;
     // padding-left:20px;
     // text-overflow: ellipsis;

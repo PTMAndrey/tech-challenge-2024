@@ -8,8 +8,6 @@ import Pagination from "../../../components/Pagination/Pagination";
 
 
 const ListAvailableEmployees = (props) => {
-  const { pageSizeMyDepartmentEmployees, currentPageMyDepartmentEmployees, setCurrentPageMyDepartmentEmployees } = useStateProvider();
-
   return (
     <>
       <div onClick={() => props.toggleSortDirectionAndColumn('firstName')} className={styles.sortButtonCard}>
@@ -23,9 +21,9 @@ const ListAvailableEmployees = (props) => {
           data={props.rows}
           className={styles.paginationBar}
           totalCount={props.rows?.length}
-          pageSize={pageSizeMyDepartmentEmployees}
-          currentPage={currentPageMyDepartmentEmployees}
-          onPageChange={page => setCurrentPageMyDepartmentEmployees(page)}
+          pageSize={props.pageSize}
+          currentPage={props.currentPage}
+          onPageChange={page => props.setCurrentPage(page)}
         />
       }
 
@@ -36,9 +34,9 @@ const ListAvailableEmployees = (props) => {
               <EmployeesCard
                 key={user.idUser}
                 data={user}
-                handleOpenAddUpdate={props.handleOpenAddUpdate}
                 handleActionYes={props.handleActionYes}
-                handleOpenDelete={props.handleOpenDelete}
+                handleActionNo={props.handleActionNo}
+                action={props.action}
               />
             </Col>
           ))}
