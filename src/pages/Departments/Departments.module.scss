@@ -11,8 +11,7 @@
     @include responsive_W550px {
         align-items: center;
         flex-direction: unset;
-        margin-top: 2em !important;
-        margin: 0 auto;
+        margin: 2em auto!important;
         width: auto;
     }
 
@@ -96,3 +95,14 @@
     font-size: $font-h4;
     font-weight: $font-bold;
 }
+.card {
+    background-color: #95c9f49e !important;
+    box-shadow: 10px 10px 5px 5px $color-gray-200 !important;
+    opacity: 1 !important;
+  
+    -webkit-user-select: text !important;
+    /* Safari */
+    -ms-user-select: text !important;
+    /* IE 10 and IE 11 */
+    user-select: text !important;
+  }

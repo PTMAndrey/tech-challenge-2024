@@ -33,7 +33,7 @@ function CustomNoRowsOverlay() {
       <svg
         style={{ flexShrink: 0 }}
         width="240"
-        height="200"
+        height="150"
         viewBox="0 0 184 152"
         aria-hidden
         focusable="false"
@@ -83,7 +83,7 @@ export default function AutoHeightOverlayNoSnap() {
         columns={[]}
         rows={[]}
         slots={{ noRowsOverlay: CustomNoRowsOverlay }}
-        sx={{ '--DataGrid-overlayHeight': '300px' }}
+        sx={{ '--DataGrid-overlayHeight': '220px' }}
       />
     </Box>
   );

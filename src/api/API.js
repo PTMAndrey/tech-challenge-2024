@@ -442,6 +442,37 @@ export const getDepartmentByID = async (id) => {
 };
 
 
+// add user skill
+export const addUserSkill = async (data) => {
+  try {
+    const response = await axios.post("/user_skill/addUserSkill", data);
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data.message || "Something went wrong... Try again later");
+
+    } else {
+      throw new Error("Network error or other issue");
+    }
+  }
+};
+
+
+// add user skill
+export const deleteUserSkill = async (id) => {
+  try {
+    const response = await axios.delete("/user_skill/deleteUserSkill?idUserSkill="+id);
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data.message || "Something went wrong... Try again later");
+
+    } else {
+      throw new Error("Network error or other issue");
+    }
+  }
+};
+
 // get UserSkills by id
 export const getUserSkillsByUserAndApproved = async (id) => {
   try {
