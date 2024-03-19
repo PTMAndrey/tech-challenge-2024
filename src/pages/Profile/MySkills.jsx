@@ -187,7 +187,6 @@ const MySkills = () => {
     if (isFormValid()) {
       setShowErrors(false);
       try {
-        console.log(formValue);
         const response = await addUserSkill({ idUser: user?.idUser, idSkill: formValue?.idSkill, level: formValue.level, experience: formValue.experience });
         if (response.status === 200 || response.status === 201) {
           handleCloseAddUpdate();
@@ -210,8 +209,6 @@ const MySkills = () => {
   }
 
   const handleUpdateSkill = async () => {
-
-    console.log(formValue, selectedSkillInTable);
 
     if (!isFormValid()) {
       setShowErrors(true);
@@ -454,8 +451,6 @@ const MySkills = () => {
 
   return (
     <section className={styles.pageProfile}>
-      {console.log(approvedUserSkills?.length)}
-      {console.log(pendingUserSkills?.length)}
       {approvedUserSkills?.length === 0 && pendingUserSkills?.length === 0 ? <>
         <Button
           className={styles.addSkill}
