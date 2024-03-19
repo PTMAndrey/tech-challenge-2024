@@ -1,71 +1,43 @@
 import * as React from "react";
 import styles from './Profile.module.scss'
 
-import {
-  DeleteForeverIcon,
-  AddCircleOutlineIcon,
-  BorderColorIcon,
-} from '../imports/muiiconsMaterial';
+import {DeleteForeverIcon} from '../imports/muiiconsMaterial';
 import {
   Card,
   CardContent,
   CardActions,
   Typography,
-  Tooltip,
-  IconButton,
 } from '../imports/muiMaterial';
-import useAuthProvider from "../../hooks/useAuthProvider";
-import useStateProvider from "../../hooks/useStateProvider";
 
-
-const DepartmentCard = (props) => {
-  const { user } = useAuthProvider();
-  const { fetchUnassignedDepartmentManagers } = useStateProvider();
+const SkillCard = (props) => {
   return (
     <div style={{ marginTop: "15%" }}>
-      <Card sx={{ minWidth: 200 }}>
+      <Card sx={{ minWidth: 200 }} className={styles.card}>
         <CardContent sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
           <Typography gutterBottom variant="p" component="div">
-            <p>Department Name</p>
+            <p>Skill name</p>
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            {props.data.departmentName}
+            {props.data.numeSkill}
           </Typography>
           <Typography gutterBottom variant="p" sx={{ marginTop: 2 }}>
-            <p>Department Manager</p>
+            <p>Level</p>
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            {props.data.level}
+          </Typography>
+          <Typography gutterBottom variant="p" sx={{ marginTop: 2 }}>
+            <p>Experience</p>
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            {props.data.experience}
           </Typography>
 
-          <Typography variant="body2" color="text.secondary">
-            {!props.data.departmentManager ?
-              <Tooltip
-                title='Add department manager'
-                placement='top-start'
-                arrow
-                onClick={() => {
-                  props.setSelectedSkillInTable({ idDepartment: props.data.id, departmentName: props.data.departmentName, idOrganisation: user?.idOrganisation, departmentManager: props.data.departmentManager, departmentManagerName: props.data.departmentManagerName });
-                  props.handleOpenAddUpdate("addManager");
-                  (async () => { const x = await fetchUnassignedDepartmentManagers(user?.idOrganisation); })();
-                }} >
-                <IconButton className={styles.iconStyle}>
-                  <AddCircleOutlineIcon className={styles.tableButtons} />
-                </IconButton><small>Add manager</small>
-              </Tooltip>
-              :
-              <>
-                {props.data.departmentManagerName}
-              </>
-            }
-          </Typography>
         </CardContent>
         <CardActions className={styles.cardButtons}>
-          <BorderColorIcon className={styles.tableButtons} onClick={() => {
-            props.setSelectedSkillInTable({ idDepartment: props.data.id, departmentName: props.data.departmentName, idOrganisation: user?.idOrganisation, departmentManager: props.data.departmentManager, departmentManagerName: props.data.departmentManagerName });
-            props.handleOpenAddUpdate("update");
-            props.setFormValue({ ...props.formValue, idDepartment: props.data.id, departmentName: props.data.departmentName })//, departmentManager: props.data.departmentManager, departmentManagerName: props.data.departmentManagerName });
-                                                        
-          }} />
+
           <DeleteForeverIcon className={styles.tableButtons} onClick={() => {
-            props.setSelectedSkillInTable({ idDepartment: props.data.id, departmentName: props.data.departmentName, idOrganisation: user?.idOrganisation, departmentManager: props.data.departmentManager, departmentManagerName: props.data.departmentManagerName });
+            props.setFormValue({ idUserSkill: props.data?.id, idSkill: props.data?.idSkill, numeSkill: props.data?.numeSkill, level: props.data?.level, experience: props.data?.experience });
             props.handleOpenDelete();
           }} />
         </CardActions>
@@ -73,4 +45,4 @@ const DepartmentCard = (props) => {
     </div>
   );
 }
-export default DepartmentCard;
+export default SkillCard;

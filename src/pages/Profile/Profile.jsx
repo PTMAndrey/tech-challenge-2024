@@ -18,7 +18,7 @@ const Profile = () => {
     }
   };
   return (
-    <section>
+    <section className={styles.pageProfile}>
       <div className={styles.content}>{tabSelector()}</div>
     </section>
 

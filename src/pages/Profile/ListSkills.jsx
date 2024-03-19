@@ -4,30 +4,31 @@ import Pagination from "../../components/Pagination/Pagination";
 import styles from './Profile.module.scss'
 import SkillCard from "./SkillCard";
 
-import { TextRotationAngleupIcon, TextRotationAngledownIcon, FilterListIcon} from '../imports/muiiconsMaterial';
+import { TextRotationAngleupIcon, TextRotationAngledownIcon, FilterListIcon } from '../imports/muiiconsMaterial';
 
 const ListSkils = (props) => {
-    const { pageSizeDepartments, currentPageDepartments, setCurrentPageDepartments } = useStateProvider();
-
     return (
         <>
-            <div onClick={()=>props.toggleSortDirectionAndColumn('departmentName')} className={styles.sortButtonCard}>
-                <FilterListIcon />
-                <p>Sort by department name </p>
-                {props.sortDirection === 'Ascending' && props.sortBy === 'departmentName'? <TextRotationAngledownIcon /> : <TextRotationAngleupIcon />}
-            </div>
+            {props.data?.length > 0 &&
+                <>
+                    <div onClick={() => props.toggleSortDirectionAndColumn('numeSkill')} className={styles.sortButtonCard}>
+                        <FilterListIcon />
+                        <p>Sort by department name </p>
+                        {props.sortDirection === 'Ascending' && props.sortBy === 'numeSkill' ? <TextRotationAngledownIcon /> : <TextRotationAngleupIcon />}
+                    </div>
 
-            {props.currentTableData?.length >= 1 &&
-                <Pagination
-                    data={props.rows}
-                    className={styles.paginationBar}
-                    totalCount={props.rows?.length}
-                    pageSize={pageSizeDepartments}
-                    currentPage={currentPageDepartments}
-                    onPageChange={page => setCurrentPageDepartments(page)}
-                />
+                    {props.currentTableData?.length >= 1 &&
+                        <Pagination
+                            data={props.rows}
+                            className={styles.paginationBar}
+                            totalCount={props.rows?.length}
+                            pageSize={props.pageSize}
+                            currentPage={props.currentPage}
+                            onPageChange={page => props.setCurrentPage(page)}
+                        />
+                    }
+                </>
             }
-
 
             {props.currentTableData?.map(
                 (dept, index) =>
@@ -38,7 +39,6 @@ const ListSkils = (props) => {
                             <SkillCard
                                 key={`${dept?.id}_${index + Math.random()}`}
                                 data={dept}
-                                setSelectedSkillInTable={props.setSelectedSkillInTable}
                                 handleOpenAddUpdate={props.handleOpenAddUpdate}
                                 handleOpenDelete={props.handleOpenDelete}
                                 formValue={props.formValue}
@@ -53,9 +53,9 @@ const ListSkils = (props) => {
                     data={props.rows}
                     className={styles.paginationBar}
                     totalCount={props.rows?.length}
-                    pageSize={pageSizeDepartments}
-                    currentPage={currentPageDepartments}
-                    onPageChange={page => setCurrentPageDepartments(page)}
+                    pageSize={props.pageSize}
+                    currentPage={props.currentPage}
+                    onPageChange={page => props.setCurrentPage(page)}
                 />
             }
 

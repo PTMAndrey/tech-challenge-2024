@@ -27,7 +27,7 @@ const ListAvailableEmployees = (props) => {
         />
       }
 
-      <Container className={styles.yourContainerStyle}>
+      <Container>
         <Row>
           {props.currentTableData?.map((user, index) => (
             <Col className="mb-4"  key={`${user?.idUser}_${index}`}>

@@ -146,7 +146,7 @@ const AdminDepartments = () => {
                 await fetchUnassignedDepartmentManagers(user?.idOrganisation);
                 if (response.status === 200 || response.status === 201) {
                     handleCloseAddUpdate();
-                     await fetchDepartments(user?.idOrganisation);
+                    await fetchDepartments(user?.idOrganisation);
                     setAlert({
                         type: "success",
                         message: "You added a new department!",
@@ -173,7 +173,7 @@ const AdminDepartments = () => {
         if (isFormValid()) {
             setShowErrors(false);
             try {
-                const response = await updateDepartment( department.idDepartment, { idOrganisation: department.idOrganisation, departmentName: formValue.departmentName,departmentManager:formValue.departmentManager })
+                const response = await updateDepartment(department.idDepartment, { idOrganisation: department.idOrganisation, departmentName: formValue.departmentName, departmentManager: formValue.departmentManager })
                 if (response.status === 200 || response.status === 201) {
                     handleCloseAddUpdate();
                     const x = await fetchDepartments(user?.idOrganisation);
@@ -199,12 +199,12 @@ const AdminDepartments = () => {
             const response = await addDepartmentManager(formValue.departmentManager, formValue.idDepartment)
             if (response.status === 200 || response.status === 201) {
                 handleCloseAddUpdate();
+                const y = await fetchUnassignedDepartmentManagers(user?.idOrganisation);
                 const x = await fetchDepartments(user?.idOrganisation);
                 setAlert({
                     type: "success",
                     message: "Manager assigned!",
                 });
-                const y = await fetchUnassignedDepartmentManagers(user?.idOrganisation);
             }
         } catch (error) {
             console.log(error.message, "error");
@@ -222,12 +222,12 @@ const AdminDepartments = () => {
             const response = await removeDepartmentManagerFromDepartment(department.departmentManager)
             if (response.status === 200 || response.status === 201) {
                 handleCloseAddUpdate();
+                const y = await fetchUnassignedDepartmentManagers(user?.idOrganisation);
                 const x = await fetchDepartments(user?.idOrganisation);
                 setAlert({
                     type: "success",
                     message: "Department manager removed!",
                 });
-                const y = await fetchUnassignedDepartmentManagers(user?.idOrganisation);
             }
         } catch (error) {
             console.log(error.message, "error");
@@ -474,6 +474,7 @@ const AdminDepartments = () => {
                                 handleOpenAddUpdate={handleOpenAddUpdate}
                                 handleOpenDelete={handleOpenDelete}
                                 sortDirection={sortDirection}
+                                sortBy={sortBy}
                                 formValue={formValue}
                                 setFormValue={setFormValue}
                                 toggleSortDirectionAndColumn={toggleSortDirectionAndColumn}
@@ -506,7 +507,7 @@ const AdminDepartments = () => {
                                         helper={showErrors ? checkErrors("departmentName") : ""}
                                     />
                                 }
-                                {(openAddUpdate.action === 'addManager' || openAddUpdate.action === 'update') &&
+                                {(openAddUpdate.action === 'addManager') &&
                                     <>
                                         {managersWithoutDepartments_dropdown[0] !== undefined && !removeDM &&
                                             <>
@@ -526,7 +527,7 @@ const AdminDepartments = () => {
                                                 />
                                             </>
                                         }
-
+{console.log(managersWithoutDepartments_dropdown)}
                                         {managersWithoutDepartments_dropdown[0] === undefined && !removeDM &&
                                             <>
                                                 <h2>No managers available</h2>
@@ -541,9 +542,13 @@ const AdminDepartments = () => {
 
                                             </>
                                         }
+
+                                    </>
+                                }
+                                {(openAddUpdate.action === 'update') &&
+                                    <>
                                         {(formValue.departmentManager !== department.departmentManager && department.departmentManager) &&
                                             <>
-                                                <h2>OR</h2>
                                                 <Input
                                                     type="checkbox"
                                                     checked={removeDM}
@@ -555,10 +560,10 @@ const AdminDepartments = () => {
                                         }
                                     </>
                                 }
-                               
+
                             </>
                         }
-                        
+
                         handleActionYes={() => {
                             // Verifică dacă acțiunea este de a adăuga un manager fără a verifica lungimea dropdown-ului
                             if (openAddUpdate.action === 'addManager') {

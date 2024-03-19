@@ -40,7 +40,7 @@ const Invitations = () => {
     const handleFileUpload = useCallback((files) => {
         const file = files[0];
         setUploadedFile(file);
-        setSingleEmail(''); // Clear single email input when file is uploaded
+        setSingleEmail({ singleEmail: '' }); // Clear single email input when file is uploaded
 
         const reader = new FileReader();
         reader.onload = (e) => {
@@ -60,6 +60,7 @@ const Invitations = () => {
             })
                 .filter(email => email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email));
             setEmailList(emails);
+            setShowErrors(false);
         };
         reader.readAsArrayBuffer(file);
     }, []);
@@ -71,27 +72,66 @@ const Invitations = () => {
     };
 
     const sendInvitations = async () => {
-        const emailsToSend = singleEmail ? [singleEmail] : emailList;
+        const emailsToSend = singleEmail ? [singleEmail.singleEmail] : emailList;
 
         if (emailsToSend.length === 0) {
             setAlert({ type: "danger", message: "Please provide an email or upload a file." });
             return;
         }
-        setIsLoading(true);
-        try {
-            await sendEmailInvitations({
-                idOrganisationAdmin: user?.idUser || "",
-                emailList: emailsToSend,
+        if (!isFormValid()) {
+            setShowErrors(true);
+            setAlert({
+                type: "danger",
+                message: "Fill all the required fields correctly.",
             });
-            setAlert({ type: "success", message: "Invitations sent successfully." });
-            setUploadedFile(null);
-            setSingleEmail('');
-            setEmailList([]);
-        } catch (error) {
-            setAlert({ type: "danger", message: error.message || "Something went wrong." });
-        } finally {
-            setIsLoading(false);
         }
+        if (isFormValid()) {
+            setIsLoading(true);
+            setShowErrors(false);
+            try {
+                await sendEmailInvitations({
+                    idOrganisationAdmin: user?.idUser || "",
+                    emailList: emailsToSend,
+                });
+                setAlert({ type: "success", message: "Invitations sent successfully." });
+                setUploadedFile(null);
+                setSingleEmail({singleEmail:''});
+                setEmailList([]);
+            } catch (error) {
+                setAlert({ type: "danger", message: error.message || "Something went wrong." });
+            } finally {
+                setIsLoading(false);
+            }
+        }
+    };
+
+    const [showErrors, setShowErrors] = useState(false);
+    const handleChange = (e) => {
+        setShowErrors(false)
+        const { name, value } = e.target;
+        setSingleEmail((prev) => {
+            return { ...prev, [name]: value };
+        });
+
+        setUploadedFile(null);
+    };
+    const checkErrors = (field) => {
+        // email
+        if (field === "singleEmail") {
+            let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+            if (reg.test(singleEmail.singleEmail) === false)
+                return "Email address is invalid!";
+        }
+        return "";
+    };
+    const isFormValid = () => {
+        let isValid = true;
+        Object.keys(singleEmail).forEach((field) => {
+            if (checkErrors(field)) {
+                isValid = false;
+            }
+        });
+        return isValid;
     };
 
     return (
@@ -120,7 +160,7 @@ const Invitations = () => {
 
                 </CopyToClipboard>
             </div>
-            <hr/>
+            <hr />
 
             <div className={styles.containerInvitiations}>
                 <Input
@@ -129,9 +169,11 @@ const Invitations = () => {
                     label="Email"
                     id="singleEmail"
                     name="singleEmail"
-                    value={singleEmail}
-                    onChange={handleInputChange}
+                    value={singleEmail?.singleEmail}
+                    onChange={(e)=> handleChange(e)}
                     disabled={!!uploadedFile}
+                    error={showErrors && checkErrors("singleEmail") ? true : false}
+                    helper={showErrors ? checkErrors("singleEmail") : ""}
                 />
             </div>
             <h2>OR</h2>
