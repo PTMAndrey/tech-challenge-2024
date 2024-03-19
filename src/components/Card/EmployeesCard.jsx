@@ -67,7 +67,7 @@ const EmployeesCard = (props) => {
                                 ) : (
                                     <>
                                         {props.data?.userSkill?.map((skill) =>
-                                            <Chip label={skill.numeSkill} sx={{ backgroundColor: "white" }} variant="outlined" color="primary" key={skill.idUserSkill} />
+                                            <Chip label={skill.numeSkill} sx={{ backgroundColor: "white" }} variant="outlined" color="primary" key={skill.idUserSkill} onClick={handleShowAllSkills} />
                                         )}
                                     </>
                                 )

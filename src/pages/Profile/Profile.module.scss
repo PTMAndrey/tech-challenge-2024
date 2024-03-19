@@ -96,3 +96,39 @@
         }
     }
 }
+
+
+
+// my skills
+
+.pageProfile{
+    display: flex;
+    flex-direction: column;
+    margin: 2em;
+
+    @include responsive_W550px {
+        align-items: center;
+        flex-direction: unset;
+        margin-top: 2em !important;
+        margin: 0 auto;
+        width: auto;
+    }
+
+}
+
+.iconWhite {
+    color: $color-white !important;
+}
+
+.addSkill{
+    display: flex;
+    width: auto;
+    margin-bottom: 1em;
+}
+.tableButtons {
+    cursor: pointer;
+
+    @include responsive_W550px {
+        font-size: 17px !important;
+    }
+}

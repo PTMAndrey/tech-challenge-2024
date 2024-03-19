@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { getAllDepartments, getAllEmployees, getAllRoles, getAllTeamRoles, getDepartmentByID, getUnassignedDepartmentManagers, getUsersWithoutDepartment } from "../api/API";
+import { getAllDepartments, getAllEmployees, getAllRoles, getAllSkillCategory, getAllSkillsFromCategory, getAllTeamRoles, getDepartmentByID, getUnassignedDepartmentManagers, getUserSkillsByUserAndApproved, getUsersWithoutDepartment } from "../api/API";
 
 const StateContext = createContext({});
 
@@ -10,25 +10,32 @@ export const StateProvider = ({ children }) => {
   const [organisationRoles, setOrganisationRoles] = useState(null);
   const [departments, setDepartments] = useState(null);
   const [departmentByID, setDepartmentByID] = useState(null);
-  const [usersWithoutDepartment, setUsersWithoutDepartment] = useState();
-  
-  // let managersWithoutDepartments_dropdown = [];
+  const [usersWithoutDepartment, setUsersWithoutDepartment] = useState(null);
   const [unassignedDepartmentManagers, setUnassignedDepartmentManagers] = useState(null);
-  const [managersWithoutDepartments_dropdown, setManagersWithoutDepartments_dropdown] = useState([]);
-  // these 2 are arrays for drodpown
-  const [employeesWithoutDepartments_dropdown, setEmployeesWithoutDepartments_dropdown] = useState([]);
   const [unassignedEmployeesOnDepartment, setunassignedEmployeesOnDepartment] = useState(null);
+  const [approvedUserSkills, setApprovedUserSkills] = useState(null);
+  const [allSkillCategory, setAllSkillCategory] = useState(null);
+  const [allSkillsFromCategory, setAllSkillsFromCategory] = useState(null);
+
+
+  // these 2 are arrays for drodpown
+  const [managersWithoutDepartments_dropdown, setManagersWithoutDepartments_dropdown] = useState([]);
+  const [employeesWithoutDepartments_dropdown, setEmployeesWithoutDepartments_dropdown] = useState([]);
+  const [allSkillCategory_dropdown, setAllSkillCategory_dropdown] = useState([]);
+  const [allSkillsFromCategory_dropdown, setAllSkillsFromCategory_dropdown] = useState([]);
 
   let pageSize = 3; // teamroles + employees
   let pageSizeDepartments = 3;
   let pageSizeMyDepartmentEmployees = 2;
   let pageSizeMyDepartmentEmployeesWithoutDepartment = 2;
+  let pageSizeMySkills = 3;
   const [currentPageTeamRoles, setCurrentPageTeamRoles] = useState(1);
   const [currentPageEmployees, setCurrentPageEmployees] = useState(1);
   const [currentPageDepartments, setCurrentPageDepartments] = useState(1);
 
   const [currentPageMyDepartmentEmployees, setCurrentPageMyDepartmentEmployees] = useState(1);
   const [currentPageMyDepartmentEmployeesWithoutDepartment, setCurrentPageMyDepartmentEmployeesWithoutDepartment] = useState(1);
+  const [currentPageMySkills, setCurrentPageMySkills] = useState(1);
 
   // alert
   const [alert, setAlert] = useState(null);
@@ -182,6 +189,75 @@ export const StateProvider = ({ children }) => {
     }
   };
 
+  
+  const fetchApprovedUserSkills = async (idUser) => {
+    try {
+      const response = await getUserSkillsByUserAndApproved(idUser);
+      if (response?.status === 200) {
+        setApprovedUserSkills(response.data);
+        console.log(response.data);
+      }
+      if(response?.status === 400){
+        setAlert({
+          type: "warning",
+          message: "You don't have approved skills"
+        });
+      }
+
+    } catch (error) {
+      console.log(error.message, "error");
+      // setAlert({
+      //   type: "danger",
+      //   message: error.message // Use the error message from the catch
+      // });
+    }
+  };
+
+  const fetchAllSkillCategory = async (idOrganisation) => {
+    try {
+      const response = await getAllSkillCategory(idOrganisation);
+      if (response?.status === 200) {
+        setAllSkillCategory(response.data);
+        console.log(response.data);
+      }
+      if(response?.status === 400){
+        setAlert({
+          type: "warning",
+          message: "You don't have approved skills"
+        });
+      }
+
+    } catch (error) {
+      console.log(error.message, "error");
+      // setAlert({
+      //   type: "danger",
+      //   message: error.message // Use the error message from the catch
+      // });
+    }
+  };
+  
+  const fetchAllSkillsFromCategory = async (idCategory,idUser) => {
+    try {
+      const response = await getAllSkillsFromCategory(idCategory, idUser);
+      if (response?.status === 200) {
+        setAllSkillsFromCategory(response.data);
+        console.log(response.data);
+      }
+      if(response?.status === 400){
+        setAlert({
+          type: "warning",
+          message: "You don't have approved skills"
+        });
+      }
+
+    } catch (error) {
+      console.log(error.message, "error");
+      setAlert({
+        type: "danger",
+        message: error.message // Use the error message from the catch
+      });
+    }
+  };
 
   useEffect(() => {
     const newDropdownOptions = unassignedDepartmentManagers?.map(item => ({
@@ -198,6 +274,25 @@ export const StateProvider = ({ children }) => {
     })) || [];
     setEmployeesWithoutDepartments_dropdown(newDropdownOptions);
   }, [unassignedEmployeesOnDepartment]);
+
+  useEffect(() => {
+    const newDropdownOptions = allSkillCategory?.map(item => ({
+      value: item.idSkillCategory,
+      label: item.skillCategoryName,
+    })) || [];
+    console.log(newDropdownOptions);
+    setAllSkillCategory_dropdown(newDropdownOptions);
+  }, [allSkillCategory]);
+
+  useEffect(() => {
+    const newDropdownOptions = allSkillsFromCategory?.map(item => ({
+      value: item.idSkill,
+      label: item.skillName,
+    })) || [];
+    console.log(newDropdownOptions);
+    setAllSkillsFromCategory_dropdown(newDropdownOptions);
+  }, [allSkillsFromCategory]);
+
 
 
 
@@ -244,7 +339,19 @@ export const StateProvider = ({ children }) => {
       fetchGetUsersWithoutDepartment,
       pageSizeMyDepartmentEmployeesWithoutDepartment,
       currentPageMyDepartmentEmployeesWithoutDepartment, 
-      setCurrentPageMyDepartmentEmployeesWithoutDepartment
+      setCurrentPageMyDepartmentEmployeesWithoutDepartment,
+      pageSizeMySkills,
+      currentPageMySkills, 
+      setCurrentPageMySkills,
+      approvedUserSkills,
+      setApprovedUserSkills,
+      fetchApprovedUserSkills,
+
+      fetchAllSkillCategory,
+      allSkillCategory_dropdown,
+
+      fetchAllSkillsFromCategory,
+      allSkillsFromCategory_dropdown,
     }}
   >{children}</StateContext.Provider>;
 };

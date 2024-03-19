@@ -442,4 +442,48 @@ export const getDepartmentByID = async (id) => {
 };
 
 
+// get UserSkills by id
+export const getUserSkillsByUserAndApproved = async (id) => {
+  try {
+    const response = await axios.get("/user_skill/getUserSkillsByUserAndApproved?idUser=" + id);
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data.message || "You don't have approved skills");
 
+    } else {
+      throw new Error("Network error or other issue");
+    }
+  }
+};
+
+// get all skills categories
+export const getAllSkillCategory = async (id) => {
+  try {
+    const response = await axios.get("/skillCategory/getAll?idOrganisation=" + id);
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data.message || "Something went wrong... Try again later");
+
+    } else {
+      throw new Error("Network error or other issue");
+    }
+  }
+};
+
+
+// get all skills from categorie id
+export const getAllSkillsFromCategory = async (idCategory, idUser) => {
+  try {
+    const response = await axios.get("/skill/getSkillsByCategory?idCategory=" + idCategory+'&idUser='+idUser);
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data.message);
+
+    } else {
+      throw new Error("Network error or other issue");
+    }
+  }
+};

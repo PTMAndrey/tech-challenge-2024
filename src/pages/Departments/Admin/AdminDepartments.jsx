@@ -173,7 +173,7 @@ const AdminDepartments = () => {
         if (isFormValid()) {
             setShowErrors(false);
             try {
-                const response = await updateDepartment(formValue.idDepartment, { idOrganisation: department.idOrganisation, departmentName: formValue.departmentName })
+                const response = await updateDepartment( department.idDepartment, { idOrganisation: department.idOrganisation, departmentName: formValue.departmentName,departmentManager:formValue.departmentManager })
                 if (response.status === 200 || response.status === 201) {
                     handleCloseAddUpdate();
                     const x = await fetchDepartments(user?.idOrganisation);
@@ -516,7 +516,7 @@ const AdminDepartments = () => {
                                                     options={managersWithoutDepartments_dropdown}
                                                     onChange={(e) => {
                                                         e === null ?
-                                                            setFormValue({ ...formValue, departmentManager: '', departmentManagerName: '' }) :
+                                                            setFormValue({ ...formValue, idDepartment: '', departmentManager: '', departmentManagerName: '' }) :
                                                             // setFormValue({ idUser: department.id, idRole: e.value });
                                                             setFormValue({ ...formValue, idDepartment: department.idDepartment, departmentManager: e.value, departmentManagerName: e.label })
 
