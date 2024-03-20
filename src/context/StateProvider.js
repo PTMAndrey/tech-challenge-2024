@@ -18,6 +18,7 @@ export const StateProvider = ({ children }) => {
   const [allSkillCategory, setAllSkillCategory] = useState(null);
   const [allSkillsFromCategory, setAllSkillsFromCategory] = useState(null);
   const [unassignedSkillsProposals, setUnassignedSkillsProposals] = useState(null);
+  const [allSkills, setAllSkills] = useState(null);
 
 
   // these 2 are arrays for drodpown
@@ -26,7 +27,7 @@ export const StateProvider = ({ children }) => {
   const [allSkillCategory_dropdown, setAllSkillCategory_dropdown] = useState([]);
   const [allSkillsFromCategory_dropdown, setAllSkillsFromCategory_dropdown] = useState([]);
 
-  let pageSize = 3; // teamroles + employees
+  let pageSize = 3; // teamroles + employees + skills
   let pageSizeDepartments = 3;
   let pageSizeMyDepartmentEmployees = 2;
   let pageSizeMyDepartmentEmployeesWithoutDepartment = 2;
@@ -39,6 +40,8 @@ export const StateProvider = ({ children }) => {
   const [currentPageMySkills, setCurrentPageMySkills] = useState(1);
   const [currentPageMySkills2, setCurrentPageMySkills2] = useState(1);
   const [currentPageProposals, setCurrentPageProposals] = useState(1);
+  const [currentPageSkillCategories, setCurrentPageSkillCategories] = useState(1);
+  const [currentPageAllSkills, setCurrentPageAllSkills] = useState(1);
 
   // alert
   const [alert, setAlert] = useState(null);
@@ -220,6 +223,7 @@ export const StateProvider = ({ children }) => {
       const response = await getAllSkillCategory(idOrganisation);
       if (response?.status === 200) {
         setAllSkillCategory(response.data);
+        console.log(response.data);
       }
       if (response?.status === 400) {
         setAlert({
@@ -395,6 +399,8 @@ export const StateProvider = ({ children }) => {
       fetchApprovedUserSkills,
 
       fetchAllSkillCategory,
+      allSkillCategory, 
+      setAllSkillCategory,
       allSkillCategory_dropdown,
 
       fetchAllSkillsFromCategory,
@@ -408,7 +414,17 @@ export const StateProvider = ({ children }) => {
       unassignedSkillsProposals,
       setUnassignedSkillsProposals,
       currentPageProposals,
+      setCurrentPageProposals,
       fetchUnassignedSkillsProposals,
+
+      allSkills, 
+      setAllSkills,
+      currentPageSkillCategories, 
+      setCurrentPageSkillCategories,
+      currentPageAllSkills, 
+      setCurrentPageAllSkills,
+
+
     }}
   >{children}</StateContext.Provider>;
 };

@@ -22,22 +22,22 @@ const SkillsProposalsCard = (props) => {
                     <Typography variant="p" component="div">
                         Employee
                     </Typography>
-                    <Typography gutterBottomvariant="body2" color="text.secondary">
+                    <Typography gutterBottom variant="body2" color="text.secondary">
                         {props.data.numeUser}
                     </Typography>
-                    <Typography variant="p" component="div">
+                    <Typography variant="p" component="div"sx={{ marginTop: 2 }}>
                         Skill name
                     </Typography>
-                    <Typography gutterBottomvariant="body2" color="text.secondary">
+                    <Typography gutterBottom variant="body2" color="text.secondary">
                         {props.data.numeSkill}
                     </Typography>
-                    <Typography variant="p" component="div">
+                    <Typography variant="p" component="div" sx={{ marginTop: 2 }}>
                         Level
                     </Typography>
-                    <Typography gutterBottomvariant="body2" color="text.secondary">
+                    <Typography gutterBottom variant="body2" color="text.secondary">
                         {props.data.level}
                     </Typography>
-                    <Typography variant="p" component="div">
+                    <Typography variant="p" component="div" sx={{ marginTop: 2 }}>
                         Experience
                     </Typography>
                     <Typography variant="body2" color="text.secondary">

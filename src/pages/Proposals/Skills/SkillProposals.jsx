@@ -32,9 +32,6 @@ import {
   KeyboardArrowLeftIcon,
   KeyboardArrowRightIcon,
   LastPageIcon,
-  AddCircleOutlineIcon,
-  DeleteForeverIcon,
-  BorderColorIcon,
   TextRotationAngleupIcon,
   TextRotationAngledownIcon,
   CheckTwoToneIcon,
@@ -50,7 +47,6 @@ const SkillProposals = () => {
   const {
     pageSize,
     unassignedSkillsProposals,
-    setUnassignedSkillsProposals,
     currentPageProposals,
     fetchUnassignedSkillsProposals,
     setAlert,
@@ -68,8 +64,6 @@ const SkillProposals = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.idUser]);
 
-  const [showErrors, setShowErrors] = useState(false);
-
   const handleOpenDelete = () => {
     setOpenDelete(true);
 
@@ -77,7 +71,6 @@ const SkillProposals = () => {
   const handleCloseDelete = () => {
     setOpenDelete(false);
     setSkillInTable({ idUserSkill: '' })
-    setShowErrors(false);
   };
 
   const handleOpenAddUpdate = (action) => {
@@ -86,7 +79,6 @@ const SkillProposals = () => {
   const handleCloseAddUpdate = () => {
     setOpenAddUpdate({ open: false, action: '' });
     setSkillInTable({ idUserSkill: '' })
-    setShowErrors(false);
 
   }
 

@@ -12,7 +12,7 @@ import {
 from '../../imports/muiiconsMaterial';
 
 const ListSkillsProposals = (props) => {
-    const { pageSize, currentPageProposals, setUnassignedSkillsProposals } = useStateProvider();
+    const { pageSize, currentPageProposals, setCurrentPageProposals } = useStateProvider();
 
     return (
         <>
@@ -28,7 +28,7 @@ const ListSkillsProposals = (props) => {
                     totalCount={props.rows?.length}
                     pageSize={pageSize}
                     currentPage={currentPageProposals}
-                    onPageChange={page => setUnassignedSkillsProposals(page)}
+                    onPageChange={page => setCurrentPageProposals(page)}
                 />
             }
 
@@ -56,7 +56,7 @@ const ListSkillsProposals = (props) => {
                     totalCount={props.rows?.length}
                     pageSize={pageSize}
                     currentPage={currentPageProposals}
-                    onPageChange={page => setUnassignedSkillsProposals(page)}
+                    onPageChange={page => setCurrentPageProposals(page)}
                 />
             }
 
