@@ -91,7 +91,7 @@ const SidebarNavigation = ({ toggleSidebar, isSidebarOpen }) => {
         <hr />
         {user?.authorities.some(authority => authority.authority === "DEPARTMENT_MANAGER") &&
           <>
-            <Link to="/skills" className={location === "/skills" ? styles.activeMenuItem : styles.menuItem}>
+            <Link to="/skills/categories" className={(location === "/skills/categories"|| location === "/skills/all") ? styles.activeMenuItem : styles.menuItem}>
               <GiSkills className={styles.img} />
               {isSidebarOpen && <span>Skills</span>}
             </Link>

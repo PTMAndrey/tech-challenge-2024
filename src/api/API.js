@@ -578,3 +578,49 @@ export const rejectUserSkill = async (idUserSkill) => {
     }
   }
 };
+
+
+
+export const addSkillCategory = async (idOrganisation,data) => {
+  try {
+    const response = await axios.post("/skillCategory/addSkillCategory?idOrganisationAdmin="+idOrganisation, data);
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data.message);
+
+    } else {
+      throw new Error("Network error or other issue");
+    }
+  }
+};
+
+
+
+export const updateSkillCategory = async (idSkillCategory,data) => {
+  try {
+    const response = await axios.put("/skillCategory/updateSkillCategory?idSkilCategory="+idSkillCategory, data);
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data.message);
+
+    } else {
+      throw new Error("Network error or other issue");
+    }
+  }
+};
+
+export const deleteSkillCategory = async (idSkilCategory) => {
+  try {
+    const response = await axios.delete("/skillCategory/deleteSkillCategory?idSkilCategory="+idSkilCategory);
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data.message);
+
+    } else {
+      throw new Error("Network error or other issue");
+    }
+  }
+};

@@ -31,6 +31,7 @@
     -ms-user-select: text !important;
     /* IE 10 and IE 11 */
     user-select: text !important;
+    margin-bottom:30px;
   }
 
   .cardButtons {
@@ -45,6 +46,7 @@
     background-color: $color-primary-300;
     color: $color-white !important;
     width:250px;
+    margin-bottom:30px;
     justify-content: center;
 
     p {

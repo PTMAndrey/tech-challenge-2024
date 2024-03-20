@@ -29,7 +29,8 @@ export const getLinksForRoute = (user, segment) => {
       ];
     case 'skills':
       return [
-        { text: 'Skills', path: '/skills' },
+        { text: 'Categories', path: '/skills/categories' },
+        { text: 'All skills', path: '/skills/all' },
       ];
     case 'teams':
       return [

@@ -76,13 +76,13 @@ function App() {
           }
           {user?.authorities.some(authority => authority.authority === "ORGANISATION_ADMIN") &&
             <>
-              <Route path="/departments/admin/all" element={<Departments/>} />
+              <Route path="/departments/admin/all" element={<Departments />} />
               {/* <Route path="/departments/myDepartment/:id" element={<Departments/>} /> */}
             </>
           }
           {(user?.authorities.some(authority => authority.authority === "DEPARTMENT_MANAGER") &&
             user?.isDepartmentManager) &&
-            <Route path="/departments/myDepartment/:id" element={<Departments/>} />
+            <Route path="/departments/myDepartment/:id" element={<Departments />} />
           }
 
 
@@ -92,7 +92,10 @@ function App() {
 
           {
             user?.authorities.some(authority => authority.authority === "DEPARTMENT_MANAGER") &&
-            <Route path="/skills" element={<Skills />} />
+            <Route path="/skills">
+              <Route path="all" element={<Skills />} />
+              <Route path="categories" element={<Skills />} />
+            </Route>
           }
           {user?.authorities.some(authority => authority.authority === "PROJECT_MANAGER") &&
             <Route path="/teams" element={<Teams />} />
