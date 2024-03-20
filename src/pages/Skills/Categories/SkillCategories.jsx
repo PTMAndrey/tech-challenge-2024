@@ -267,7 +267,7 @@ const SkillCategories = () => {
             {allSkillCategory?.length === 0 ? <>
                 <Button
                     className={styles.addSkill}
-                    label="Add role"
+                    label="Add category"
                     icon={<AddCircleOutlineIcon />}
                     position="left"
                     variant="primary"
@@ -280,7 +280,7 @@ const SkillCategories = () => {
                 <div>
                     <Button
                         className={styles.addSkill}
-                        label="Add role"
+                        label="Add category"
                         icon={<AddCircleOutlineIcon />}
                         position="left"
                         variant="primary"
