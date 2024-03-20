@@ -25,7 +25,6 @@ export const getLinksForRoute = (user, segment) => {
     case 'projects':
       return [
         { text: `${user?.authorities.some(authority => authority.authority === "EMPLOYEE") ? 'My projects' : 'View projects'}`, path: '/projects' },
-        { text: `${user?.authorities.some(authority => authority.authority === "EMPLOYEE") ? 'My past projects' : 'View past projects'}`, path: '/projects/past-projects' },
       ];
     case 'skills':
       return [

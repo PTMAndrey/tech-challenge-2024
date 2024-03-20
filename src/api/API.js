@@ -461,7 +461,7 @@ export const addUserSkill = async (data) => {
 // add user skill
 export const deleteUserSkill = async (id) => {
   try {
-    const response = await axios.delete("/user_skill/deleteUserSkill?idUserSkill="+id);
+    const response = await axios.delete("/user_skill/deleteUserSkill?idUserSkill=" + id);
     return response;
   } catch (error) {
     if (error.response) {
@@ -487,6 +487,24 @@ export const getUserSkillsByUserAndApproved = async (id) => {
     }
   }
 };
+
+
+
+// get all skills
+export const getAllSkills = async (idOrganisation, idUser) => {
+  try {
+    const response = await axios.get("/skill/getAll?idOrganisation=" + idOrganisation + '&idUser=' + idUser);
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data.message || "Something went wrong... Try again later");
+
+    } else {
+      throw new Error("Network error or other issue");
+    }
+  }
+};
+
 
 // get all skills categories
 export const getAllSkillCategory = async (id) => {
@@ -522,7 +540,7 @@ export const getUserSkillsByUserAndUnapproved = async (id) => {
 // get all skills from categorie id
 export const getAllSkillsFromCategory = async (idCategory, idUser) => {
   try {
-    const response = await axios.get("/skill/getSkillsByCategory?idCategory=" + idCategory+'&idUser='+idUser);
+    const response = await axios.get("/skill/getSkillsByCategory?idCategory=" + idCategory + '&idUser=' + idUser);
     return response;
   } catch (error) {
     if (error.response) {
@@ -538,7 +556,7 @@ export const getAllSkillsFromCategory = async (idCategory, idUser) => {
 // get unassigned skill proposals
 export const getUnassignedSkillsProposals = async (idUser) => {
   try {
-    const response = await axios.get("/user_skill/unapprovedByDepartmentManager?idDepartmentManager="+idUser);
+    const response = await axios.get("/user_skill/unapprovedByDepartmentManager?idDepartmentManager=" + idUser);
     return response;
   } catch (error) {
     if (error.response) {
@@ -553,7 +571,7 @@ export const getUnassignedSkillsProposals = async (idUser) => {
 
 export const approveUserSkill = async (idUserSkill) => {
   try {
-    const response = await axios.put("/user_skill/approveUserSkill?idUserSkill="+idUserSkill);
+    const response = await axios.put("/user_skill/approveUserSkill?idUserSkill=" + idUserSkill);
     return response;
   } catch (error) {
     if (error.response) {
@@ -567,7 +585,7 @@ export const approveUserSkill = async (idUserSkill) => {
 
 export const rejectUserSkill = async (idUserSkill) => {
   try {
-    const response = await axios.put("/user_skill/desapproveUserSkill?idUserSkill="+idUserSkill);
+    const response = await axios.put("/user_skill/desapproveUserSkill?idUserSkill=" + idUserSkill);
     return response;
   } catch (error) {
     if (error.response) {
@@ -581,9 +599,9 @@ export const rejectUserSkill = async (idUserSkill) => {
 
 
 
-export const addSkillCategory = async (idOrganisation,data) => {
+export const addSkill = async (idOrganisation, data) => {
   try {
-    const response = await axios.post("/skillCategory/addSkillCategory?idOrganisationAdmin="+idOrganisation, data);
+    const response = await axios.post("/skill/addSkill", data);
     return response;
   } catch (error) {
     if (error.response) {
@@ -597,9 +615,9 @@ export const addSkillCategory = async (idOrganisation,data) => {
 
 
 
-export const updateSkillCategory = async (idSkillCategory,data) => {
+export const updateSkill = async (idSkill, idUser, data) => {
   try {
-    const response = await axios.put("/skillCategory/updateSkillCategory?idSkilCategory="+idSkillCategory, data);
+    const response = await axios.put("/skill/updateSkill?idSkill=" + idSkill + '&idUser=' + idUser, data);
     return response;
   } catch (error) {
     if (error.response) {
@@ -610,10 +628,103 @@ export const updateSkillCategory = async (idSkillCategory,data) => {
     }
   }
 };
+
+
+export const deleteSkill = async (idSkilCategory) => {
+  try {
+    const response = await axios.delete("/skillCategory/deleteSkillCategory?idSkilCategory=" + idSkilCategory);
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data.message);
+
+    } else {
+      throw new Error("Network error or other issue");
+    }
+  }
+};
+
+export const addSkillCategory = async (idOrganisation, data) => {
+  try {
+    const response = await axios.post("/skillCategory/addSkillCategory?idOrganisationAdmin=" + idOrganisation, data);
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data.message);
+
+    } else {
+      throw new Error("Network error or other issue");
+    }
+  }
+};
+
+
+
+export const updateSkillCategory = async (idSkillCategory, data) => {
+  try {
+    const response = await axios.put("/skillCategory/updateSkillCategory?idSkilCategory=" + idSkillCategory, data);
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data.message);
+
+    } else {
+      throw new Error("Network error or other issue");
+    }
+  }
+};
+
 
 export const deleteSkillCategory = async (idSkilCategory) => {
   try {
-    const response = await axios.delete("/skillCategory/deleteSkillCategory?idSkilCategory="+idSkilCategory);
+    const response = await axios.delete("/skillCategory/deleteSkillCategory?idSkilCategory=" + idSkilCategory);
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data.message);
+
+    } else {
+      throw new Error("Network error or other issue");
+    }
+  }
+};
+
+
+export const addSkillToMyDepartment = async (idSkill, idUser, data) => {
+  try {
+    const response = await axios.post("/skill/addSkillToMyDepartment?idSkill="+idSkill+"&idUser="+idUser, data);
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data.message);
+
+    } else {
+      throw new Error("Network error or other issue");
+    }
+  }
+};
+
+
+
+export const deleteSkillFromMyDepartment = async (idSkill, idUser ) => {
+  try {
+    const response = await axios.delete("/skill/removeSkillFromMyDepartment?idSkill=" + idSkill+"&idUser="+idUser);
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data.message);
+
+    } else {
+      throw new Error("Network error or other issue");
+    }
+  }
+};
+
+
+
+export const getOrganisationStatistics = async (id) => {
+  try {
+    const response = await axios.get("/organisation/statistics?idOrganisation=" + id);
     return response;
   } catch (error) {
     if (error.response) {

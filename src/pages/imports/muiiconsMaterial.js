@@ -14,3 +14,4 @@ export { default as PersonRemoveIcon } from '@mui/icons-material/PersonRemove';
 export { default as PersonAddAlt1Icon } from '@mui/icons-material/PersonAddAlt1';
 export { default as CheckTwoToneIcon } from '@mui/icons-material/CheckTwoTone';
 export { default as CloseTwoToneIcon } from '@mui/icons-material/CloseTwoTone';
+export { default as BookmarkRemoveTwoToneIcon } from '@mui/icons-material/BookmarkRemoveTwoTone';

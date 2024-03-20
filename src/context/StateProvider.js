@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { getAllDepartments, getAllEmployees, getAllRoles, getAllSkillCategory, getAllSkillsFromCategory, getAllTeamRoles, getDepartmentByID, getUnassignedDepartmentManagers, getUnassignedSkillsProposals, getUserSkillsByUserAndApproved, getUserSkillsByUserAndUnapproved, getUsersWithoutDepartment } from "../api/API";
+import { getAllDepartments, getAllEmployees, getAllRoles, getAllSkillCategory, getAllSkills, getAllSkillsFromCategory, getAllTeamRoles, getDepartmentByID, getUnassignedDepartmentManagers, getUnassignedSkillsProposals, getUserSkillsByUserAndApproved, getUserSkillsByUserAndUnapproved, getUsersWithoutDepartment } from "../api/API";
 
 const StateContext = createContext({});
 
@@ -112,7 +112,6 @@ export const StateProvider = ({ children }) => {
     }
   };
 
-
   const fetchDepartments = async (idOrganisation) => {
     try {
       const response = await getAllDepartments(idOrganisation);
@@ -161,8 +160,6 @@ export const StateProvider = ({ children }) => {
     }
   };
 
-
-
   const fetchGetDepartmentByID = async (idDepartment) => {
     try {
       const response = await getDepartmentByID(idDepartment);
@@ -195,7 +192,6 @@ export const StateProvider = ({ children }) => {
     }
   };
 
-
   const fetchApprovedUserSkills = async (idUser) => {
     try {
       const response = await getUserSkillsByUserAndApproved(idUser);
@@ -223,6 +219,29 @@ export const StateProvider = ({ children }) => {
       const response = await getAllSkillCategory(idOrganisation);
       if (response?.status === 200) {
         setAllSkillCategory(response.data);
+        console.log(response.data);
+      }
+      if (response?.status === 400) {
+        setAlert({
+          type: "warning",
+          message: "You don't have approved skills"
+        });
+      }
+
+    } catch (error) {
+      console.log(error.message, "error");
+      // setAlert({
+      //   type: "danger",
+      //   message: error.message // Use the error message from the catch
+      // });
+    }
+  };
+
+  const fetchAllSkills = async (idOrganisation, idUser) => {
+    try {
+      const response = await getAllSkills(idOrganisation,idUser);
+      if (response?.status === 200) {
+        setAllSkills(response.data);
         console.log(response.data);
       }
       if (response?.status === 400) {
@@ -423,7 +442,7 @@ export const StateProvider = ({ children }) => {
       setCurrentPageSkillCategories,
       currentPageAllSkills, 
       setCurrentPageAllSkills,
-
+      fetchAllSkills,
 
     }}
   >{children}</StateContext.Provider>;
