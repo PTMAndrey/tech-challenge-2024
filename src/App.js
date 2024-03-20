@@ -38,15 +38,16 @@ function App() {
   useEffect(() => {
     setTimeout(() => {
       setIsLoading(false);
-    }, 800);
+    }, 1500);
   }, []);
 
   if (isLoading) {
     return <>
       <Backdrop
-        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        sx={{ display: 'flex', flexDirection: 'column', color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={true}
       >
+        <h3>We prepare the data for you!</h3>
         <CircularProgress color="inherit" />
       </Backdrop>
     </>;
@@ -85,10 +86,7 @@ function App() {
             <Route path="/departments/myDepartment/:id" element={<Departments />} />
           }
 
-
-          <Route path="/projects">
-            <Route path="past-projects" element={<Projects />} />
-          </Route>
+          <Route path="/projects" element={<Projects />} />
 
           {
             user?.authorities.some(authority => authority.authority === "DEPARTMENT_MANAGER") &&

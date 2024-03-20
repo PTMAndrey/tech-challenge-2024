@@ -1,0 +1,17 @@
+@import '../../styles/variables.scss';
+@import '../../styles/mixins.scss';
+@import "../../styles/index.scss";
+
+.pageNotifications{
+    display: flex;
+    flex-direction: column;
+    margin: 2em;
+
+    @include responsive_W550px {
+        align-items: center;
+        flex-direction: unset;
+        margin: 2em auto!important;
+        width: auto;
+    }
+
+}

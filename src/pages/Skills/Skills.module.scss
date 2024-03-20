@@ -29,6 +29,8 @@
     background-color: #95c9f49e !important;
     box-shadow: 10px 10px 5px 5px $color-gray-200 !important;
     opacity: 1 !important;
+    word-wrap: break-word;
+    max-width: 230px;
   
     -webkit-user-select: text !important;
     /* Safari */
@@ -68,3 +70,8 @@
         font-size: 17px !important;
     }
 }
+
+.allEmployeesButtonsAction {
+    display: flex;
+    justify-content: space-evenly;
+  }
