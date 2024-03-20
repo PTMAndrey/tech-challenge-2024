@@ -26,6 +26,8 @@ import useAuthProvider from './hooks/useAuthProvider';
 import Proposals from './pages/Proposals/Proposals';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 function App() {
   const { alert } = useStateProvider();
