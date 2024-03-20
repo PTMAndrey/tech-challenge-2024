@@ -1,0 +1,65 @@
+@import '../../styles/variables.scss';
+@import '../../styles/mixins.scss';
+@import "../../styles/index.scss";
+
+
+.pageProposals {
+    display: flex;
+    flex-direction: column;
+    margin: 2em;
+
+    @include responsive_W550px {
+        align-items: center;
+        flex-direction: unset;
+        margin: 2em auto!important;
+        width: auto;
+    }
+
+}
+
+.iconWhite {
+    color: $color-white !important;
+}
+
+.card {
+    background-color: #95c9f49e !important;
+    box-shadow: 10px 10px 5px 5px $color-gray-200 !important;
+    opacity: 1 !important;
+  
+    -webkit-user-select: text !important;
+    /* Safari */
+    -ms-user-select: text !important;
+    /* IE 10 and IE 11 */
+    user-select: text !important;
+  }
+
+  .cardButtons {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.sortButtonCard {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: $color-primary-300;
+    color: $color-white !important;
+    width:250px;
+    justify-content: center;
+
+    p {
+        padding: 5px;
+        font-size: $font-body-small;
+    }
+
+    @include responsive_W550px {
+        width: 100%;
+    }
+}
+.tableButtons {
+    cursor: pointer;
+
+    @include responsive_W550px {
+        font-size: 17px !important;
+    }
+}

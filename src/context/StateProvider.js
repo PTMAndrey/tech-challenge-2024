@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { getAllDepartments, getAllEmployees, getAllRoles, getAllSkillCategory, getAllSkillsFromCategory, getAllTeamRoles, getDepartmentByID, getUnassignedDepartmentManagers, getUserSkillsByUserAndApproved, getUserSkillsByUserAndUnapproved, getUsersWithoutDepartment } from "../api/API";
+import { getAllDepartments, getAllEmployees, getAllRoles, getAllSkillCategory, getAllSkillsFromCategory, getAllTeamRoles, getDepartmentByID, getUnassignedDepartmentManagers, getUnassignedSkillsProposals, getUserSkillsByUserAndApproved, getUserSkillsByUserAndUnapproved, getUsersWithoutDepartment } from "../api/API";
 
 const StateContext = createContext({});
 
@@ -17,6 +17,7 @@ export const StateProvider = ({ children }) => {
   const [pendingUserSkills, setPendingUserSkills] = useState(null);
   const [allSkillCategory, setAllSkillCategory] = useState(null);
   const [allSkillsFromCategory, setAllSkillsFromCategory] = useState(null);
+  const [unassignedSkillsProposals, setUnassignedSkillsProposals] = useState(null);
 
 
   // these 2 are arrays for drodpown
@@ -33,12 +34,12 @@ export const StateProvider = ({ children }) => {
   const [currentPageTeamRoles, setCurrentPageTeamRoles] = useState(1);
   const [currentPageEmployees, setCurrentPageEmployees] = useState(1);
   const [currentPageDepartments, setCurrentPageDepartments] = useState(1);
-
   const [currentPageMyDepartmentEmployees, setCurrentPageMyDepartmentEmployees] = useState(1);
   const [currentPageMyDepartmentEmployeesWithoutDepartment, setCurrentPageMyDepartmentEmployeesWithoutDepartment] = useState(1);
   const [currentPageMySkills, setCurrentPageMySkills] = useState(1);
   const [currentPageMySkills2, setCurrentPageMySkills2] = useState(1);
-  
+  const [currentPageProposals, setCurrentPageProposals] = useState(1);
+
   // alert
   const [alert, setAlert] = useState(null);
   if (alert) {
@@ -197,7 +198,6 @@ export const StateProvider = ({ children }) => {
       const response = await getUserSkillsByUserAndApproved(idUser);
       if (response?.status === 200) {
         setApprovedUserSkills(response.data);
-        console.log(response.data);
       }
       if (response?.status === 400) {
         setAlert({
@@ -220,7 +220,6 @@ export const StateProvider = ({ children }) => {
       const response = await getAllSkillCategory(idOrganisation);
       if (response?.status === 200) {
         setAllSkillCategory(response.data);
-        console.log(response.data);
       }
       if (response?.status === 400) {
         setAlert({
@@ -243,7 +242,6 @@ export const StateProvider = ({ children }) => {
       const response = await getAllSkillsFromCategory(idCategory, idUser);
       if (response?.status === 200) {
         setAllSkillsFromCategory(response.data);
-        console.log(response.data);
       }
       if (response?.status === 400) {
         setAlert({
@@ -266,6 +264,28 @@ export const StateProvider = ({ children }) => {
       const response = await getUserSkillsByUserAndUnapproved(idUser);
       if (response?.status === 200) {
         setPendingUserSkills(response.data);
+      }
+      if (response?.status === 400) {
+        setAlert({
+          type: "warning",
+          message: "You don't have approved skills"
+        });
+      }
+
+    } catch (error) {
+      console.log(error.message, "error");
+      setAlert({
+        type: "danger",
+        message: error.message // Use the error message from the catch
+      });
+    }
+  };
+
+  const fetchUnassignedSkillsProposals = async (idUser) => {
+    try {
+      const response = await getUnassignedSkillsProposals(idUser);
+      if (response?.status === 200) {
+        setUnassignedSkillsProposals(response.data);
         console.log(response.data);
       }
       if (response?.status === 400) {
@@ -283,6 +303,7 @@ export const StateProvider = ({ children }) => {
       });
     }
   };
+
 
 
   useEffect(() => {
@@ -379,13 +400,15 @@ export const StateProvider = ({ children }) => {
       fetchAllSkillsFromCategory,
       allSkillsFromCategory_dropdown,
 
-      //pending skills
-
       currentPageMySkills2,
       setCurrentPageMySkills2,
       pendingUserSkills,
       fetchPendingUserSkills,
-      //end pending skill
+
+      unassignedSkillsProposals,
+      setUnassignedSkillsProposals,
+      currentPageProposals,
+      fetchUnassignedSkillsProposals,
     }}
   >{children}</StateContext.Provider>;
 };

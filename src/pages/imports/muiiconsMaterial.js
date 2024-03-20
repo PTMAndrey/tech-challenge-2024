@@ -12,3 +12,5 @@ export { default as FilterListIcon } from '@mui/icons-material/FilterList';
 export { default as ContentCopyIcon } from '@mui/icons-material/ContentCopy';
 export { default as PersonRemoveIcon } from '@mui/icons-material/PersonRemove';
 export { default as PersonAddAlt1Icon } from '@mui/icons-material/PersonAddAlt1';
+export { default as CheckTwoToneIcon } from '@mui/icons-material/CheckTwoTone';
+export { default as CloseTwoToneIcon } from '@mui/icons-material/CloseTwoTone';

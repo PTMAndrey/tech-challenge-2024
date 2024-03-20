@@ -533,3 +533,48 @@ export const getAllSkillsFromCategory = async (idCategory, idUser) => {
     }
   }
 };
+
+
+// get unassigned skill proposals
+export const getUnassignedSkillsProposals = async (idUser) => {
+  try {
+    const response = await axios.get("/user_skill/unapprovedByDepartmentManager?idDepartmentManager="+idUser);
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data.message);
+
+    } else {
+      throw new Error("Network error or other issue");
+    }
+  }
+};
+
+
+export const approveUserSkill = async (idUserSkill) => {
+  try {
+    const response = await axios.put("/user_skill/approveUserSkill?idUserSkill="+idUserSkill);
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data.message);
+
+    } else {
+      throw new Error("Network error or other issue");
+    }
+  }
+};
+
+export const rejectUserSkill = async (idUserSkill) => {
+  try {
+    const response = await axios.put("/user_skill/desapproveUserSkill?idUserSkill="+idUserSkill);
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data.message);
+
+    } else {
+      throw new Error("Network error or other issue");
+    }
+  }
+};
