@@ -226,12 +226,13 @@ const AllSkills = () => {
     if (isFormValid()) {
       setShowErrors(false);
       try {
+        console.log({ skillName: formValue.skillName, skillDescription: formValue.skillDescription, createdBy: user?.idUser, idSkillCategory: formValue.idSkillCategory, adToMyDepartment: addToMyDepartment_checkbox });
         const response = await addSkill({ skillName: formValue.skillName, skillDescription: formValue.skillDescription, createdBy: user?.idUser, idSkillCategory: formValue.idSkillCategory, adToMyDepartment: addToMyDepartment_checkbox });
         if (response.status === 200 || response.status === 201) {
           fetchAllSkills(user?.idOrganisation, user?.idUser);
           setAlert({
             type: "success",
-            message: "You added a new category!",
+            message: "You added a new skill!",
           });
           handleCloseAddUpdate();
         }
@@ -245,29 +246,23 @@ const AllSkills = () => {
     }
   }
 
-  const handleUpdateSkill = async () => {
-    if (!isFormValid()) {
-      setShowErrors(true);
-    }
-    if (isFormValid()) {
-      setShowErrors(false);
-      try {
-        const response = await updateSkill(formValue.idSkillCategory, { skilCategoryName: formValue.skillCategoryName, idOrganisation: user?.idOrganisation });
-        if (response.status === 200 || response.status === 201) {
-          fetchAllSkillCategory(user?.idOrganisation);
-          setAlert({
-            type: "success",
-            message: "Update complete!",
-          });
-          handleCloseAddUpdate();
-        }
-      } catch (error) {
-        console.log(error.message, "error");
+  const handlDeleteSkill = async () => {
+    try {
+      const response = await deleteSkill(formValue.idSkill, user?.idUser);
+      if (response.status === 200 || response.status === 201) {
+        fetchAllSkills(user?.idOrganisation, user?.idUser);
         setAlert({
-          type: "danger",
-          message: error.message || "Something went wrong...",
+          type: "success",
+          message: "Skill deleted!",
         });
+        handleCloseDelete();
       }
+    } catch (error) {
+      console.log(error.message, "error");
+      setAlert({
+        type: "danger",
+        message: error.message || "Something went wrong...",
+      });
     }
   }
 
@@ -300,7 +295,7 @@ const AllSkills = () => {
         fetchAllSkills(user?.idOrganisation, user?.idUser);
         setAlert({
           type: "success",
-          message: "Skill removed from department!",
+          message: "Skill removed from your department!",
         });
         handleCloseDelete();
       }
@@ -523,42 +518,8 @@ const AllSkills = () => {
                       </TableCell>
                       <TableCell style={{ width: 160 }} align="center">
                         <div className={styles.allEmployeesButtonsAction}>
-                          {row?.editable ?
+                          {row?.creatorName === (user?.firstName + ' ' + user?.lastName) ?
                             <>
-                              <Tooltip
-                                title='Update skill'
-                                placement='top-start'
-                                arrow
-                                onClick={() => {
-                                  setSelectedSkillInTable({
-                                    idSkill: row?.id,
-                                    skillName: row?.skillName,
-                                    skillDescription: row?.skillDescription,
-                                    creatorName: row?.creatorName,
-                                    skillCategoryName: row?.skilCategoryName,
-                                    departments: row?.departments,
-                                    adToMyDepartment: row?.adToMyDepartment,
-                                    editable: row?.editable,
-                                    inMyDepartment: row?.inMyDepartment,
-                                  });
-                                  setFormValue({
-                                    ...formValue,
-                                    idSkill: row?.id,
-                                    skillName: row?.skillName,
-                                    skillDescription: row?.skillDescription,
-                                    creatorName: row?.creatorName,
-                                    skillCategoryName: row?.skilCategoryName,
-                                    departments: row?.departments,
-                                    adToMyDepartment: row?.adToMyDepartment,
-                                    editable: row?.editable,
-                                    inMyDepartment: row?.inMyDepartment,
-                                  });
-                                  handleOpenAddUpdate('updateSkill');
-                                }} >
-                                <IconButton>
-                                  <BorderColorIcon className={styles.tableButtons} />
-                                </IconButton>
-                              </Tooltip>
                               <Tooltip
                                 title='Delete skill'
                                 placement='top-start'
@@ -675,7 +636,7 @@ const AllSkills = () => {
                   error={showErrors && checkErrors('idSkillCategory') ? true : false}
                   helper={showErrors ? checkErrors('idSkillCategory') : ''}
                 />
-                <br/>
+                <br />
                 <Input
                   type="text"
                   placeholder="Description"
@@ -689,7 +650,7 @@ const AllSkills = () => {
                   error={showErrors && checkErrors("skillDescription") ? true : false}
                   helper={showErrors ? checkErrors("skillDescription") : ""}
                 />
-                <br/>
+                <br />
                 <Input
                   type="checkbox"
                   checked={addToMyDepartment_checkbox}
@@ -699,7 +660,7 @@ const AllSkills = () => {
                 />
               </>
             }
-            handleActionYes={() => openAddUpdate.action === 'addSkill' ? handleAddSkill() : handleUpdateSkill()}
+            handleActionYes={() => openAddUpdate.action === 'addSkill' ? handleAddSkill() : null}
             textActionYes={"Confirm"}
             handleActionNo={handleCloseAddUpdate}
             textActionNo={"Cancel"}
@@ -711,10 +672,18 @@ const AllSkills = () => {
           <Modal
             open={openDelete.open}
             handleClose={handleCloseDelete}
-            title={openDelete.action === 'addToMyDepartment' ? "Add skill to my department" : `Remove [${selectedSkillInTable.skillName}]`}
+            title={openDelete.action === 'addToMyDepartment' ? "Add skill to my department" : openDelete.action === 'removeFromMyDepartment' ? `Remove [${selectedSkillInTable.skillName}]` : 'Delete skill'}
             content={"This action is permanent!"}
-            handleActionYes={() => openDelete.action === 'addToMyDepartment' ? handleAddSkillToMyDepartment() : handleRemoveSkillFromMyDepartment()}
-            textActionYes={openDelete.action === 'addToMyDepartment' ? "Add skill" : "Remove skill"}
+            handleActionYes={() => {
+              if (openDelete.action === 'addToMyDepartment')
+                handleAddSkillToMyDepartment();
+              if (openDelete.action === 'removeFromMyDepartment')
+                handleRemoveSkillFromMyDepartment();
+              if (openDelete.action === 'deleteSkill')
+                handlDeleteSkill();
+            }
+            }
+            textActionYes={openDelete.action === 'addToMyDepartment' ? "Add skill" : openDelete.action === 'removeFromMyDepartment' ? "Remove skill" : "Delete"}
             handleActionNo={handleCloseDelete}
             textActionNo={"Cancel"}
           />

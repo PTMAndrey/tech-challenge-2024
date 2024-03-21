@@ -599,7 +599,7 @@ export const rejectUserSkill = async (idUserSkill) => {
 
 
 
-export const addSkill = async (idOrganisation, data) => {
+export const addSkill = async (data) => {
   try {
     const response = await axios.post("/skill/addSkill", data);
     return response;
@@ -630,9 +630,9 @@ export const updateSkill = async (idSkill, idUser, data) => {
 };
 
 
-export const deleteSkill = async (idSkilCategory) => {
+export const deleteSkill = async (idSkill, idUser) => {
   try {
-    const response = await axios.delete("/skillCategory/deleteSkillCategory?idSkilCategory=" + idSkilCategory);
+    const response = await axios.delete("/skill/deleteSkill?idSkill=" + idSkill+'&idUser='+idUser);
     return response;
   } catch (error) {
     if (error.response) {

@@ -9,13 +9,15 @@ const Home = () => {
   const [statistics, setStatistics] = useState({});
 
   useEffect(() => {
-    (async () => {
-      const response = await getOrganisationStatistics(user?.idOrganisation);
-      if (response.status === 200) {
-        setStatistics(response.data);
-      }
-    })();
-  }, []);
+    if (user?.idOrganisation) {
+      (async () => {
+        const response = await getOrganisationStatistics(user?.idOrganisation);
+        if (response.status === 200) {
+          setStatistics(response.data);
+        }
+      })();
+    }
+  }, [user?.idOrganisation]);
 
   const toFriendlyText = (key) => {
     const mappings = {
@@ -29,11 +31,11 @@ const Home = () => {
     return mappings[key] || key;
   };
 
- const statisticsArray = Object.entries(statistics).map(([key, value]) => ({
+  const statisticsArray = Object.entries(statistics).map(([key, value]) => ({
     name: toFriendlyText(key),
     value,
   }));
-  
+
 
   return (
     <Container fluid className={styles.mainContainer}>
