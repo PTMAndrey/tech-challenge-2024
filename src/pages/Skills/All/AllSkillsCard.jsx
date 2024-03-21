@@ -20,6 +20,7 @@ import useStateProvider from "../../../hooks/useStateProvider";
 
 
 const AllSkillsCard = (props) => {
+  const{user} = useAuthProvider();
   return (
     <div style={{ marginTop: "15%" }}>
       <Card sx={{ minWidth: 200 }} className={styles.card}>
@@ -111,6 +112,31 @@ const AllSkillsCard = (props) => {
               </Tooltip>
             </>
           }
+          {props.data?.creatorName === (user?.firstName + ' ' + user?.lastName) &&
+            <Tooltip
+              title='Delete skill'
+              placement='top-start'
+              arrow
+              onClick={() => {
+                props.setSelectedSkillInTable({
+                  idSkill: props.data?.id,
+                  skillName: props.data?.skillName,
+                  skillDescription: props.data?.skillDescription,
+                  creatorName: props.data?.creatorName,
+                  skillCategoryName: props.data?.skilCategoryName,
+                  departments: props.data?.departments,
+                  adToMyDepartment: props.data?.adToMyDepartment,
+                  editable: props.data?.editable,
+                  inMyDepartment: props.data?.inMyDepartment,
+                });
+                props.setFormValue({ ...props.formValue, idSkill: props.data?.id });
+                props.handleOpenDelete('deleteSkill');
+              }}>
+              <IconButton>
+                <DeleteForeverIcon className={styles.tableButtons} />
+              </IconButton>
+            </Tooltip>
+          }
 
 
         </CardContent>
@@ -153,7 +179,7 @@ const AllSkillsCard = (props) => {
           }
         </CardActions>
       </Card>
-    </div>
+    </div >
   );
 }
 export default AllSkillsCard;
